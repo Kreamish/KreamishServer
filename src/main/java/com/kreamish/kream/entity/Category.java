@@ -1,19 +1,25 @@
 package com.kreamish.kream.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public class Category extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long categoryId;
 
-    @Column(name = "name")
+    @Length(min=1,max=200)
+    @Column(name = "name",nullable = false, unique = true)
     @Setter
     private String name;
+
+    public static Category of(String name) {
+        return new Category(null, name);
+    }
 }
