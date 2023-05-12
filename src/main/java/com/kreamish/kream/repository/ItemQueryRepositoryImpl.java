@@ -1,11 +1,12 @@
 package com.kreamish.kream.repository;
 
 import com.kreamish.kream.entity.Item;
-import com.querydsl.core.types.EntityPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+
+import static com.kreamish.kream.entity.QItem.item;
 
 @RequiredArgsConstructor
 public class ItemQueryRepositoryImpl implements ItemQueryRepository {
@@ -14,7 +15,9 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
 
 
     public List<Item> findItemsWhereLikes(String name){
-        return null;
-
+        return query.select(item)
+                .from(item)
+                .where(item.name.like(name))
+                .fetch();
     }
 }

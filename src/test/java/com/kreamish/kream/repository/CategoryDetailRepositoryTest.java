@@ -1,7 +1,7 @@
-package com.kreamish.kream.entity;
+package com.kreamish.kream.repository;
 
-import com.kreamish.kream.repository.CategoryDetailRepository;
-import com.kreamish.kream.repository.CategoryRepository;
+import com.kreamish.kream.entity.Category;
+import com.kreamish.kream.entity.CategoryDetail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-class CategoryDetailTest {
+class CategoryDetailRepositoryTest {
     String categoryName = "test category name";
     String categoryDetailName = "test category_detail name";
     @Autowired
