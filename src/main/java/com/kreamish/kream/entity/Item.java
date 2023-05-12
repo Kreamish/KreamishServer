@@ -50,6 +50,6 @@ public class Item extends BaseEntity{
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryDetailId",nullable = false)
+    @JoinColumn(name = "categoryDetailId")
     private CategoryDetail categoryDetail;
 }
