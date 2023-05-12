@@ -13,6 +13,7 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
 
     private final JPAQueryFactory query;
 
+
     public List<Item> findItemsWhereLikes(String name){
         return query.select(item)
                 .from(item)
