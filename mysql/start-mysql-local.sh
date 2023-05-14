@@ -13,6 +13,8 @@ docker run -dit --name ${CONTAINER_NAME} \
 -e MYSQL_USER=${DB_USER} \
 -e MYSQL_PASSWORD=${DB_PASSWORD} \
 -e MYSQL_DATABASE=${DB_NAME} \
+-e LC_ALL=C.UTF-8 \
 -p ${CONTAINER_OUTER_PORT}:${CONTAINER_INNER_PORT} \
--v ${DB_VOLUME_NAME}:${CONTAINER_INNER_DATA_PATH} \
-${IMAGE_NAME}:${IMAGE_TAG}
+${IMAGE_NAME}:${IMAGE_TAG} \
+mysqld --lower_case_table_names=1 \
+--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

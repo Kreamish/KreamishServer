@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 export IMAGE_NAME=mysql
-export IMAGE_TAG=8.0.33
+export IMAGE_TAG=8.0.33-debian
 
 export CONTAINER_NAME=mysql
 export CONTAINER_OUTER_PORT=1521
