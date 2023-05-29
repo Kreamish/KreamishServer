@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @EqualsAndHashCode
 public class Collection extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long collectionId;
 
     @Length(min=1,max=50)
