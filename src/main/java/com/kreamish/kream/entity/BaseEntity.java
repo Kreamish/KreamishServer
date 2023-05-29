@@ -15,6 +15,6 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
     @Column(name = "create_id", nullable = false, updatable = false)
     private String createId;
-    @Column(name = "updateid")
+    @Column(name = "update_id")
     private String updateId;
 }
