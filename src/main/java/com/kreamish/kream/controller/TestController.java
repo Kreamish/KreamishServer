@@ -6,14 +6,18 @@ import com.kreamish.kream.repository.ItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/test")
@@ -25,12 +29,12 @@ public class TestController {
 
     @GetMapping(value = "/item", produces = "application/json")
     @Operation(
-            summary = "TEST 이름으로 상품 찾기",
-            description = "TEST 요청 받은 이름과 일치하는 상품의 List 반환."
+        summary = "TEST 이름으로 상품 찾기",
+        description = "TEST 요청 받은 이름과 일치하는 상품의 List 반환."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204-0", description = "존재하지 않는 리소스"),
-            @ApiResponse(responseCode = "200", description = "정상 반환")
+        @ApiResponse(responseCode = "204-0", description = "존재하지 않는 리소스"),
+        @ApiResponse(responseCode = "200", description = "정상 반환")
     })
     public ResponseEntity<List<Item>> getItem(@RequestParam String name) {
         List<Item> findItem = itemRepository.findItemsWhereLikes(name);
@@ -42,12 +46,12 @@ public class TestController {
 
     @PostMapping(value = "/item", produces = "application/json", consumes = "application/json")
     @Operation(
-            summary = "TEST 이름으로 상품 등록",
-            description = "TEST 요청 받은 이름으로 상품 등록."
+        summary = "TEST 이름으로 상품 등록",
+        description = "TEST 요청 받은 이름으로 상품 등록."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "400-0", description = "이미 존재하는 이름"),
-            @ApiResponse(responseCode = "201-0", description = "정상 생성")
+        @ApiResponse(responseCode = "400-0", description = "이미 존재하는 이름"),
+        @ApiResponse(responseCode = "201-0", description = "정상 생성")
     })
     public ResponseEntity<?> registerItem(@RequestBody TestDto req) {
         List<Item> findItem = itemRepository.findItemsWhereLikes(req.getName());
