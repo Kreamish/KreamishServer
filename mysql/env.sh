@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export IMAGE_NAME=mysql
+export IMAGE_NAME=re12io/mysql
 export IMAGE_TAG=kreamish
 
 export CONTAINER_NAME=mysql
