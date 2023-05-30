@@ -1,7 +1,16 @@
 package com.kreamish.kream.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
@@ -9,13 +18,14 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-public class Category extends BaseEntity{
+public class Category extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
-    @Length(min=1,max=200)
-    @Column(name = "name",nullable = false, unique = true)
+    @Length(min = 1, max = 200)
+    @Column(name = "name", nullable = false, unique = true)
     @Setter
     private String name;
 
