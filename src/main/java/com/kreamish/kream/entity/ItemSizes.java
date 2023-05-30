@@ -10,7 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class ItemSizes extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemSizesId;
 
     @Column(name="size", nullable = false, unique = true)

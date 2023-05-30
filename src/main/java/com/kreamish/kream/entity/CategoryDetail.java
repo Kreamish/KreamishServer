@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @EqualsAndHashCode
 public class CategoryDetail extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryDetailId;
 
     @Length(min=1,max=200)

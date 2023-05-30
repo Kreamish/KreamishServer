@@ -10,7 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class ItemCollectionRel extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemCollectionRelId;
 
     @ManyToOne(fetch = FetchType.LAZY)
