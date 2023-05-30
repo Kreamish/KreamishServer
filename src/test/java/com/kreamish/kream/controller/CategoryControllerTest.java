@@ -12,19 +12,20 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 class CategoryControllerTest {
 
-  @Autowired
-  WebTestClient webTestClient;
+    @Autowired
+    WebTestClient webTestClient;
 
-  @Test
-  @DisplayName("성공: 모든 List 반환")
-  void SUCCESS_GET() {
-    webTestClient.get()
-        .uri("/category/all")
-        .exchange();
-  }
+    @Test
+    @DisplayName("성공: 모든 List 반환")
+    void SUCCESS_GET() {
+        webTestClient.get()
+            .uri("/category/all")
+            .exchange();
+    }
 
-  @Test
-  @DisplayName("실패: 40x 에러 발생")
-  void FAIL_GET() {
-  }
+    @Test
+    @DisplayName("실패: 40x 에러 발생")
+    void FAIL_GET() {
+
+    }
 }
