@@ -1,5 +1,6 @@
 package com.kreamish.kream.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kreamish.kream.entity.Category;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import lombok.Getter;
 @Getter
 public class CategoriesDto {
 
+    @JsonProperty(value = "categories")
     List<CategoryDto> categoryDtoList;
 
     public static CategoriesDto of(List<Category> Categories) {
