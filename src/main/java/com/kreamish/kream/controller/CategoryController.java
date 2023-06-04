@@ -21,7 +21,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     @Operation(
         summary = "모든 category list",
         description = "모든 category list를 반환"
