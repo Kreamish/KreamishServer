@@ -1,30 +1,82 @@
 package com.kreamish.kream.controller;
 
+import com.kreamish.kream.common.ApiUtils;
+import com.kreamish.kream.dto.CategoriesDto;
+import com.kreamish.kream.entity.Category;
+import com.kreamish.kream.errors.GeneralExceptionHandler;
+import com.kreamish.kream.service.CategoryService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 
-@AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+
+@ExtendWith(MockitoExtension.class)
 class CategoryControllerTest {
+    @Mock
+    CategoryService categoryService;
+    WebTestClient webTestClient;
+    @InjectMocks
+    CategoryController categoryController;
+    @BeforeEach
+    void setup() {
+        this.webTestClient = MockMvcWebTestClient
+                .bindToController(categoryController)
+                .controllerAdvice(new GeneralExceptionHandler())
+                .build();
+    }
 
-  @Autowired
-  WebTestClient webTestClient;
+    @Test
+    @DisplayName("성공: 모든 List 반환. status 200")
+    void SUCCESS_SHOULD_CHECK_STATUS_200() {
+        Category mockBrand = Category.of("mockBrand");
+        CategoriesDto mockCategoriesDto = CategoriesDto.of(List.of(mockBrand));
 
-  @Test
-  @DisplayName("성공: 모든 List 반환")
-  void SUCCESS_GET() {
-    webTestClient.get()
-        .uri("/category/all")
-        .exchange();
-  }
+        doReturn(mockCategoriesDto).when(categoryService).getItems();
 
-  @Test
-  @DisplayName("실패: 40x 에러 발생")
-  void FAIL_GET() {
-  }
+        webTestClient.get()
+            .uri("/categories")
+            .exchange()
+                .expectStatus().isOk()
+                .expectBody(ApiUtils.ApiResult.class);
+    }
+
+    @Test
+    @DisplayName("성공: Category List가 존재하지 않음. status 204")
+    void SUCCESS_SHOULD_CHECK_STATUS_204() {
+        CategoriesDto mockCategoriesDto = CategoriesDto.of(Collections.EMPTY_LIST);
+
+        doReturn(mockCategoriesDto).when(categoryService).getItems();
+
+        webTestClient.get()
+                .uri("/categories")
+                .exchange()
+                .expectStatus().isNoContent()
+                .expectBody(ApiUtils.ApiResult.class);
+    }
+
+    @Test
+    @DisplayName("실패: 40x 에러 발생")
+    void FAIL_SHOULD_CHECK_STATUS_40x() {
+        doThrow(RuntimeException.class).when(categoryService).getItems();
+
+        webTestClient.get()
+                .uri("/categories")
+                .exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody(ApiUtils.ApiResult.class);
+    }
 }
