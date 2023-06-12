@@ -1,6 +1,10 @@
 spring:
   datasource:
+<<<<<<< HEAD
     url: jdbc:mysql://mysql:3306/kreamishdb?serverTimezone=UTC
+=======
+    url: jdbc:mysql://mysql:1521/kreamishdb?serverTimezone=UTC
+>>>>>>> 7331366 (feat: KS-7 Dockerfile 작성 및 prod 구성 (docker network 내 mysql dns 사용))
     username: kreamishwas
     password: kreamish
     driver-class-name: com.mysql.cj.jdbc.Driver
