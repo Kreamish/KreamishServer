@@ -1,7 +1,7 @@
-package com.kreamish.kream.errors;
+package com.kreamish.kream.common.error;
 
-import com.kreamish.kream.common.ApiUtils;
-import com.kreamish.kream.common.ApiUtils.ApiResult;
+import com.kreamish.kream.common.util.ApiUtils;
+import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

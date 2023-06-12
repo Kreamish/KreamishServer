@@ -1,10 +1,11 @@
 package com.kreamish.kream.controller;
 
-import com.kreamish.kream.common.ApiUtils;
-import com.kreamish.kream.dto.CategoriesDto;
-import com.kreamish.kream.entity.Category;
-import com.kreamish.kream.errors.GeneralExceptionHandler;
-import com.kreamish.kream.service.CategoryService;
+import com.kreamish.kream.category.controller.CategoryController;
+import com.kreamish.kream.common.util.ApiUtils;
+import com.kreamish.kream.category.dto.CategoriesDto;
+import com.kreamish.kream.category.entity.Category;
+import com.kreamish.kream.common.error.GeneralExceptionHandler;
+import com.kreamish.kream.category.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 
@@ -45,7 +43,7 @@ class CategoryControllerTest {
         Category mockBrand = Category.of("mockBrand");
         CategoriesDto mockCategoriesDto = CategoriesDto.of(List.of(mockBrand));
 
-        doReturn(mockCategoriesDto).when(categoryService).getItems();
+        doReturn(mockCategoriesDto).when(categoryService).getAllCategories();
 
         webTestClient.get()
             .uri("/categories")
@@ -59,7 +57,7 @@ class CategoryControllerTest {
     void SUCCESS_SHOULD_CHECK_STATUS_204() {
         CategoriesDto mockCategoriesDto = CategoriesDto.of(Collections.EMPTY_LIST);
 
-        doReturn(mockCategoriesDto).when(categoryService).getItems();
+        doReturn(mockCategoriesDto).when(categoryService).getAllCategories();
 
         webTestClient.get()
                 .uri("/categories")
@@ -71,7 +69,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("실패: 40x 에러 발생")
     void FAIL_SHOULD_CHECK_STATUS_40x() {
-        doThrow(RuntimeException.class).when(categoryService).getItems();
+        doThrow(RuntimeException.class).when(categoryService).getAllCategories();
 
         webTestClient.get()
                 .uri("/categories")

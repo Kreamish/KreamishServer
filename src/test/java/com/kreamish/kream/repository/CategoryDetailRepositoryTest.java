@@ -1,7 +1,9 @@
 package com.kreamish.kream.repository;
 
-import com.kreamish.kream.entity.Category;
-import com.kreamish.kream.entity.CategoryDetail;
+import com.kreamish.kream.category.repository.CategoryRepository;
+import com.kreamish.kream.categorydetail.repository.CategoryDetailRepository;
+import com.kreamish.kream.category.entity.Category;
+import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

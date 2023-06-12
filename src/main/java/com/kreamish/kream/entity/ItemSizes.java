@@ -1,5 +1,6 @@
 package com.kreamish.kream.entity;
 
+import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-public class ItemSizes extends BaseEntity{
+public class ItemSizes extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemSizesId;

@@ -1,4 +1,4 @@
-package com.kreamish.kream.common;
+package com.kreamish.kream.common.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

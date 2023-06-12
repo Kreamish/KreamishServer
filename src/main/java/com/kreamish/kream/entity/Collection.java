@@ -1,5 +1,6 @@
 package com.kreamish.kream.entity;
 
+import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -9,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-public class Collection extends BaseEntity{
+public class Collection extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long collectionId;
