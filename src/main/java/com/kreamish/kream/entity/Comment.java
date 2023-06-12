@@ -1,5 +1,6 @@
 package com.kreamish.kream.entity;
 
+import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

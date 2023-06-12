@@ -1,4 +1,4 @@
-package com.kreamish.kream.entity;
+package com.kreamish.kream.common.entity;
 
 import jakarta.persistence.Column;
 import java.time.LocalDateTime;

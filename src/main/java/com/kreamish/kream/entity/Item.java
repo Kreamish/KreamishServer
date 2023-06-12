@@ -1,5 +1,8 @@
 package com.kreamish.kream.entity;
 
+import com.kreamish.kream.category.entity.Category;
+import com.kreamish.kream.categorydetail.entity.CategoryDetail;
+import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,8 +35,8 @@ public class Item extends BaseEntity {
     private Long itemId;
 
     public static Item of(String name, String subName, String modelCode, LocalDate releaseDate,
-        Long releasePrice, String representativeColor, Brand brand, Category category,
-        CategoryDetail categoryDetail, String imageUrl) {
+                          Long releasePrice, String representativeColor, Brand brand, Category category,
+                          CategoryDetail categoryDetail, String imageUrl) {
         return new Item(null, name, subName, imageUrl, modelCode, releaseDate, releasePrice, representativeColor,
             brand, category, categoryDetail);
     }

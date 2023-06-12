@@ -1,22 +1,22 @@
-package com.kreamish.kream.dto;
+package com.kreamish.kream.category.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kreamish.kream.entity.Category;
+import com.kreamish.kream.category.entity.Category;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+
+import lombok.*;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@ToString
 public class CategoriesDto {
 
     @JsonProperty(value = "categories")
     List<CategoryDto> categoryDtoList;
 
-    public static CategoriesDto of(List<Category> Categories) {
-        return new CategoriesDto(Categories.stream()
+    public static CategoriesDto of(List<Category> categories) {
+        return new CategoriesDto(categories.stream()
             .map(CategoryDto::of)
             .collect(Collectors.toList()));
     }

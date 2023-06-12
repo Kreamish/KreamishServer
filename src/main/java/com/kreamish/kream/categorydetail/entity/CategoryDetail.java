@@ -1,5 +1,7 @@
-package com.kreamish.kream.entity;
+package com.kreamish.kream.categorydetail.entity;
 
+import com.kreamish.kream.category.entity.Category;
+import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
