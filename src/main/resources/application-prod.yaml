@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://mysql:3306/kreamishdb?serverTimezone=UTC
+    url: jdbc:mysql://mysql:1521/kreamishdb?serverTimezone=UTC
     username: kreamishwas
     password: kreamish
     driver-class-name: com.mysql.cj.jdbc.Driver
