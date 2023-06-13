@@ -1,9 +1,9 @@
-package com.kreamish.kream.repository;
+package com.kreamish.kream.legacy.repository;
 
-import com.kreamish.kream.entity.Item;
-
+import com.kreamish.kream.legacy.entity.Item;
 import java.util.List;
 
 public interface ItemQueryRepository {
+
     List<Item> findItemsWhereLikes(String name);
 }

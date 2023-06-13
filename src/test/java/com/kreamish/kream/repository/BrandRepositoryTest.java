@@ -1,6 +1,10 @@
 package com.kreamish.kream.repository;
 
-import com.kreamish.kream.entity.Brand;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.kreamish.kream.legacy.entity.Brand;
+import com.kreamish.kream.legacy.repository.BrandRepository;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,12 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest
 class BrandRepositoryTest {
+
     String name = "test brand name";
 
     @Autowired
@@ -52,7 +53,7 @@ class BrandRepositoryTest {
 
         //then
         Assertions.assertThatThrownBy(() ->
-                        brandRepository.save(duplicatedBrand))
-                .isInstanceOf(DataIntegrityViolationException.class);
+                brandRepository.save(duplicatedBrand))
+            .isInstanceOf(DataIntegrityViolationException.class);
     }
 }

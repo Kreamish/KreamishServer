@@ -1,4 +1,4 @@
-package com.kreamish.kream.config;
+package com.kreamish.kream.common.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;

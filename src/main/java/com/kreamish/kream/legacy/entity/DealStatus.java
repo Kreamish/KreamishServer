@@ -1,4 +1,4 @@
-package com.kreamish.kream.entity;
+package com.kreamish.kream.legacy.entity;
 
 public enum DealStatus {
     PENDING, COMPLETE

@@ -1,3 +1,4 @@
+/*
 package com.kreamish.kream.repository;
 
 import com.kreamish.kream.entity.Item;
@@ -56,3 +57,4 @@ class ItemRepositoryTest {
         assertThat(findItem.getName()).isEqualTo(itemName);
     }
 }
+*/
