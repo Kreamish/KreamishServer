@@ -21,7 +21,7 @@ public class CategoriesFilterResultDto {
     private Long id;
     @JsonProperty("category_name")
     private String name;
-    @JsonProperty("category_name")
+    @JsonProperty("category_detail_list")
     private List<SimpleCategoryDetailDto> simpleCategoryDetailList;
 
     public static CategoriesFilterResultDto of(CategoryDto categoryDto,
