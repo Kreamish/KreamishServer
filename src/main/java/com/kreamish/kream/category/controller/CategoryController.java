@@ -1,9 +1,9 @@
 package com.kreamish.kream.category.controller;
 
-import com.kreamish.kream.common.util.ApiUtils;
-import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.category.dto.CategoriesDto;
 import com.kreamish.kream.category.service.CategoryService;
+import com.kreamish.kream.common.util.ApiUtils;
+import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/categories")
 public class CategoryController {
+
 
     private final CategoryService categoryService;
 
@@ -37,6 +38,4 @@ public class CategoryController {
 
         return new ResponseEntity<>(ApiUtils.success(findCategories), httpStatus);
     }
-
-
 }

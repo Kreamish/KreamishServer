@@ -1,53 +1,35 @@
 package com.kreamish.kream.filter.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kreamish.kream.category.dto.CategoriesDto;
+import com.kreamish.kream.category.dto.CategoryDto;
+import com.kreamish.kream.categorydetail.dto.CategoryDetailDto;
 import com.kreamish.kream.categorydetail.dto.CategoryDetailsDto;
+import lombok.*;
 
-public class CategoryDetailFilterResultDto {
-    /*
-    Map
-    상의: [스니커즈, 샌들]
-    하의: 자켓, 아노락
-    List<ResultDto> resultDto;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    ResultDto
-    cateogry
-    [
-        {
-            category id: 1
-            category name: 상의
-            category detail list: [
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2}]
-        }
+@ToString
+@Getter
+@Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class CategoriesFilterResultDto {
+    @JsonProperty("category_id")
+    private Long id;
+    @JsonProperty("category_name")
+    private String name;
+    private List<SimpleCategoryDetailDto> simpleCategoryDetailList;
 
-        {상의:1} : [ {아노락:1}, {셔츠:2}, {셔츠:2}, {셔츠:2}]
-        {
-            category_id: 1
-            category name: 상의
-            category detail list: [
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2}]
-        }
-        {
-            category_id: 1
-            category name: 상의
-            category detail list: [
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2},
-                { category detail name: 아노락, category detail id: 2}]
-        }
+    public static CategoriesFilterResultDto of(CategoryDto categoryDto, List<CategoryDetailDto> categoryDetailDtoList) {
+        List<SimpleCategoryDetailDto> simpleCategoryDetailDtoList = categoryDetailDtoList.stream()
+                .filter(categoryDetailDto -> categoryDetailDto.isBelongTo(categoryDto))
+                .map(SimpleCategoryDetailDto::of)
+                .collect(Collectors.toList());
 
-    Map<category name, List<map<category defatil id, category detail name>>>
-
-     */
-
-    public static CategoryDetailFilterResultDto of(CategoriesDto allCategories, CategoryDetailsDto allCategoryDetails) {
-
+        return new CategoriesFilterResultDto(categoryDto.getCategoryId(),categoryDto.getName(), simpleCategoryDetailDtoList);
     }
 }

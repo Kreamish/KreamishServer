@@ -18,4 +18,8 @@ public class CategoryDetailDto {
     public static CategoryDetailDto of(CategoryDetail categoryDetail) {
         return new CategoryDetailDto(categoryDetail.getCategoryDetailId(), categoryDetail.getName(), CategoryDto.of(categoryDetail.getCategory()));
     }
+
+    public boolean isBelongTo(CategoryDto categoryDto) {
+        return this.categoryDto.getCategoryId().equals(categoryDto.getCategoryId());
+    }
 }
