@@ -1,4 +1,4 @@
-package com.kreamish.kream.dto;
+package com.kreamish.kream.legacy.dto;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Getter;

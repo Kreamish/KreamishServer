@@ -1,8 +1,8 @@
-package com.kreamish.kream.controller;
+package com.kreamish.kream.legacy.controller;
 
-import com.kreamish.kream.dto.TestDto;
-import com.kreamish.kream.entity.Item;
-import com.kreamish.kream.repository.ItemRepository;
+import com.kreamish.kream.legacy.dto.TestDto;
+import com.kreamish.kream.legacy.entity.Item;
+import com.kreamish.kream.legacy.repository.ItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

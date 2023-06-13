@@ -1,10 +1,10 @@
 package com.kreamish.kream.categorydetail.repository;
 
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
-import com.kreamish.kream.repository.ItemQueryRepository;
+import com.kreamish.kream.legacy.repository.ItemQueryRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface CategoryDetailRepository extends JpaRepository<CategoryDetail, Long>,
+    ItemQueryRepository {
 
-public interface CategoryDetailRepository extends JpaRepository<CategoryDetail, Long>, ItemQueryRepository {
 }
