@@ -1,6 +1,7 @@
 package com.kreamish.kream.filter.controller;
 
-import com.kreamish.kream.common.util.ApiUtils;
+import static org.mockito.Mockito.doReturn;
+
 import com.kreamish.kream.filter.facade.FilterFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 
 @ExtendWith(MockitoExtension.class)
 class FilterControllerTest {
+
     @Mock
     FilterFacade filterFacade;
     WebTestClient webTestClient;
@@ -23,17 +25,37 @@ class FilterControllerTest {
     @BeforeEach
     void setup() {
         this.webTestClient = MockMvcWebTestClient
-                .bindToController(filterController)
-                .build();
+            .bindToController(filterController)
+            .build();
     }
 
     @Test
     @DisplayName("성공: 모든 필터링 카테고리 목록 반환")
     void SUCCESS_SHOULD_RETURN_CATEGORY_DETAIL_LIST_FOR_FILTER() {
+        doReturn(null).when(filterFacade).getCategories();
+
         webTestClient.get()
-                .uri("/filter/categories")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(ApiUtils.ApiResult.class);
+            .uri("/filter/categories")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+
+            .jsonPath("$.success").isEqualTo(true)
+            .jsonPath("$.error").doesNotExist();
+    }
+
+    @Test
+    @DisplayName("성공: 모든 브랜드 리스트 반환")
+    void SUCCESS_SHOULD_RETURN_BRAND_LIST_FOR_FILTER() {
+        doReturn(null).when(filterFacade).getBrand();
+
+        webTestClient.get()
+            .uri("/filter/brand")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+
+            .jsonPath("$.success").isEqualTo(true)
+            .jsonPath("$.error").doesNotExist();
     }
 }
