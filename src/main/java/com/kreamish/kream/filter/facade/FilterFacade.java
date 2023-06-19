@@ -1,5 +1,7 @@
 package com.kreamish.kream.filter.facade;
 
+import com.kreamish.kream.brand.dto.BrandDto;
+import com.kreamish.kream.brand.service.BrandService;
 import com.kreamish.kream.category.dto.CategoryDto;
 import com.kreamish.kream.category.service.CategoryService;
 import com.kreamish.kream.categorydetail.dto.CategoryDetailDto;
@@ -18,6 +20,7 @@ public class FilterFacade {
 
     private final CategoryService categoryService;
     private final CategoryDetailService categoryDetailService;
+    private final BrandService brandService;
 
     public List<CategoriesFilterResultDto> getCategories() {
         List<CategoryDto> categoryDtoList = categoryService.getAllCategories().getCategoryDtoList();
@@ -27,5 +30,9 @@ public class FilterFacade {
         return categoryDtoList.stream()
             .map(categoryDto -> CategoriesFilterResultDto.of(categoryDto, categoryDetailDtoList))
             .collect(Collectors.toList());
+    }
+
+    public List<BrandDto> getBrand() {
+        return brandService.getAllBrand();
     }
 }
