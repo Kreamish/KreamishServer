@@ -2,7 +2,8 @@ package com.kreamish.kream.filter.controller;
 
 import static com.kreamish.kream.common.util.ApiUtils.success;
 
-import com.kreamish.kream.common.util.ApiUtils;
+import com.kreamish.kream.brand.dto.BrandDto;
+import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
 import com.kreamish.kream.filter.facade.FilterFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,21 @@ public class FilterController {
         @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
         @ApiResponse(responseCode = "404")
     })
-    public ResponseEntity<ApiUtils.ApiResult<List<CategoriesFilterResultDto>>> getCategories() {
+    public ResponseEntity<ApiResult<List<CategoriesFilterResultDto>>> getCategories() {
         return new ResponseEntity<>(success(filterFacade.getCategories()), HttpStatus.OK);
+    }
+
+    @GetMapping("/brand")
+    @Operation(
+        summary = "브랜드 리스트 반환",
+        description = "필터링을 위한 모든 브랜드 리스트 반환"
+    )
+
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
+        @ApiResponse(responseCode = "404")
+    })
+    public ResponseEntity<ApiResult<List<BrandDto>>> getBrand() {
+        return new ResponseEntity<>(success(filterFacade.getBrand()), HttpStatus.OK);
     }
 }
