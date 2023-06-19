@@ -1,5 +1,6 @@
 package com.kreamish.kream.legacy.entity;
 
+import com.kreamish.kream.collection.entity.Collection;
 import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
