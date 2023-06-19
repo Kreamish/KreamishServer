@@ -58,4 +58,19 @@ class FilterControllerTest {
             .jsonPath("$.success").isEqualTo(true)
             .jsonPath("$.error").doesNotExist();
     }
+
+    @Test
+    @DisplayName("성공: 모든 컬렉션 리스트 반환")
+    void SUCCESS_SHOULD_RETURN_COLLECTION_LIST_FOR_FILTER() {
+        doReturn(null).when(filterFacade).getCollections();
+
+        webTestClient.get()
+            .uri("/filter/collections")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+
+            .jsonPath("$.success").isEqualTo(true)
+            .jsonPath("$.error").doesNotExist();
+    }
 }

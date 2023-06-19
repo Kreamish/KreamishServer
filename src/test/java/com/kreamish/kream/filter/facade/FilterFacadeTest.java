@@ -9,6 +9,9 @@ import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.category.repository.CategoryRepository;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.categorydetail.repository.CategoryDetailRepository;
+import com.kreamish.kream.collection.dto.CollectionDto;
+import com.kreamish.kream.collection.entity.Collection;
+import com.kreamish.kream.collection.repository.CollectionRepository;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +31,8 @@ class FilterFacadeTest {
     FilterFacade filterFacade;
     @Autowired
     BrandRepository brandRepository;
+    @Autowired
+    CollectionRepository collectionRepository;
 
     @Test
     void SUCCESS_SHOULD_GET_CATEGORIES() {
@@ -63,5 +68,22 @@ class FilterFacadeTest {
         assertThat(srcBrandDto).isNotNull();
         assertThat(srcBrandDto.size()).isEqualTo(drcBrandDto.size());
         assertThat(srcBrandDto).isEqualTo(drcBrandDto);
+    }
+
+    @Test
+    void SUCCESS_SHOULD_GET_COLLECTIONS() {
+        //given
+        List<Collection> srcCollections = collectionRepository.findAll();
+        List<CollectionDto> srcCollectionsDto = srcCollections.stream()
+            .map(collection -> CollectionDto.of(collection))
+            .collect(Collectors.toList());
+
+        //when
+        List<CollectionDto> dstCollectionsDto = filterFacade.getCollections();
+
+        //then
+        assertThat(srcCollectionsDto).isNotNull();
+        assertThat(srcCollectionsDto.size()).isEqualTo(dstCollectionsDto.size());
+        assertThat(srcCollectionsDto).isEqualTo(dstCollectionsDto);
     }
 }
