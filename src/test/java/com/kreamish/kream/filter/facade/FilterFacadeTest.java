@@ -15,6 +15,10 @@ import com.kreamish.kream.collection.repository.CollectionRepository;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
+import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +37,8 @@ class FilterFacadeTest {
     BrandRepository brandRepository;
     @Autowired
     CollectionRepository collectionRepository;
+    @Autowired
+    ItemSizesRepository itemSizesRepository;
 
     @Test
     void SUCCESS_SHOULD_GET_CATEGORIES() {
@@ -85,5 +91,23 @@ class FilterFacadeTest {
         assertThat(srcCollectionsDto).isNotNull();
         assertThat(srcCollectionsDto.size()).isEqualTo(dstCollectionsDto.size());
         assertThat(srcCollectionsDto).isEqualTo(dstCollectionsDto);
+    }
+
+    @Test
+    void SUCCESS_SHOULD_GET_ITEM_SIZES() {
+        //given
+        List<ItemSizes> srcItemSizes = itemSizesRepository.findAll();
+        List<ItemSizeDto> srcItemSizesDto = srcItemSizes.stream()
+                .map(itemSize -> ItemSizeDto.of(itemSize))
+                .collect(Collectors.toSet())
+                .stream().collect(Collectors.toList());
+
+        //when
+        List<ItemSizeDto> dstItemSizesDto = filterFacade.getItemSizes();
+
+        //then
+        assertThat(srcItemSizes).isNotNull();
+        assertThat(srcItemSizesDto.size()).isEqualTo(dstItemSizesDto.size());
+        assertThat(srcItemSizesDto).isEqualTo(dstItemSizesDto);
     }
 }

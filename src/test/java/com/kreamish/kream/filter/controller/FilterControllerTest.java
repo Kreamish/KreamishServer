@@ -73,4 +73,19 @@ class FilterControllerTest {
             .jsonPath("$.success").isEqualTo(true)
             .jsonPath("$.error").doesNotExist();
     }
+
+    @Test
+    @DisplayName("성공: 모든 아이템 사이즈 리스트 반환")
+    void SUCCESS_SHOULD_RETURN_ITEM_SIZE_LIST_FOR_FILTER() {
+        doReturn(null).when(filterFacade).getItemSizes();
+
+        webTestClient.get()
+                .uri("/filter/itemsizes")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+
+                .jsonPath("$.success").isEqualTo(true)
+                .jsonPath("$.error").doesNotExist();
+    }
 }
