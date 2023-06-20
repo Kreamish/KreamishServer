@@ -7,6 +7,7 @@ import com.kreamish.kream.collection.dto.CollectionDto;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
 import com.kreamish.kream.filter.facade.FilterFacade;
+import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -63,5 +64,18 @@ public class FilterController {
     })
     public ResponseEntity<ApiResult<List<CollectionDto>>> getCollections() {
         return new ResponseEntity<>(success(filterFacade.getCollections()), HttpStatus.OK);
+    }
+
+    @GetMapping("/itemsizes")
+    @Operation(
+            summary = "아이템 사이즈 리스트 반환",
+            description = "필터링을 위한 모든 아이템 사이즈 리스트 반환"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
+            @ApiResponse(responseCode = "404")
+    })
+    public ResponseEntity<ApiResult<List<ItemSizeDto>>> getItemSizes() {
+        return new ResponseEntity<>(success(filterFacade.getItemSizes()), HttpStatus.OK);
     }
 }
