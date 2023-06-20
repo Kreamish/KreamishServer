@@ -1,4 +1,4 @@
-package com.kreamish.kream.itemsizes.repository;
+package com.kreamish.kream.legacy.repository;
 
 import com.kreamish.kream.legacy.entity.Item;
 import com.kreamish.kream.legacy.repository.ItemQueryRepository;
