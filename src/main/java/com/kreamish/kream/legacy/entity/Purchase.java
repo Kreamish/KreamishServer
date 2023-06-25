@@ -1,6 +1,7 @@
 package com.kreamish.kream.legacy.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
+import com.kreamish.kream.item.entity.ItemSizes;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +15,6 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
@@ -40,6 +40,5 @@ public class Purchase extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "purchase_status", nullable = false)
-    @Length(max = 100)
     private DealStatus purchaseStatus;
 }
