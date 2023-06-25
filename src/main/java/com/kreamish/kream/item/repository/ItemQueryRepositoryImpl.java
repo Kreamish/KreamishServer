@@ -1,4 +1,4 @@
-package com.kreamish.kream.legacy.repository;
+package com.kreamish.kream.item.repository;
 
 
 import static com.kreamish.kream.legacy.entity.QItem.item;
