@@ -1,4 +1,4 @@
-package com.kreamish.kream.legacy.entity;
+package com.kreamish.kream.item.entity;
 
 import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
