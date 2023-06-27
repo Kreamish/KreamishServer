@@ -9,18 +9,17 @@ import com.kreamish.kream.categorydetail.service.CategoryDetailService;
 import com.kreamish.kream.collection.dto.CollectionDto;
 import com.kreamish.kream.collection.service.CollectionService;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
 import com.kreamish.kream.itemsizes.service.ItemSizeService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-@Transactional
+@Transactional(readOnly = true)
 public class FilterFacade {
 
     private final CategoryService categoryService;
@@ -28,6 +27,7 @@ public class FilterFacade {
     private final BrandService brandService;
     private final CollectionService collectionService;
     private final ItemSizeService itemSizeService;
+
 
     public List<CategoriesFilterResultDto> getCategories() {
         List<CategoryDto> categoryDtoList = categoryService.getAllCategories().getCategoryDtoList();
@@ -47,5 +47,7 @@ public class FilterFacade {
         return collectionService.getAllCollections();
     }
 
-    public List<ItemSizeDto> getItemSizes() { return itemSizeService.getItemSizes(); }
+    public List<ItemSizeDto> getItemSizes() {
+        return itemSizeService.getItemSizes();
+    }
 }

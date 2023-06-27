@@ -11,14 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
 public class BrandService {
 
     private final BrandRepository brandRepository;
 
-    @Transactional(readOnly = true)
     public List<BrandDto> getAllBrand() {
         List<Brand> allBrand = brandRepository.findAll();
 

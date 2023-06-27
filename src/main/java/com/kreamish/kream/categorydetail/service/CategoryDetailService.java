@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CategoryDetailService {
+
     private final CategoryDetailRepository categoryDetailRepository;
 
-    @Transactional(readOnly = true)
     public CategoryDetailsDto getAllCategoryDetails() {
         return CategoryDetailsDto.of(categoryDetailRepository.findAll());
     }

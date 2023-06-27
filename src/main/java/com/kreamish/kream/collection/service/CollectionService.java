@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CollectionService {
 
     private final CollectionRepository collectionRepository;
 
-    @Transactional(readOnly = true)
     public List<CollectionDto> getAllCollections() {
         List<Collection> allCollections = collectionRepository.findAll();
 
