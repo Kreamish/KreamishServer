@@ -1,6 +1,7 @@
-package com.kreamish.kream.legacy.entity;
+package com.kreamish.kream.itemsizes.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
+import com.kreamish.kream.legacy.entity.Item;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class ItemSizes extends BaseEntity {
     @Column(name = "item_sizes_id")
     private Long itemSizesId;
 
-    @Column(name = "size", nullable = false, unique = true)
+    @Column(name = "size", nullable = false, unique = false)
     @Setter
     private String size;
 

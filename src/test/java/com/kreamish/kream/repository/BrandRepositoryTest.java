@@ -2,8 +2,8 @@ package com.kreamish.kream.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.kreamish.kream.legacy.entity.Brand;
-import com.kreamish.kream.legacy.repository.BrandRepository;
+import com.kreamish.kream.brand.entity.Brand;
+import com.kreamish.kream.brand.repository.BrandRepository;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
