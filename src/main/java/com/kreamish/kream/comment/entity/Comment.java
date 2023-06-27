@@ -44,4 +44,8 @@ public class Comment extends BaseEntity {
     public static Comment of(Item item, Member member, String value) {
         return new Comment(null, item, member, value);
     }
+
+    public boolean isBelongTo(Long memberId) {
+        return this.getMember().getMemberId().equals(memberId);
+    }
 }
