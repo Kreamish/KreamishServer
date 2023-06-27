@@ -1,4 +1,4 @@
-package com.kreamish.kream.legacy.entity;
+package com.kreamish.kream.brand.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -6,35 +6,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-public class ItemSizes extends BaseEntity {
+public class Brand extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itemSizesId;
+    private Long brandId;
 
-    @Column(name = "size", nullable = false, unique = true)
+    @Length(min = 1, max = 200)
+    @Column(name = "name", nullable = false, unique = true)
     @Setter
-    private String size;
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "itemId", nullable = false)
-    private Item item;
-
-    public static ItemSizes of(String size, Item item) {
-        return new ItemSizes(null, size, item);
+    public static Brand of(String name) {
+        return new Brand(null, name);
     }
 }

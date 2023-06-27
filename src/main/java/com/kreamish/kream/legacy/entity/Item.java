@@ -1,5 +1,6 @@
 package com.kreamish.kream.legacy.entity;
 
+import com.kreamish.kream.brand.entity.Brand;
 import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.common.entity.BaseEntity;
