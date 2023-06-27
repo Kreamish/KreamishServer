@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.time.LocalDate;
@@ -29,48 +30,60 @@ import org.hibernate.validator.constraints.URL;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
+@Table(name = "item")
 public class Item extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
     private Long itemId;
+
     @Length(min = 1, max = 200)
     @Column(name = "name", nullable = false, unique = true)
     @Setter
     private String name;
+
     @Length(min = 1, max = 200)
     @Column(name = "sub_name", nullable = false, unique = true)
     @Setter
     private String subName;
+
     @Length(min = 1, max = 200)
     @Column(name = "image_url", nullable = true, unique = true)
     @URL
     @Setter
     private String imageUrl;
+
     @Length(min = 1, max = 50)
     @Column(name = "model_code")
     @Setter
     private String modelCode;
+
     @Column(name = "release_date")
     @Setter
     private LocalDate releaseDate;
+
     @Max(Long.MAX_VALUE)
     @Min(0L)
     @Column(name = "release_price")
     @Setter
     private Long releasePrice;
+
     @Length(min = 1, max = 50)
     @Column(name = "representative_color")
     @Setter
     private String representativeColor;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brandId", nullable = false)
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryDetailId", nullable = false)
+    @JoinColumn(name = "category_detail_id", nullable = false)
     private CategoryDetail categoryDetail;
 
     public static Item of(String name, String subName, String modelCode, LocalDate releaseDate,

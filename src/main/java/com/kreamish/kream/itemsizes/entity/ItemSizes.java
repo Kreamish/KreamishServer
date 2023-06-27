@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -21,10 +22,12 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
+@Table(name = "item_sizes")
 public class ItemSizes extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_sizes_id")
     private Long itemSizesId;
 
     @Column(name = "size", nullable = false, unique = false)
@@ -32,7 +35,7 @@ public class ItemSizes extends BaseEntity {
     private String size;
 
     @ManyToOne
-    @JoinColumn(name = "itemId", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
     public static ItemSizes of(String size, Item item) {

@@ -55,7 +55,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("성공: Category List가 존재하지 않음. status 204")
     void SUCCESS_SHOULD_CHECK_STATUS_204() {
-        CategoriesDto mockCategoriesDto = CategoriesDto.of(Collections.EMPTY_LIST);
+        CategoriesDto mockCategoriesDto = CategoriesDto.of(Collections.emptyList());
 
         doReturn(mockCategoriesDto).when(categoryService).getAllCategories();
 
