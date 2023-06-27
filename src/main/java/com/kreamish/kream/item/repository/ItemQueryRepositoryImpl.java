@@ -83,6 +83,8 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
                     ) : null,
                 inOrElseGetTrue(item.itemId, findItemIdBySizesCondition)
             )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
 
         Long count = query.select(item.count())
