@@ -14,7 +14,10 @@ import com.kreamish.kream.legacy.entity.Sale;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,121 +48,25 @@ class ItemServiceTest {
         // item3 - item3size - sale3(Pending, X), sale4(Complete, O)
         // item4 - item4size - sale5(Complete, O), sale6(Pending, X)
 
+        List<Object> forSave = new ArrayList<>();
+
         //given
         Brand brand = Brand.of("brand");
         Category category = Category.of("category");
         CategoryDetail categoryDetail = CategoryDetail.of(category, "category-detail");
 
-        em.persist(brand);
-        em.persist(category);
-        em.persist(categoryDetail);
+        List<Item> items = getDefaultItems(4, brand, category, categoryDetail);
 
-        List<Object> forSave = new ArrayList<>();
+        List<ItemSizes> itemSizes = getDefaultItemSizeOneToOne(items);
 
-        Item item1 = Item.builder()
-            .name("item1")
-            .subName("itemSubname1")
-            .brand(brand)
-            .category(category)
-            .categoryDetail(categoryDetail)
-            .build();
+        List<Sale> customSales = getCustomSales(itemSizes);
 
-        Item item2 = Item.builder()
-            .name("item2")
-            .subName("itemSubname2")
-            .brand(brand)
-            .category(category)
-            .categoryDetail(categoryDetail)
-            .build();
-
-        Item item3 = Item.builder()
-            .name("item3")
-            .subName("itemSubname3")
-            .brand(brand)
-            .category(category)
-            .categoryDetail(categoryDetail)
-            .build();
-
-        Item item4 = Item.builder()
-            .name("item4")
-            .subName("itemSubname4")
-            .brand(brand)
-            .category(category)
-            .categoryDetail(categoryDetail)
-            .build();
-
-        forSave.add(item1);
-        forSave.add(item2);
-        forSave.add(item3);
-        forSave.add(item4);
-
-        ItemSizes itemSizes1 = ItemSizes.builder()
-            .item(item1)
-            .size("size1")
-            .build();
-
-        ItemSizes itemSizes2 = ItemSizes.builder()
-            .item(item2)
-            .size("size2")
-            .build();
-
-        ItemSizes itemSizes3 = ItemSizes.builder()
-            .item(item3)
-            .size("size3")
-            .build();
-
-        ItemSizes itemSizes4 = ItemSizes.builder()
-            .item(item4)
-            .size("size4")
-            .build();
-
-        forSave.add(itemSizes1);
-        forSave.add(itemSizes2);
-        forSave.add(itemSizes3);
-        forSave.add(itemSizes4);
-
-        Sale sale1 = Sale.builder()
-            .itemSizes(itemSizes1)
-            .saleStatus(DealStatus.PENDING)
-            .salePrice(100000L)
-            .build();
-
-        Sale sale2 = Sale.builder()
-            .itemSizes(itemSizes2)
-            .saleStatus(DealStatus.PENDING)
-            .salePrice(200000L)
-            .build();
-
-        Sale sale3 = Sale.builder()
-            .itemSizes(itemSizes3)
-            .saleStatus(DealStatus.PENDING)
-            .salePrice(99999L)
-            .build();
-
-        Sale sale4 = Sale.builder()
-            .itemSizes(itemSizes3)
-            .saleStatus(DealStatus.COMPLETE)
-            .salePrice(123456L)
-            .build();
-
-        Sale sale5 = Sale.builder()
-            .itemSizes(itemSizes4)
-            .saleStatus(DealStatus.COMPLETE)
-            .salePrice(123456L)
-            .build();
-
-        Sale sale6 = Sale.builder()
-            .itemSizes(itemSizes4)
-            .saleStatus(DealStatus.PENDING)
-            .salePrice(200001L)
-            .build();
-
-        forSave.add(sale1);
-        forSave.add(sale2);
-        forSave.add(sale3);
-        forSave.add(sale4);
-        forSave.add(sale5);
-        forSave.add(sale6);
+        forSave.add(brand);
+        forSave.add(category);
+        forSave.add(categoryDetail);
+        forSave.addAll(items);
+        forSave.addAll(itemSizes);
+        forSave.addAll(customSales);
 
         for (Object entity : forSave) {
             em.persist(entity);
@@ -179,10 +86,82 @@ class ItemServiceTest {
 
         ItemListResponseDto dto = itemService.findItemsByCondition(condition, PageRequest.of(0, 10));
 
-        Long item1Id = item1.getItemId();
-        Long item2Id = item2.getItemId();
+        Long item1Id = items.get(0).getItemId();
+        Long item2Id = items.get(1).getItemId();
 
         assertThat(dto.getItemPages()).extracting("itemId")
             .contains(item1Id, item2Id);
+    }
+
+    private List<Sale> getCustomSales(List<ItemSizes> itemSizes) {
+        if (itemSizes == null || itemSizes.size() != 4) {
+            throw new IllegalArgumentException("현재 테스트에선 4개의 itemSize 를 사용해야 함");
+        }
+        return new ArrayList<>(Arrays.asList(
+            Sale.builder()
+                .itemSizes(itemSizes.get(0))
+                .saleStatus(DealStatus.PENDING)
+                .salePrice(100000L)
+                .build(),
+            Sale.builder()
+                .itemSizes(itemSizes.get(1))
+                .saleStatus(DealStatus.PENDING)
+                .salePrice(200000L)
+                .build(),
+            Sale.builder()
+                .itemSizes(itemSizes.get(2))
+                .saleStatus(DealStatus.PENDING)
+                .salePrice(99999L)
+                .build(),
+            Sale.builder()
+                .itemSizes(itemSizes.get(2))
+                .saleStatus(DealStatus.COMPLETE)
+                .salePrice(123456L)
+                .build(),
+            Sale.builder()
+                .itemSizes(itemSizes.get(3))
+                .saleStatus(DealStatus.COMPLETE)
+                .salePrice(123456L)
+                .build(),
+            Sale.builder()
+                .itemSizes(itemSizes.get(3))
+                .saleStatus(DealStatus.PENDING)
+                .salePrice(200001L)
+                .build()
+        ));
+    }
+
+    private List<ItemSizes> getDefaultItemSizeOneToOne(List<Item> items) {
+        AtomicInteger ai = new AtomicInteger(0);
+        return items.stream()
+            .map(item -> {
+                String sizeName = String.format("size%d", ai.incrementAndGet());
+                return ItemSizes.builder()
+                    .item(item)
+                    .size(sizeName)
+                    .build();
+            })
+            .collect(Collectors.toList());
+    }
+
+    private List<Item> getDefaultItems(
+        @SuppressWarnings("SameParameterValue") int count,
+        Brand brand, Category category, CategoryDetail categoryDetail
+    ) {
+        List<Item> result = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            String itemName = String.format("item%d", i);
+            String itemSubName = String.format("itemSubname%d", i);
+            result.add(
+                Item.builder()
+                    .name(itemName)
+                    .subName(itemSubName)
+                    .brand(brand)
+                    .category(category)
+                    .categoryDetail(categoryDetail)
+                    .build()
+            );
+        }
+        return result;
     }
 }
