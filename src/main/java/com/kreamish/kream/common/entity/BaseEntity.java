@@ -2,9 +2,11 @@ package com.kreamish.kream.common.entity;
 
 import jakarta.persistence.Column;
 import java.time.LocalDateTime;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+@Getter
 public abstract class BaseEntity {
 
     @Column(name = "created_at", nullable = false, updatable = false)
