@@ -10,7 +10,7 @@ import com.kreamish.kream.item.repository.ItemRepository;
 import com.kreamish.kream.item.repository.TradeRepository;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
-import com.kreamish.kream.legacy.entity.Trade;
+import com.kreamish.kream.trade.entity.Trade;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;

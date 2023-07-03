@@ -5,7 +5,7 @@ import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.common.entity.BaseEntity;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
-import com.kreamish.kream.legacy.entity.ItemCollectionRel;
+import com.kreamish.kream.rel.entity.ItemCollectionRel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

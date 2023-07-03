@@ -1,6 +1,6 @@
 package com.kreamish.kream.item.repository;
 
-import com.kreamish.kream.legacy.entity.Trade;
+import com.kreamish.kream.trade.entity.Trade;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

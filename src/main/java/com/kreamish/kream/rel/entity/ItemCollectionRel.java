@@ -1,4 +1,4 @@
-package com.kreamish.kream.legacy.entity;
+package com.kreamish.kream.rel.entity;
 
 import com.kreamish.kream.collection.entity.Collection;
 import com.kreamish.kream.common.entity.BaseEntity;
