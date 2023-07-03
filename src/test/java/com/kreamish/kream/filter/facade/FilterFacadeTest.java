@@ -1,19 +1,28 @@
 package com.kreamish.kream.filter.facade;
 
-import com.kreamish.kream.category.dto.CategoryDto;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.kreamish.kream.brand.dto.BrandDto;
+import com.kreamish.kream.brand.entity.Brand;
+import com.kreamish.kream.brand.repository.BrandRepository;
 import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.category.repository.CategoryRepository;
-import com.kreamish.kream.categorydetail.dto.CategoryDetailDto;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.categorydetail.repository.CategoryDetailRepository;
+import com.kreamish.kream.collection.dto.CollectionDto;
+import com.kreamish.kream.collection.entity.Collection;
+import com.kreamish.kream.collection.repository.CollectionRepository;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
 import java.util.ArrayList;
 import java.util.List;
-import org.assertj.core.api.Assertions;
+import java.util.stream.Collectors;
+
+import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
+import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 //@TestPropertySource(properties = {"spring.config.location = classpath:application-local.yaml"})
@@ -25,22 +34,79 @@ class FilterFacadeTest {
     CategoryDetailRepository categoryDetailRepository;
     @Autowired
     FilterFacade filterFacade;
-    List<CategoryDto> categoryDtoList = new ArrayList<>();
-    List<CategoryDetailDto> categoryDetailDtoList = new ArrayList<>();
+    @Autowired
+    BrandRepository brandRepository;
+    @Autowired
+    CollectionRepository collectionRepository;
+    @Autowired
+    ItemSizesRepository itemSizesRepository;
 
     @Test
-    void getCategories() {
-        List<Category> categories = categoryRepository.findAll();
-        List<CategoryDetail> categoryDetails = categoryDetailRepository.findAll();
+    void SUCCESS_SHOULD_GET_CATEGORIES() {
+        //given
+        List<Category> srcCategory = categoryRepository.findAll();
+        List<CategoryDetail> srcCategoryDetail = categoryDetailRepository.findAll();
 
-        List<CategoriesFilterResultDto> filterResultList = filterFacade.getCategories();
+        //when
+        List<CategoriesFilterResultDto> dstFilterResult = filterFacade.getCategories();
 
-        int totalCategoryDetailCnt = filterResultList.stream()
+        int dstTotalCnt = dstFilterResult.stream()
             .mapToInt(filterResult -> filterResult.getSimpleCategoryDetailList()
                 .size()).sum();
 
-        Assertions.assertThat(filterResultList).isNotNull();
-        Assertions.assertThat(filterResultList.size()).isEqualTo(categories.size());
-        Assertions.assertThat(totalCategoryDetailCnt).isEqualTo(categoryDetails.size());
+        //then
+        assertThat(dstFilterResult).isNotNull();
+        assertThat(dstFilterResult.size()).isEqualTo(srcCategory.size());
+        assertThat(dstTotalCnt).isEqualTo(srcCategoryDetail.size());
+    }
+
+    @Test
+    void SUCCESS_SHOULD_GET_BRAND() {
+        //given
+        List<Brand> srcBrand = brandRepository.findAll();
+        List<BrandDto> srcBrandDto = srcBrand.stream()
+            .map(BrandDto::of)
+            .collect(Collectors.toList());
+
+        //when
+        List<BrandDto> drcBrandDto = filterFacade.getBrand();
+
+        //then
+        assertThat(srcBrandDto).isNotNull();
+        assertThat(srcBrandDto.size()).isEqualTo(drcBrandDto.size());
+        assertThat(srcBrandDto).isEqualTo(drcBrandDto);
+    }
+
+    @Test
+    void SUCCESS_SHOULD_GET_COLLECTIONS() {
+        //given
+        List<Collection> srcCollections = collectionRepository.findAll();
+        List<CollectionDto> srcCollectionsDto = srcCollections.stream()
+            .map(CollectionDto::of)
+            .collect(Collectors.toList());
+
+        //when
+        List<CollectionDto> dstCollectionsDto = filterFacade.getCollections();
+
+        //then
+        assertThat(srcCollectionsDto).isNotNull();
+        assertThat(srcCollectionsDto.size()).isEqualTo(dstCollectionsDto.size());
+        assertThat(srcCollectionsDto).isEqualTo(dstCollectionsDto);
+    }
+
+    @Test
+    void SUCCESS_SHOULD_GET_ITEM_SIZES() {
+        //given
+        List<ItemSizes> srcItemSizes = itemSizesRepository.findAll();
+        List<ItemSizeDto> srcItemSizesDto = srcItemSizes.stream()
+            .map(ItemSizeDto::of).distinct().collect(Collectors.toList());
+
+        //when
+        List<ItemSizeDto> dstItemSizesDto = filterFacade.getItemSizes();
+
+        //then
+        assertThat(srcItemSizes).isNotNull();
+        assertThat(srcItemSizesDto.size()).isEqualTo(dstItemSizesDto.size());
+        assertThat(srcItemSizesDto).isEqualTo(dstItemSizesDto);
     }
 }

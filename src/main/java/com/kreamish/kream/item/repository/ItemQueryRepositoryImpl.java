@@ -1,9 +1,9 @@
 package com.kreamish.kream.item.repository;
 
 
+import static com.kreamish.kream.collection.entity.QCollection.collection;
 import static com.kreamish.kream.item.entity.QItem.item;
-import static com.kreamish.kream.item.entity.QItemSizes.itemSizes;
-import static com.kreamish.kream.legacy.entity.QCollection.collection;
+import static com.kreamish.kream.itemsizes.entity.QItemSizes.itemSizes;
 import static com.kreamish.kream.legacy.entity.QItemCollectionRel.itemCollectionRel;
 import static com.kreamish.kream.legacy.entity.QSale.sale;
 

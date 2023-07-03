@@ -1,4 +1,4 @@
-package com.kreamish.kream.legacy.entity;
+package com.kreamish.kream.collection.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
 import jakarta.persistence.Column;

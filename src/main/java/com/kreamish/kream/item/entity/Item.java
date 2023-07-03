@@ -1,9 +1,10 @@
 package com.kreamish.kream.item.entity;
 
+import com.kreamish.kream.brand.entity.Brand;
 import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.common.entity.BaseEntity;
-import com.kreamish.kream.legacy.entity.Brand;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.legacy.entity.ItemCollectionRel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

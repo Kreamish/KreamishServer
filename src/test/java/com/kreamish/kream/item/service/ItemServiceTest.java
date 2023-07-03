@@ -2,13 +2,13 @@ package com.kreamish.kream.item.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.kreamish.kream.brand.entity.Brand;
 import com.kreamish.kream.category.entity.Category;
 import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.item.dto.ItemListResponseDto;
 import com.kreamish.kream.item.dto.ItemListSearchCondition;
 import com.kreamish.kream.item.entity.Item;
-import com.kreamish.kream.item.entity.ItemSizes;
-import com.kreamish.kream.legacy.entity.Brand;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.legacy.entity.DealStatus;
 import com.kreamish.kream.legacy.entity.Sale;
 import jakarta.persistence.EntityManager;

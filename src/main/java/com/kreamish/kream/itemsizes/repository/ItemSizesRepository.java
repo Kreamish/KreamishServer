@@ -1,6 +1,6 @@
-package com.kreamish.kream.legacy.repository;
+package com.kreamish.kream.itemsizes.repository;
 
-import com.kreamish.kream.item.entity.ItemSizes;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

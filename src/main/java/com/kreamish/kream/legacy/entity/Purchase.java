@@ -1,7 +1,7 @@
 package com.kreamish.kream.legacy.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
-import com.kreamish.kream.item.entity.ItemSizes;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
