@@ -4,12 +4,12 @@ package com.kreamish.kream.item.repository;
 import static com.kreamish.kream.collection.entity.QCollection.collection;
 import static com.kreamish.kream.item.entity.QItem.item;
 import static com.kreamish.kream.itemsizes.entity.QItemSizes.itemSizes;
-import static com.kreamish.kream.legacy.entity.QItemCollectionRel.itemCollectionRel;
-import static com.kreamish.kream.legacy.entity.QSale.sale;
+import static com.kreamish.kream.rel.entity.QItemCollectionRel.itemCollectionRel;
+import static com.kreamish.kream.sale.entity.QSale.sale;
 
 import com.kreamish.kream.item.dto.ItemListSearchCondition;
 import com.kreamish.kream.item.entity.Item;
-import com.kreamish.kream.legacy.entity.DealStatus;
+import com.kreamish.kream.common.entity.DealStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
