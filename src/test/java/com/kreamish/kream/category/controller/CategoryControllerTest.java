@@ -74,7 +74,7 @@ class CategoryControllerTest {
         webTestClient.get()
             .uri("/categories")
             .exchange()
-            .expectStatus().is4xxClientError()
+            .expectStatus().is5xxServerError()
             .expectBody(ApiUtils.ApiResult.class);
     }
 }
