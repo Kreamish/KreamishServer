@@ -22,7 +22,7 @@ public class BrandService {
         List<Brand> allBrand = brandRepository.findAll();
 
         return allBrand.stream()
-            .map(brand -> BrandDto.of(brand))
+            .map(BrandDto::of)
             .collect(Collectors.toList());
     }
 }

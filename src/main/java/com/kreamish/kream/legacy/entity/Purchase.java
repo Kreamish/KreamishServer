@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
@@ -41,6 +40,5 @@ public class Purchase extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "purchase_status", nullable = false)
-    @Length(max = 100)
     private DealStatus purchaseStatus;
 }

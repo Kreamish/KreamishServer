@@ -1,7 +1,7 @@
 package com.kreamish.kream.comment.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
-import com.kreamish.kream.legacy.entity.Item;
+import com.kreamish.kream.item.entity.Item;
 import com.kreamish.kream.legacy.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

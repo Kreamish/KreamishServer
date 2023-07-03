@@ -13,6 +13,7 @@ import com.kreamish.kream.collection.dto.CollectionDto;
 import com.kreamish.kream.collection.entity.Collection;
 import com.kreamish.kream.collection.repository.CollectionRepository;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,7 @@ class FilterFacadeTest {
         //given
         List<Brand> srcBrand = brandRepository.findAll();
         List<BrandDto> srcBrandDto = srcBrand.stream()
-            .map(brand -> BrandDto.of(brand))
+            .map(BrandDto::of)
             .collect(Collectors.toList());
 
         //when
@@ -81,7 +82,7 @@ class FilterFacadeTest {
         //given
         List<Collection> srcCollections = collectionRepository.findAll();
         List<CollectionDto> srcCollectionsDto = srcCollections.stream()
-            .map(collection -> CollectionDto.of(collection))
+            .map(CollectionDto::of)
             .collect(Collectors.toList());
 
         //when
@@ -98,9 +99,7 @@ class FilterFacadeTest {
         //given
         List<ItemSizes> srcItemSizes = itemSizesRepository.findAll();
         List<ItemSizeDto> srcItemSizesDto = srcItemSizes.stream()
-                .map(itemSize -> ItemSizeDto.of(itemSize))
-                .collect(Collectors.toSet())
-                .stream().collect(Collectors.toList());
+            .map(ItemSizeDto::of).distinct().collect(Collectors.toList());
 
         //when
         List<ItemSizeDto> dstItemSizesDto = filterFacade.getItemSizes();

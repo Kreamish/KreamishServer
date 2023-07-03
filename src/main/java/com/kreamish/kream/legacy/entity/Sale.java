@@ -13,14 +13,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "sale")
+@Builder
+@AllArgsConstructor
 public class Sale extends BaseEntity {
 
     @Id
@@ -41,6 +44,5 @@ public class Sale extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sale_status", nullable = false)
-    @Length(max = 100)
     private DealStatus saleStatus;
 }
