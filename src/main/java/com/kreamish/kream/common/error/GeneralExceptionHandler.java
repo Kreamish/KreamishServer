@@ -13,13 +13,22 @@ public class GeneralExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ApiResult<?>> handleGeneralException(Exception e) {
-        return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+            ApiUtils.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR),
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<ApiResult<?>> handleNoSuchElementException(
         NoSuchElementException e
-    ){
-        return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+    ) {
+        return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND),
+            HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<ApiResult<?>> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST),
+            HttpStatus.BAD_REQUEST);
     }
 }

@@ -13,6 +13,7 @@ import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.trade.entity.Trade;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,16 @@ public class ItemServiceImpl implements ItemService {
     private final TradeRepository tradeRepository;
 
     @Override
-    public ItemListResponseDto findItemsByCondition(ItemListSearchCondition condition, PageRequest pageRequest) {
+    public Optional<Item> getItemById(Long itemId) {
+        return itemRepository.findById(itemId);
+    }
+
+    @Override
+    public ItemListResponseDto findItemsByCondition(ItemListSearchCondition condition,
+        PageRequest pageRequest) {
         ItemListResponseDto dto = new ItemListResponseDto();
-        dto.setItemPages(itemRepository.findItemsByCondition(condition, pageRequest).map(this::convert));
+        dto.setItemPages(
+            itemRepository.findItemsByCondition(condition, pageRequest).map(this::convert));
         return dto;
     }
 
