@@ -5,7 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-@Profile("test")
+@Profile("data & test")
 @Component
 public class TestDataRunner implements ApplicationRunner {
 
