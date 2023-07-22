@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-class CommentControllerUnitTest {
+class CommentsControllerUnitTest {
 
     @MockBean
     CommentFacade commentFacade;
@@ -81,6 +81,6 @@ class CommentControllerUnitTest {
 
             .exchange()
             .expectStatus().is4xxClientError();
-            
+
     }
 }

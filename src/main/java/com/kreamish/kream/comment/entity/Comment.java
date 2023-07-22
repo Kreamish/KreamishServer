@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Table(name = "comment")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Comment extends BaseEntity {
 
     @Id
@@ -39,7 +39,7 @@ public class Comment extends BaseEntity {
 
     @Column
     @Length(min = 1, max = 2000)
-    private String value;
+    private String content;
 
     public static Comment of(Item item, Member member, String value) {
         return new Comment(null, item, member, value);
