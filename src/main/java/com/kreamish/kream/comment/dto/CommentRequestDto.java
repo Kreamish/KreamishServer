@@ -15,10 +15,10 @@ import org.hibernate.validator.constraints.Length;
 public class CommentRequestDto {
 
     @NotNull
-    @JsonProperty(value = "member_id")
+    @JsonProperty(value = "member-id")
     private Long memberId;
     @NotNull
-    @JsonProperty(value = "item_id")
+    @JsonProperty(value = "item-id")
     private Long itemId;
     @Length(min = 1, max = 2000)
     private String content;
