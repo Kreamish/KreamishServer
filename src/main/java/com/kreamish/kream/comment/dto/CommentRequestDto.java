@@ -21,5 +21,5 @@ public class CommentRequestDto {
     @JsonProperty(value = "item_id")
     private Long itemId;
     @Length(min = 1, max = 2000)
-    private String value;
+    private String content;
 }

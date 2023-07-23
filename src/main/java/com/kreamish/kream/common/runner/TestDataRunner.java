@@ -25,6 +25,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TestDataRunner implements ApplicationRunner {
 
+    public static MemberRole ROLE_MEMBER;
+    public static MemberRole ROLE_ADMIN;
+    public static Brand BRAND1;
+    public static Category CATEGORY1;
+    public static CategoryDetail DETAIL1_WITH_CATEGORY1;
+    public static Item ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
+    public static Item ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1;
+    public static Member MEMBER1;
+    public static Comment COMMENT1_BY_ITEM1_MEMBER1;
+    public static Comment COMMENT2_BY_ITEM1_MEMBER1;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final MemberRoleRepository memberRoleRepository;
@@ -36,30 +46,31 @@ public class TestDataRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // memberRole
-        MemberRole roleMember = saveMemberRole("member");
-        MemberRole roleAdmin = saveMemberRole("admin");
-
+        ROLE_MEMBER = saveMemberRole("member");
+        ROLE_ADMIN = saveMemberRole("admin");
         // brand
-        Brand brand1 = saveBrand("brand1");
-
+        BRAND1 = saveBrand("brand1");
         // category
-        Category category1 = saveCategory("category1");
-
+        CATEGORY1 = saveCategory("category1");
         // categoryDetail
-        CategoryDetail categoryDetail1 = saveCategoryDetail(category1, "categoryDetail1");
-
+        DETAIL1_WITH_CATEGORY1 = saveCategoryDetail(CATEGORY1, "categoryDetail1");
         // item
-        Item item1 = saveItem("item1", "subName1", brand1, category1, categoryDetail1,
-            "dummyImgUrl1");
-        Item item2 = saveItem("item2", "subName2", brand1, category1, categoryDetail1,
-            "dummyImgUrl2");
-
+        ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2 = saveItem("item1", "subName1",
+            BRAND1, CATEGORY1,
+            DETAIL1_WITH_CATEGORY1,
+            "http://dummyImgUrl.com");
+        ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1 = saveItem("item2", "subName2", BRAND1, CATEGORY1,
+            DETAIL1_WITH_CATEGORY1,
+            "http://dummyImgUrl2.com");
         // member
-        Member member1 = saveMember("dummyEmail", roleMember, "dummyPassword");
-
+        MEMBER1 = saveMember("dummyEmail", ROLE_MEMBER, "dummyPassword");
         // comment
-        Comment comment1 = saveComment(item1, member1, "comment1");
-        Comment comment2 = saveComment(item1, member1, "comment2");
+        COMMENT1_BY_ITEM1_MEMBER1 = saveComment(
+            ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
+            "comment1");
+        COMMENT2_BY_ITEM1_MEMBER1 = saveComment(
+            ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
+            "comment2");
     }
 
     private Comment saveComment(Item item, Member member, String content) {
