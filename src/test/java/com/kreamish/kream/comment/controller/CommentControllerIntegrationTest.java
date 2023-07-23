@@ -1,9 +1,12 @@
 package com.kreamish.kream.comment.controller;
 
+import static com.kreamish.kream.common.runner.TestDataRunner.ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
+
 import com.kreamish.kream.comment.repository.CommentRepository;
 import com.kreamish.kream.common.runner.TestDataRunner;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,23 +19,33 @@ import org.springframework.web.reactive.function.BodyInserters;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({"test", "data"})
 @Transactional
-public class CommentsControllerIntegrationTest {
+public class CommentControllerIntegrationTest {
 
     @Autowired
     CommentRepository commentRepository;
     @Autowired
     WebTestClient webTestClient;
 
+    Map<String, String> params = new HashMap<>();
+    String notExistedId = String.valueOf(Integer.MAX_VALUE);
 
     @Test
-    void SUCCESS_CREATE_COMMENT() {
-        Map params = new HashMap();
+    @DisplayName("댓글 등록하기.")
+    void SUCCESS_CREATE_COMMENT_SHOULD_CHECK_IS_OK() {
+        String memberId = TestDataRunner.MEMBER1.getMemberId().toString();
+        String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
+            .toString();
+        String content = "content3";
 
-        params.put("member-id", TestDataRunner.member1.getMemberId());
-        params.put("item-id", TestDataRunner.item1WithBrand1AndCategory1AndDetail1.getItemId());
-        params.put("value", "content3");
+        Long targetItemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId();
+        Long targetMemberId = TestDataRunner.MEMBER1.getMemberId();
+
+        params.put("member-id", memberId);
+        params.put("item-id", itemId);
+        params.put("content", content);
 
         webTestClient.post()
+            .uri("/comment")
             .body(BodyInserters.fromValue(params))
             .exchange()
 
@@ -40,23 +53,189 @@ public class CommentsControllerIntegrationTest {
             .isOk()
 
             .expectBody()
-            .jsonPath("$.success").isEqualTo(true)
-            .jsonPath("$.response").isNotEmpty()
+
+            .jsonPath("$.success")
+            .isEqualTo(true)
+
+            .jsonPath("$.response")
+            .isNotEmpty()
+
             .jsonPath("$.response.item_id")
-            .isEqualTo(TestDataRunner.item1WithBrand1AndCategory1AndDetail1.getItemId())
-            .jsonPath("$.response.member_id").isEqualTo(TestDataRunner.member1.getMemberId());
+            .isEqualTo(targetItemId)
+
+            .jsonPath("$.response.member_id")
+            .isEqualTo(targetMemberId);
     }
 
     @Test
-    void deleteComment() {
+    @DisplayName("댓글 지우기.")
+    void SUCCESS_DELETE_COMMENT_SHOULD_CHECK_IS_OK() {
+        String uri = "/comment/{comment-id}/member/{member-id}";
+        String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
+        String memberId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getMember().getMemberId()
+            .toString();
+
+        params.put("comment-id", commentId);
+        params.put("member-id", memberId);
+
+        webTestClient.delete()
+            .uri(uri, params)
+            .exchange()
+
+            .expectStatus()
+            .isOk()
+
+            .expectBody()
+
+            .jsonPath("$.success")
+            .isEqualTo(true)
+
+            .jsonPath("$.response")
+            .isEmpty();
     }
 
     @Test
-    void getComment() {
+    @DisplayName("존재하지 않는 댓글 지우기")
+    void FAIL_DELETE_COMMENT_SHOULD_CHECK_BAD_REQUEST() {
+        String uri = "/comment/{comment-id}/member/{member-id}";
 
+        params.put("comment-id", notExistedId);
+        params.put("member-id", notExistedId);
+
+        webTestClient.delete()
+            .uri(uri, params)
+            .exchange()
+
+            .expectStatus()
+            .isBadRequest()
+
+            .expectBody()
+
+            .jsonPath("$.success")
+            .isNotEmpty()
+
+            .jsonPath("$.success")
+            .isEqualTo(false)
+
+            .jsonPath("$.response")
+            .isEmpty()
+
+            .jsonPath("$.error")
+            .isNotEmpty();
     }
 
     @Test
-    void getComments() {
+    @DisplayName("특정 아이템에 달린 댓글 개수 가져오기")
+    void SUCCESS_GET_COMMENT_COUNT_SHOULD_CHECK_IS_OK() {
+        String uri = "/comment/count/item/{item-id}";
+        String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
+            .toString();
+        Long targetCnt = 2L;
+
+        params.put("item-id", itemId);
+
+        webTestClient.get()
+            .uri(uri, params)
+            .exchange()
+
+            .expectStatus()
+            .isOk()
+
+            .expectBody()
+
+            .jsonPath("$.success")
+            .isEqualTo(true)
+
+            .jsonPath("$.response.itemId")
+            .isEqualTo(itemId)
+
+            .jsonPath("$.response.commentCount")
+            .isEqualTo(targetCnt);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 아이템에 달린 댓글 개수 가져오기")
+    void SUCCESS_GET_NOT_EXISTED_COMMENT_COUNT_SHOULD_IS_OK() {
+        String uri = "/comment/count/item/{item-id}";
+        Long notExistedResponse = 0L;
+
+        params.put("item-id", String.valueOf(Integer.MAX_VALUE));
+
+        webTestClient.get()
+            .uri(uri, params)
+            .exchange()
+
+            .expectStatus()
+            .isOk()
+
+            .expectBody()
+
+            .jsonPath("$.success")
+            .isEqualTo(true)
+
+            .jsonPath("$.response.commentCount")
+            .isEqualTo(notExistedResponse)
+
+            .jsonPath("$.error")
+            .isEmpty();
+    }
+
+    @Test
+    @DisplayName("특정 아이템에 등록된 댓글 전체 가져오기")
+    void SUCCESS_GET_ALL_COMMENT_SHOULD_IS_OK() {
+        String uri = "/comments/item/{item-id}";
+        String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
+            .toString();
+        Long targetCommentCnt = 2L;
+
+        params.put("item-id", itemId);
+
+        webTestClient.get()
+            .uri(uri, params)
+            .exchange()
+
+            .expectStatus()
+            .isOk()
+
+            .expectBody()
+
+            .jsonPath("$.success")
+            .isEqualTo(true)
+
+            .jsonPath("$.response")
+            .isArray()
+
+            .jsonPath("$.response.length()")
+            .isEqualTo(targetCommentCnt);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 아이템에 등록된 댓글 전체 가져오기")
+    void SUCCESS_GET_ALL_COMMENT_ABOUT_NOT_EXISTED_ITEM_SHOULD_IS_OK() {
+        String uri = "/comments/item/{item-id}";
+        Long zeroLength = 0L;
+
+        params.put("item-id", notExistedId);
+
+        webTestClient.get()
+            .uri(uri, params)
+            .exchange()
+
+            .expectStatus()
+            .isOk()
+
+            .expectBody()
+
+            .jsonPath("$.success")
+            .isEqualTo(true)
+
+            .jsonPath("$.response")
+            .isArray()
+
+            .jsonPath("$.response.length()")
+            .isEqualTo(zeroLength)
+
+            .jsonPath("$.error")
+            .isEmpty();
     }
 }
