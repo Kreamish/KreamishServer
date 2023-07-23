@@ -24,6 +24,6 @@ public class CommentResponseDto implements Serializable {
 
     public static CommentResponseDto of(Comment comment) {
         return new CommentResponseDto(comment.getCommentId(), comment.getItem().getItemId(),
-            comment.getMember().getMemberId(), comment.getValue());
+            comment.getMember().getMemberId(), comment.getContent());
     }
 }

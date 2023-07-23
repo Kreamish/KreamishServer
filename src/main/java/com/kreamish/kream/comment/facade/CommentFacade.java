@@ -28,7 +28,7 @@ public class CommentFacade {
         Item item = itemService.getItemById(commentRequestDto.getItemId())
             .orElseThrow(() -> new IllegalArgumentException("Item Not Found"));
 
-        return commentService.create(item, member, commentRequestDto.getValue())
+        return commentService.create(item, member, commentRequestDto.getContent())
             .map(CommentResponseDto::of)
             .orElseThrow(() -> new IllegalArgumentException("JPA Save Exception"));
     }
