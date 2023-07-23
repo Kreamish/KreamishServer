@@ -18,7 +18,6 @@ public class MemberService {
     public Optional<Member> getMemberById(Long memberId) {
         return memberRepository.findById(memberId);
     }
-
 }
 
 
