@@ -20,16 +20,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
 
     private final CommentFacade commentFacade;
 
-    @PostMapping("/comment")
+    @PostMapping
     @Operation(
         summary = "댓글 등록",
         description = "유저가 아이템에 댓글 등록"
@@ -44,7 +46,7 @@ public class CommentController {
             HttpStatus.OK);
     }
 
-    @DeleteMapping("/comment/{comment-id}")
+    @DeleteMapping("/{comment-id}")
     @Operation(
         summary = "댓글 삭제",
         description = "유저가 아이템에 등록한 댓글을 삭제"
@@ -61,7 +63,7 @@ public class CommentController {
         return new ResponseEntity<>(success(null), HttpStatus.OK);
     }
 
-    @GetMapping("/comment/count/item/{item-id}")
+    @GetMapping("/count/item/{item-id}")
     @Operation(
         summary = "댓글 개수 가져오기",
         description = "특정 아이템에 등록된 댓글 개수 가져오기"
@@ -77,7 +79,7 @@ public class CommentController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/comments/item/{item-id}")
+    @GetMapping("/item/{item-id}")
     @Operation(
         summary = "댓글 전체 가져오기",
         description = "특정 아이템에 등록된 댓글 전체 댓글 가져오기"
