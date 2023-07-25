@@ -32,7 +32,7 @@ public class CommentControllerIntegrationTest {
     @DisplayName("실패: member-id 파라미터 없이 댓글 지우기. ")
     @Transactional
     void FAIL_DELETE_COMMENT_SHOULD_CHECK_IS_BAD_REQUEST() {
-        String uri = "/comment/{comment-id}";
+        String uri = "/comments/{comment-id}";
         String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
 
         params.put("comment-id", commentId);
@@ -61,7 +61,7 @@ public class CommentControllerIntegrationTest {
     @DisplayName("성공: 댓글 지우기.")
     @Transactional
     void SUCCESS_DELETE_COMMENT_SHOULD_CHECK_IS_OK() {
-        String uri = "/comment/{comment-id}?member-id={member-id}";
+        String uri = "/comments/{comment-id}?member-id={member-id}";
         String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
         String memberId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getMember().getMemberId()
             .toString();
@@ -88,7 +88,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("실패: 존재하지 않는 댓글 지우기")
     void FAIL_DELETE_COMMENT_SHOULD_CHECK_BAD_REQUEST() {
-        String uri = "/comment/{comment-id}?member-id={member-id}";
+        String uri = "/comments/{comment-id}?member-id={member-id}";
 
         params.put("comment-id", notExistedId);
         params.put("member-id", notExistedId);
@@ -132,7 +132,7 @@ public class CommentControllerIntegrationTest {
         params.put("content", content);
 
         webTestClient.post()
-            .uri("/comment")
+            .uri("/comments")
             .body(BodyInserters.fromValue(params))
             .exchange()
 
@@ -157,7 +157,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 특정 아이템에 달린 댓글 개수 가져오기")
     void SUCCESS_GET_COMMENT_COUNT_SHOULD_CHECK_IS_OK() {
-        String uri = "/comment/count/item/{item-id}";
+        String uri = "/comments/count/item/{item-id}";
         String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
             .toString();
         Long targetCnt = 2L;
@@ -186,7 +186,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 존재하지 않는 아이템에 달린 댓글 개수 가져오기")
     void SUCCESS_GET_NOT_EXISTED_COMMENT_COUNT_SHOULD_IS_OK() {
-        String uri = "/comment/count/item/{item-id}";
+        String uri = "/comments/count/item/{item-id}";
         Long notExistedResponse = 0L;
 
         params.put("item-id", String.valueOf(Integer.MAX_VALUE));

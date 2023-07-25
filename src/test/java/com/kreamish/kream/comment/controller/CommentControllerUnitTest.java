@@ -44,7 +44,7 @@ class CommentControllerUnitTest {
         params.put("content", "123123");
 
         webTestClient.post()
-            .uri("/comment")
+            .uri("/comments")
             .body(BodyInserters.fromValue(params))
 
             .exchange()
@@ -63,7 +63,7 @@ class CommentControllerUnitTest {
         when(commentFacade.create(any(CommentRequestDto.class))).thenReturn(null);
 
         webTestClient.post()
-            .uri("/comment")
+            .uri("/comments")
             .body(BodyInserters.fromValue(params))
 
             .exchange()
@@ -77,7 +77,7 @@ class CommentControllerUnitTest {
     @DisplayName("실패: 댓글 삭제 실패. comment-id type mismatch")
     void FAIL_SHOULD_CHECK_REQUIRED_PATH_VARIABLE() {
         webTestClient.delete()
-            .uri("/comment/mismatch")
+            .uri("/comments/mismatch")
 
             .exchange()
             .expectStatus().is4xxClientError();
