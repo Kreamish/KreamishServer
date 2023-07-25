@@ -1,7 +1,7 @@
 package com.kreamish.kream.comment.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 import com.kreamish.kream.comment.dto.CommentRequestDto;
 import com.kreamish.kream.comment.facade.CommentFacade;
@@ -11,7 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,11 +20,11 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-class CommentsControllerUnitTest {
+class CommentControllerUnitTest {
 
     @MockBean
     CommentFacade commentFacade;
-    @InjectMocks
+    @Autowired
     CommentController commentController;
     WebTestClient webTestClient;
 
@@ -40,8 +40,8 @@ class CommentsControllerUnitTest {
     @DisplayName("실패: 댓글 등록 실패. item_id가 null")
     void FAIL_SHOULD_CHECK_STATUS_400() {
         Map<String, String> params = new HashMap();
-        params.put("member_id", "1");
-        params.put("value", "123123");
+        params.put("member-id", "1");
+        params.put("content", "123123");
 
         webTestClient.post()
             .uri("/comment")
@@ -56,11 +56,11 @@ class CommentsControllerUnitTest {
     @DisplayName("성공: 댓글 등록")
     void SUCCESS_SHOULD_CHECK_STATUS_200() {
         Map<String, String> params = new HashMap();
-        params.put("member_id", "1");
-        params.put("item_id", "1");
-        params.put("value", "comment content");
+        params.put("member-id", "1");
+        params.put("item-id", "1");
+        params.put("content", "comment content");
 
-        doReturn(null).when(commentFacade).create(any(CommentRequestDto.class));
+        when(commentFacade.create(any(CommentRequestDto.class))).thenReturn(null);
 
         webTestClient.post()
             .uri("/comment")
@@ -77,7 +77,7 @@ class CommentsControllerUnitTest {
     @DisplayName("실패: 댓글 삭제 실패. comment-id type mismatch")
     void FAIL_SHOULD_CHECK_REQUIRED_PATH_VARIABLE() {
         webTestClient.delete()
-            .uri("/comment/mismatch/member/1")
+            .uri("/comment/mismatch")
 
             .exchange()
             .expectStatus().is4xxClientError();

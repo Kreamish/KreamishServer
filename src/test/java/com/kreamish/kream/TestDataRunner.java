@@ -1,4 +1,4 @@
-package com.kreamish.kream.common.runner;
+package com.kreamish.kream;
 
 import com.kreamish.kream.brand.entity.Brand;
 import com.kreamish.kream.brand.repository.BrandRepository;

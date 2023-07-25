@@ -22,6 +22,7 @@ public class CommentFacade {
     private final MemberService memberService;
     private final CommentService commentService;
 
+    @Transactional
     public CommentResponseDto create(CommentRequestDto commentRequestDto) {
         Member member = memberService.getMemberById(commentRequestDto.getMemberId())
             .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
@@ -33,6 +34,7 @@ public class CommentFacade {
             .orElseThrow(() -> new IllegalArgumentException("JPA Save Exception"));
     }
 
+    @Transactional
     public void delete(Long commentId, Long memberId) {
         Comment comment = commentService.findById(commentId)
             .orElseThrow(() -> new IllegalArgumentException("Comment Not Found"));
@@ -43,6 +45,7 @@ public class CommentFacade {
 
         commentService.delete(comment);
     }
+
 
     public Long getCommentCount(Long itemId) {
         return commentService.getCommentCount(itemId);

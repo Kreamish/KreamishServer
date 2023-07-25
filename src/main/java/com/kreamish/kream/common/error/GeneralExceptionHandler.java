@@ -7,6 +7,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -28,17 +29,14 @@ public class GeneralExceptionHandler {
             HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ApiResult<?>> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST),
-            HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class,
+        MissingServletRequestParameterException.class,
+        IllegalArgumentException.class})
     public ResponseEntity<ApiResult<?>> handleMethodArgumentNotValidException(
-        MethodArgumentNotValidException e) {
+        Exception e) {
         return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST),
             HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler(TypeMismatchException.class)
