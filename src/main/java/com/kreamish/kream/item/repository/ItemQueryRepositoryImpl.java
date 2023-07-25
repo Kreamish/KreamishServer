@@ -1,15 +1,14 @@
 package com.kreamish.kream.item.repository;
 
-
 import static com.kreamish.kream.collection.entity.QCollection.collection;
 import static com.kreamish.kream.item.entity.QItem.item;
 import static com.kreamish.kream.itemsizes.entity.QItemSizes.itemSizes;
 import static com.kreamish.kream.rel.entity.QItemCollectionRel.itemCollectionRel;
 import static com.kreamish.kream.sale.entity.QSale.sale;
 
+import com.kreamish.kream.common.entity.DealStatus;
 import com.kreamish.kream.item.dto.ItemListSearchCondition;
 import com.kreamish.kream.item.entity.Item;
-import com.kreamish.kream.common.entity.DealStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
@@ -39,7 +38,8 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
     @Override
     public Page<Item> findItemsByCondition(ItemListSearchCondition condition, Pageable pageable) {
 
-        boolean hasPriceCondition = condition.getMinPrice() != null && condition.getMaxPrice() != null;
+        boolean hasPriceCondition =
+            condition.getMinPrice() != null && condition.getMaxPrice() != null;
 
         List<Long> findItemIdByCollectionIds = query.select(itemCollectionRel.item.itemId)
             .from(itemCollectionRel)
@@ -79,7 +79,8 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
                         JPAExpressions
                             .select(itemSizes.item.itemId)
                             .from(itemSizes)// Item - ItemSizes - Sale
-                            .where(inOrElseGetTrue(itemSizes.itemSizesId, findItemSizesIdByPriceCondition))
+                            .where(inOrElseGetTrue(itemSizes.itemSizesId,
+                                findItemSizesIdByPriceCondition))
                     ) : null,
                 inOrElseGetTrue(item.itemId, findItemIdBySizesCondition)
             )
@@ -98,7 +99,8 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
                         JPAExpressions
                             .select(itemSizes.item.itemId)
                             .from(itemSizes)// Item - ItemSizes - Sale
-                            .where(inOrElseGetTrue(itemSizes.itemSizesId, findItemSizesIdByPriceCondition))
+                            .where(inOrElseGetTrue(itemSizes.itemSizesId,
+                                findItemSizesIdByPriceCondition))
                     ) : null,
                 inOrElseGetTrue(item.itemId, findItemIdBySizesCondition)
             )

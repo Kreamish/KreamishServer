@@ -11,4 +11,5 @@ public interface ItemQueryRepository {
     List<Item> findItemsWhereLikes(String name);
 
     Page<Item> findItemsByCondition(ItemListSearchCondition condition, Pageable pageable);
+
 }

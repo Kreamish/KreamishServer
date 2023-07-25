@@ -1,8 +1,8 @@
 package com.kreamish.kream.sale.entity;
 
 import com.kreamish.kream.common.entity.BaseEntity;
-import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.common.entity.DealStatus;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

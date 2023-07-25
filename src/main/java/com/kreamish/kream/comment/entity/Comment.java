@@ -12,14 +12,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comment")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Comment extends BaseEntity {
 
     @Id
@@ -37,5 +39,13 @@ public class Comment extends BaseEntity {
 
     @Column
     @Length(min = 1, max = 2000)
-    private String value;
+    private String content;
+
+    public static Comment of(Item item, Member member, String value) {
+        return new Comment(null, item, member, value);
+    }
+
+    public boolean isBelongTo(Long memberId) {
+        return this.getMember().getMemberId().equals(memberId);
+    }
 }
