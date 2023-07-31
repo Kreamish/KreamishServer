@@ -1,21 +1,15 @@
 package com.kreamish.kream.member.service;
 
-import com.kreamish.kream.member.entity.Member;
-import com.kreamish.kream.member.repository.MemberRepository;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.kreamish.kream.member.dto.MemberDetailResponseDto;
+import com.kreamish.kream.member.dto.MemberRegisterRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class MemberService {
+public interface MemberService {
 
-    private final MemberRepository memberRepository;
+    Long registerMember(MemberRegisterRequestDto registerDto);
 
-    @Transactional(readOnly = true)
-    public Optional<Member> getMemberById(Long memberId) {
-        return memberRepository.findById(memberId);
-    }
+    MemberDetailResponseDto getMemberWithMemberRole(Long memberId);
+
+    Page<MemberDetailResponseDto> getMemberPageList(Pageable pageable);
 }
