@@ -30,4 +30,8 @@ public class MemberRole extends BaseEntity {
     @Length(max = 16)
     @Column(nullable = false)
     private String name;
+
+    public void changeName(String name){
+        this.name = name;
+    }
 }
