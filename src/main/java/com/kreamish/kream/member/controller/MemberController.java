@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class MemberController {
         @ApiResponse(responseCode = "201", description = "정상 회원 생성")
     })
     public ResponseEntity<ApiUtils.ApiResult<MemberRegisterResponseDto>> registerMember(
-        @RequestBody MemberRegisterRequestDto registerDto
+        @RequestBody @Valid MemberRegisterRequestDto registerDto
     ) {
         Long memberId = memberService.registerMember(registerDto);
         if (memberId == null || memberId == 0L) {
