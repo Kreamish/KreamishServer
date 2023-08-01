@@ -23,14 +23,15 @@ public class MemberRoleServiceImpl implements MemberRoleService {
     public MemberRoleRegisterResponseDto saveMemberRole(
         MemberRoleRegisterRequestDto requestDto
     ) {
+        String name = requestDto.getName();
+
         MemberRole memberRole = MemberRole.builder()
-            .name(requestDto.getName())
+            .name(name)
             .build();
 
-        if (memberRoleRepository.findByName(requestDto.getName()).isPresent()) {
+        if (memberRoleRepository.findByName(name).isPresent()) {
             throw new IllegalArgumentException(
-                String.format("이미 존재하는 이름의 MemberRole 입니다. memberRoleId -> %s", memberRoleRepository.findByName(requestDto.getName())
-                    .get().getName())
+                String.format("이미 존재하는 이름의 MemberRole 입니다. memberRoleId -> %s", name)
             );
         }
 
