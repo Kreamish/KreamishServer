@@ -33,7 +33,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/")
+    @PostMapping
     @Operation(
         summary = "회원 등록",
         description = "회원 가입"
@@ -73,7 +73,7 @@ public class MemberController {
         return ResponseEntity.ok(ApiUtils.success(memberService.getMemberWithMemberRole(memberId)));
     }
 
-    @GetMapping("/")
+    @GetMapping
     @Operation(
         summary = "전체 회원 조회",
         description = "전체 회원 정보 상세 조회 페이징 적용"

@@ -26,7 +26,7 @@ public class MemberRoleController {
 
     private final MemberRoleService memberRoleService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ApiUtils.ApiResult<MemberRoleRegisterResponseDto>> registerMemberRole(
         @RequestBody MemberRoleRegisterRequestDto requestDto
     ) {
@@ -34,7 +34,7 @@ public class MemberRoleController {
         return new ResponseEntity<>(ApiUtils.success(response), HttpStatus.CREATED);
     }
 
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<ApiUtils.ApiResult<MemberRoleUpdateResponseDto>> updateMember(
         @RequestBody MemberRoleUpdateRequestDto requestDto
     ) {
@@ -52,7 +52,7 @@ public class MemberRoleController {
         return ResponseEntity.ok(ApiUtils.success(memberRoleService.getMemberRole(memberRoleId)));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<ApiUtils.ApiResult<List<MemberRoleDetailResponseDto>>> inquiryAllMemberRole() {
         List<MemberRoleDetailResponseDto> response = memberRoleService.getAllMemberRoles();
         if (response == null || response.isEmpty()) {
