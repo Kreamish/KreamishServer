@@ -28,10 +28,10 @@ public class MemberRoleServiceImpl implements MemberRoleService {
             .name(requestDto.getName())
             .build();
 
-        Optional<MemberRole> findMemberRole = memberRoleRepository.findByName(requestDto.getName());
-        if (findMemberRole.isPresent()) {
+        if (memberRoleRepository.findByName(requestDto.getName()).isPresent()) {
             throw new IllegalArgumentException(
-                String.format("이미 존재하는 이름의 MemberRole 입니다. memberRoleId -> %s", findMemberRole.get().getName())
+                String.format("이미 존재하는 이름의 MemberRole 입니다. memberRoleId -> %s", memberRoleRepository.findByName(requestDto.getName())
+                    .get().getName())
             );
         }
 
@@ -44,12 +44,9 @@ public class MemberRoleServiceImpl implements MemberRoleService {
 
     @Override
     public MemberRoleUpdateResponseDto updateMember(MemberRoleUpdateRequestDto requestDto) {
-        Optional<MemberRole> findMemberRole = memberRoleRepository.findById(requestDto.getMemberRoleId());
-        if (findMemberRole.isEmpty()) {
-            throw new NoSuchElementException("memberRoleId 로 해당 MemberRole 을 찾을 수 없습니다.");
-        }
+        MemberRole memberRole = memberRoleRepository.findById(requestDto.getMemberRoleId())
+            .orElseThrow(() -> new NoSuchElementException("memberRoleId 로 해당 MemberRole 을 찾을 수 없습니다."));
 
-        MemberRole memberRole = findMemberRole.get();
         String prevName = memberRole.getName();
         memberRole.changeName(requestDto.getName());
 
@@ -62,11 +59,9 @@ public class MemberRoleServiceImpl implements MemberRoleService {
 
     @Override
     public MemberRoleDetailResponseDto getMemberRole(Long memberRoleId) {
-        Optional<MemberRole> findMemberRole = memberRoleRepository.findById(memberRoleId);
-        if (findMemberRole.isEmpty()) {
-            throw new NoSuchElementException("memberRoleId 로 해당 MemberRole 을 찾을 수 없습니다.");
-        }
-        MemberRole memberRole = findMemberRole.get();
+        MemberRole memberRole = memberRoleRepository.findById(memberRoleId)
+            .orElseThrow(() -> new NoSuchElementException("memberRoleId 로 해당 MemberRole 을 찾을 수 없습니다."));
+
         return MemberRoleDetailResponseDto.builder()
             .memberRoleId(memberRole.getMemberRoleId())
             .name(memberRole.getName())
