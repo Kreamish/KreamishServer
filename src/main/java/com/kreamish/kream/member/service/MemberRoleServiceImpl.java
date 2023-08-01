@@ -9,7 +9,6 @@ import com.kreamish.kream.member.entity.MemberRole;
 import com.kreamish.kream.member.repository.MemberRoleRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
