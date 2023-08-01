@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/memberRoles")
+@RequestMapping("/member-roles")
 public class MemberRoleController {
 
     private final MemberRoleService memberRoleService;
