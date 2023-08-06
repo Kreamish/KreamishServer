@@ -1,8 +1,9 @@
 package com.kreamish.kream.category.controller;
 
+import static com.kreamish.kream.common.util.ApiUtils.success;
+
 import com.kreamish.kream.category.dto.CategoriesDto;
-import com.kreamish.kream.category.service.CategoryService;
-import com.kreamish.kream.common.util.ApiUtils;
+import com.kreamish.kream.category.service.CategoryServiceImpl;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,8 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/categories")
 public class CategoryController {
 
-
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryServiceImpl;
 
     @GetMapping
     @Operation(
@@ -33,9 +33,9 @@ public class CategoryController {
         @ApiResponse(responseCode = "404", description = "category service error")
     })
     public ResponseEntity<ApiResult<?>> getItems() {
-        CategoriesDto findCategories = categoryService.getAllCategories();
+        CategoriesDto findCategories = categoryServiceImpl.getAllCategories();
         HttpStatus httpStatus = findCategories.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
 
-        return new ResponseEntity<>(ApiUtils.success(findCategories), httpStatus);
+        return new ResponseEntity<>(success(findCategories), httpStatus);
     }
 }

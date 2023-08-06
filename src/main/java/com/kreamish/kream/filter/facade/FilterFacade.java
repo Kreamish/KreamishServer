@@ -1,16 +1,16 @@
 package com.kreamish.kream.filter.facade;
 
 import com.kreamish.kream.brand.dto.BrandDto;
-import com.kreamish.kream.brand.service.BrandService;
+import com.kreamish.kream.brand.service.BrandServiceImpl;
 import com.kreamish.kream.category.dto.CategoryDto;
-import com.kreamish.kream.category.service.CategoryService;
+import com.kreamish.kream.category.service.CategoryServiceImpl;
 import com.kreamish.kream.categorydetail.dto.CategoryDetailDto;
-import com.kreamish.kream.categorydetail.service.CategoryDetailService;
+import com.kreamish.kream.categorydetail.service.CategoryDetailServiceImpl;
 import com.kreamish.kream.collection.dto.CollectionDto;
-import com.kreamish.kream.collection.service.CollectionService;
+import com.kreamish.kream.collection.service.CollectionServiceImpl;
 import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
 import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
-import com.kreamish.kream.itemsizes.service.ItemSizeService;
+import com.kreamish.kream.itemsizes.service.ItemSizeServiceImpl;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +22,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class FilterFacade {
 
-    private final CategoryService categoryService;
-    private final CategoryDetailService categoryDetailService;
-    private final BrandService brandService;
-    private final CollectionService collectionService;
-    private final ItemSizeService itemSizeService;
+    private final CategoryServiceImpl categoryServiceImpl;
+    private final CategoryDetailServiceImpl categoryDetailServiceImpl;
+    private final BrandServiceImpl brandServiceImpl;
+    private final CollectionServiceImpl collectionServiceImpl;
+    private final ItemSizeServiceImpl itemSizeServiceImpl;
 
 
     public List<CategoriesFilterResultDto> getCategories() {
-        List<CategoryDto> categoryDtoList = categoryService.getAllCategories().getCategoryDtoList();
-        List<CategoryDetailDto> categoryDetailDtoList = categoryDetailService.getAllCategoryDetails()
+        List<CategoryDto> categoryDtoList = categoryServiceImpl.getAllCategories()
+            .getCategoryDtoList();
+        List<CategoryDetailDto> categoryDetailDtoList = categoryDetailServiceImpl.getAllCategoryDetails()
             .getCategoryDetailDtoList();
 
         return categoryDtoList.stream()
@@ -40,14 +41,14 @@ public class FilterFacade {
     }
 
     public List<BrandDto> getBrand() {
-        return brandService.getAllBrand();
+        return brandServiceImpl.getAllBrand();
     }
 
     public List<CollectionDto> getCollections() {
-        return collectionService.getAllCollections();
+        return collectionServiceImpl.getAllCollections();
     }
 
     public List<ItemSizeDto> getItemSizes() {
-        return itemSizeService.getItemSizes();
+        return itemSizeServiceImpl.getItemSizes();
     }
 }
