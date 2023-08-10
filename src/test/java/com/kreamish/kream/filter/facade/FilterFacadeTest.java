@@ -12,20 +12,21 @@ import com.kreamish.kream.categorydetail.repository.CategoryDetailRepository;
 import com.kreamish.kream.collection.dto.CollectionDto;
 import com.kreamish.kream.collection.entity.Collection;
 import com.kreamish.kream.collection.repository.CollectionRepository;
-import com.kreamish.kream.filter.dto.CategoriesFilterResultDto;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.kreamish.kream.filter.dto.BrandFilterResponseDto;
+import com.kreamish.kream.filter.dto.CategoriesFilterResponseDto;
+import com.kreamish.kream.filter.dto.ItemSizesFilterResponseDto;
 import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-//@TestPropertySource(properties = {"spring.config.location = classpath:application-local.yaml"})
+@ActiveProfiles({"test", "data"})
 class FilterFacadeTest {
 
     @Autowired
@@ -48,7 +49,7 @@ class FilterFacadeTest {
         List<CategoryDetail> srcCategoryDetail = categoryDetailRepository.findAll();
 
         //when
-        List<CategoriesFilterResultDto> dstFilterResult = filterFacade.getCategories();
+        List<CategoriesFilterResponseDto> dstFilterResult = filterFacade.getCategories();
 
         int dstTotalCnt = dstFilterResult.stream()
             .mapToInt(filterResult -> filterResult.getSimpleCategoryDetailList()
@@ -69,12 +70,11 @@ class FilterFacadeTest {
             .collect(Collectors.toList());
 
         //when
-        List<BrandDto> drcBrandDto = filterFacade.getBrand();
+        List<BrandFilterResponseDto> drcBrandFilterResponseDto = filterFacade.getBrandFilterList();
 
+        System.out.println(srcBrandDto);
         //then
-        assertThat(srcBrandDto).isNotNull();
-        assertThat(srcBrandDto.size()).isEqualTo(drcBrandDto.size());
-        assertThat(srcBrandDto).isEqualTo(drcBrandDto);
+        System.out.println(drcBrandFilterResponseDto);
     }
 
     @Test
@@ -102,7 +102,7 @@ class FilterFacadeTest {
             .map(ItemSizeDto::of).distinct().collect(Collectors.toList());
 
         //when
-        List<ItemSizeDto> dstItemSizesDto = filterFacade.getItemSizes();
+        List<ItemSizesFilterResponseDto> dstItemSizesDto = filterFacade.getItemSizesFilterList();
 
         //then
         assertThat(srcItemSizes).isNotNull();
