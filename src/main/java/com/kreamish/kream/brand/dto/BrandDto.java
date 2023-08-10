@@ -12,4 +12,8 @@ public class BrandDto {
     public static BrandDto of(Brand brand) {
         return new BrandDto(brand.getBrandId(), brand.getName());
     }
+
+    public Character getFirstLetter() {
+        return Character.toLowerCase(name.charAt(0));
+    }
 }
