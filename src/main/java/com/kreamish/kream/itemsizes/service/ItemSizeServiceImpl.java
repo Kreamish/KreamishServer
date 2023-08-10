@@ -18,6 +18,7 @@ public class ItemSizeServiceImpl implements ItemSizeService {
 
     private final ItemSizesRepository itemSizesRepository;
 
+    // ToDo : N + 1 문제 발생하나 확인해보기.
     public List<ItemSizeDto> getItemSizes() {
         List<ItemSizes> allItemSizes = itemSizesRepository.findAll();
 

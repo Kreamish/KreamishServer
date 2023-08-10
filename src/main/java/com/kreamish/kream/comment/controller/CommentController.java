@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class CommentController {
 
     private final CommentFacade commentFacade;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "댓글 등록",
         description = "유저가 아이템에 댓글 등록"
@@ -46,7 +47,7 @@ public class CommentController {
             HttpStatus.OK);
     }
 
-    @DeleteMapping("/{comment-id}")
+    @DeleteMapping(value = "/{comment-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "댓글 삭제",
         description = "유저가 아이템에 등록한 댓글을 삭제"
@@ -57,38 +58,43 @@ public class CommentController {
     })
     public ResponseEntity<ApiResult<?>> deleteComment(
         @PathVariable("comment-id") Long commentId,
+        // ToDo : basic token header
         @RequestParam("member-id") Long memberId) {
 
         commentFacade.delete(commentId, memberId);
         return new ResponseEntity<>(success(null), HttpStatus.OK);
     }
 
-    @GetMapping("/count/item/{item-id}")
+    @GetMapping(value = "/count/item/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "댓글 개수 가져오기",
         description = "특정 아이템에 등록된 댓글 개수 가져오기"
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 개수 가져오기 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 개수 가져오기 실패")
+        @ApiResponse(responseCode = "400", description = "댓글 개수 가져오기 실패"),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 아이템")
     })
-    public ResponseEntity<ApiResult<?>> getCommentCount(@PathVariable("item-id") Long itemId) {
+    public ResponseEntity<ApiResult<ItemCommentCountDto>> getCommentCount(
+        @PathVariable("item-id") Long itemId) {
         Long commentCount = commentFacade.getCommentCount(itemId);
+        ItemCommentCountDto itemCommentCountDto = ItemCommentCountDto.of(itemId, commentCount);
 
-        return new ResponseEntity<>(success(ItemCommentCountDto.of(itemId, commentCount)),
-            HttpStatus.OK);
+        return new ResponseEntity<>(success(itemCommentCountDto), HttpStatus.OK);
     }
 
-    @GetMapping("/item/{item-id}")
+    @GetMapping(value = "/item/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "댓글 전체 가져오기",
         description = "특정 아이템에 등록된 댓글 전체 댓글 가져오기"
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 전체 가져오기 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 전체 가져오기 실패")
+        @ApiResponse(responseCode = "400", description = "댓글 전체 가져오기 실패"),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 아이템")
     })
-    public ResponseEntity<ApiResult<?>> getComments(@PathVariable("item-id") Long itemId) {
+    public ResponseEntity<ApiResult<List<CommentResponseDto>>> getComments(
+        @PathVariable("item-id") Long itemId) {
         List<CommentResponseDto> commentsResponseDtoList = commentFacade.getComments(itemId);
 
         return new ResponseEntity<>(success(commentsResponseDtoList), HttpStatus.OK);
