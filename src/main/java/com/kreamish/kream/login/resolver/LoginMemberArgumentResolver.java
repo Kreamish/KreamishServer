@@ -4,7 +4,6 @@ import com.kreamish.kream.common.resolver.CommonArgumentResolver;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
 import io.micrometer.common.util.StringUtils;
-import io.netty.util.internal.StringUtil;
 import java.util.Base64;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -41,6 +40,19 @@ public class LoginMemberArgumentResolver extends CommonArgumentResolver {
         if (split.length <= 1) {
             throw new IllegalArgumentException("잘못된 토큰입니다.");
         }
+
+        if (isLongParsable(split[1])) {
+            throw new IllegalArgumentException("memberId는 1이상의 Long 타입이어야 합니다.");
+        }
         return new LoginMemberInfo(Long.parseLong(split[1]));
+    }
+
+    private Boolean isLongParsable(String string) {
+        try {
+            long value = Long.parseLong(string);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
