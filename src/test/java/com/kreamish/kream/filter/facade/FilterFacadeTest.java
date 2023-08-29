@@ -20,6 +20,7 @@ import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,18 +64,17 @@ class FilterFacadeTest {
 
     @Test
     void SUCCESS_SHOULD_GET_BRAND() {
-        //given
-        List<Brand> srcBrand = brandRepository.findAll();
-        List<BrandDto> srcBrandDto = srcBrand.stream()
-            .map(BrandDto::of)
-            .collect(Collectors.toList());
-
-        //when
+        //given, when
+        long totalBrandCnt = brandRepository.count();
         List<BrandFilterResponseDto> drcBrandFilterResponseDto = filterFacade.getBrandFilterList();
 
-        System.out.println(srcBrandDto);
+        int drcBrandCnt = drcBrandFilterResponseDto
+            .stream()
+            .mapToInt(x -> x.getBrandDtoList().size())
+            .sum();
+
         //then
-        System.out.println(drcBrandFilterResponseDto);
+        assertThat(drcBrandCnt).isEqualTo(totalBrandCnt);
     }
 
     @Test
