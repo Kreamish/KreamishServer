@@ -1,24 +1,19 @@
 package com.kreamish.kream.brand.dto;
 
 import com.kreamish.kream.brand.entity.Brand;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@EqualsAndHashCode
+@Data
 public class BrandDto {
 
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 
     public static BrandDto of(Brand brand) {
         return new BrandDto(brand.getBrandId(), brand.getName());
+    }
+
+    public Character getFirstLetter() {
+        return Character.toLowerCase(name.charAt(0));
     }
 }

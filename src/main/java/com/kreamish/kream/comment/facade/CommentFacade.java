@@ -9,6 +9,8 @@ import com.kreamish.kream.item.service.ItemService;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.service.MemberService;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +39,7 @@ public class CommentFacade {
     @Transactional
     public void delete(Long commentId, Long memberId) {
         Comment comment = commentService.findById(commentId)
-            .orElseThrow(() -> new IllegalArgumentException("Comment Not Found"));
+            .orElseThrow(() -> new NoSuchElementException("Comment Not Found"));
 
         if (!comment.isBelongTo(memberId)) {
             throw new IllegalArgumentException("Comment that does not belong to the Member");
@@ -52,6 +54,9 @@ public class CommentFacade {
     }
 
     public List<CommentResponseDto> getComments(Long itemId) {
+        Optional.ofNullable(itemService.findItemById(itemId))
+            .orElseThrow(() -> new NoSuchElementException("Item Not Found"));
+
         return commentService.getComments(itemId);
     }
 }

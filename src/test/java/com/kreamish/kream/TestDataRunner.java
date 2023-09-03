@@ -25,9 +25,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TestDataRunner implements ApplicationRunner {
 
+    /*
+        ToDo : 테스트가 끝나도 테스트 데이터가 메모리에 남아있는 문제.
+     */
+    public static Boolean isNotInitialized = true;
     public static MemberRole ROLE_MEMBER;
     public static MemberRole ROLE_ADMIN;
-    public static Brand BRAND1;
+    public static Brand BRAND1_STARTED_WITH_CHAR_B;
+    public static Brand BRAND2_STARTED_WITH_CHAR_B;
+    public static Brand BRAND1_STARTED_WITH_CHAR_C;
+    public static Brand BRAND1_STARTED_WITH_CHAR_D;
+    public static Brand BRAND2_STARTED_WITH_CHAR_D;
+    public static Brand BRAND1_STARTED_WITH_CHAR_E;
+
     public static Category CATEGORY1;
     public static CategoryDetail DETAIL1_WITH_CATEGORY1;
     public static Item ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
@@ -44,33 +54,43 @@ public class TestDataRunner implements ApplicationRunner {
     private final CommentRepository commentRepository;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        // memberRole
-        ROLE_MEMBER = saveMemberRole("member");
-        ROLE_ADMIN = saveMemberRole("admin");
-        // brand
-        BRAND1 = saveBrand("brand1");
-        // category
-        CATEGORY1 = saveCategory("category1");
-        // categoryDetail
-        DETAIL1_WITH_CATEGORY1 = saveCategoryDetail(CATEGORY1, "categoryDetail1");
-        // item
-        ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2 = saveItem("item1", "subName1",
-            BRAND1, CATEGORY1,
-            DETAIL1_WITH_CATEGORY1,
-            "http://dummyImgUrl.com");
-        ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1 = saveItem("item2", "subName2", BRAND1, CATEGORY1,
-            DETAIL1_WITH_CATEGORY1,
-            "http://dummyImgUrl2.com");
-        // member
-        MEMBER1 = saveMember("dummyEmail", ROLE_MEMBER, "dummyPassword");
-        // comment
-        COMMENT1_BY_ITEM1_MEMBER1 = saveComment(
-            ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
-            "comment1");
-        COMMENT2_BY_ITEM1_MEMBER1 = saveComment(
-            ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
-            "comment2");
+    public void run(ApplicationArguments args) {
+        if (isNotInitialized) {
+            // memberRole
+            ROLE_MEMBER = saveMemberRole("member");
+            ROLE_ADMIN = saveMemberRole("admin");
+            // brand
+            BRAND1_STARTED_WITH_CHAR_B = saveBrand("b_brand1");
+            BRAND2_STARTED_WITH_CHAR_B = saveBrand("b_brand2");
+            BRAND1_STARTED_WITH_CHAR_C = saveBrand("c_brand1");
+            BRAND1_STARTED_WITH_CHAR_D = saveBrand("d_brand1");
+            BRAND2_STARTED_WITH_CHAR_D = saveBrand("d_brand2");
+            BRAND1_STARTED_WITH_CHAR_E = saveBrand("e_brand1");
+            // category
+            CATEGORY1 = saveCategory("category1");
+            // categoryDetail
+            DETAIL1_WITH_CATEGORY1 = saveCategoryDetail(CATEGORY1, "categoryDetail1");
+            // item
+            ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2 = saveItem("item1", "subName1",
+                BRAND1_STARTED_WITH_CHAR_B, CATEGORY1,
+                DETAIL1_WITH_CATEGORY1,
+                "http://dummyImgUrl.com");
+            ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1 = saveItem("item2", "subName2",
+                BRAND1_STARTED_WITH_CHAR_B, CATEGORY1,
+                DETAIL1_WITH_CATEGORY1,
+                "http://dummyImgUrl2.com");
+            // member
+            MEMBER1 = saveMember("dummyEmail", ROLE_MEMBER, "dummyPassword");
+            // comment
+            COMMENT1_BY_ITEM1_MEMBER1 = saveComment(
+                ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
+                "comment1");
+            COMMENT2_BY_ITEM1_MEMBER1 = saveComment(
+                ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
+                "comment2");
+
+            isNotInitialized = !isNotInitialized;
+        }
     }
 
     private Comment saveComment(Item item, Member member, String content) {

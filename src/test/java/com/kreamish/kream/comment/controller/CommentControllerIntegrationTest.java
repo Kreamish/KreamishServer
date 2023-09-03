@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,19 +19,18 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({"test", "data"})
+@Transactional
 public class CommentControllerIntegrationTest {
 
     @Autowired
     CommentRepository commentRepository;
     @Autowired
     WebTestClient webTestClient;
-
     Map<String, String> params = new HashMap<>();
     String notExistedId = String.valueOf(Integer.MAX_VALUE);
 
     @Test
     @DisplayName("실패: member-id 파라미터 없이 댓글 지우기. ")
-    @Transactional
     void FAIL_DELETE_COMMENT_SHOULD_CHECK_IS_BAD_REQUEST() {
         String uri = "/comments/{comment-id}";
         String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
@@ -45,7 +45,6 @@ public class CommentControllerIntegrationTest {
             .isBadRequest()
 
             .expectBody()
-            .consumeWith(System.out::println)
 
             .jsonPath("$.success")
             .isEqualTo(false)
@@ -59,7 +58,6 @@ public class CommentControllerIntegrationTest {
 
     @Test
     @DisplayName("성공: 댓글 지우기.")
-    @Transactional
     void SUCCESS_DELETE_COMMENT_SHOULD_CHECK_IS_OK() {
         String uri = "/comments/{comment-id}?member-id={member-id}";
         String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
@@ -98,7 +96,7 @@ public class CommentControllerIntegrationTest {
             .exchange()
 
             .expectStatus()
-            .isBadRequest()
+            .isNotFound()
 
             .expectBody()
 
@@ -117,7 +115,6 @@ public class CommentControllerIntegrationTest {
 
     @Test
     @DisplayName("성공: 댓글 등록하기.")
-    @Transactional
     void SUCCESS_CREATE_COMMENT_SHOULD_CHECK_IS_OK() {
         String memberId = TestDataRunner.MEMBER1.getMemberId().toString();
         String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
@@ -127,12 +124,14 @@ public class CommentControllerIntegrationTest {
         Long targetItemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId();
         Long targetMemberId = TestDataRunner.MEMBER1.getMemberId();
 
-        params.put("member-id", memberId);
-        params.put("item-id", itemId);
+        params.put("memberId", memberId);
+        params.put("itemId", itemId);
         params.put("content", content);
 
         webTestClient.post()
             .uri("/comments")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(params))
             .exchange()
 
@@ -147,10 +146,10 @@ public class CommentControllerIntegrationTest {
             .jsonPath("$.response")
             .isNotEmpty()
 
-            .jsonPath("$.response.item_id")
+            .jsonPath("$.response.itemId")
             .isEqualTo(targetItemId)
 
-            .jsonPath("$.response.member_id")
+            .jsonPath("$.response.memberId")
             .isEqualTo(targetMemberId);
     }
 
@@ -240,8 +239,8 @@ public class CommentControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("성공: 존재하지 않는 아이템에 등록된 댓글 전체 가져오기")
-    void SUCCESS_GET_ALL_COMMENT_ABOUT_NOT_EXISTED_ITEM_SHOULD_IS_OK() {
+    @DisplayName("실패: 존재하지 않는 아이템에 등록된 댓글 전체 가져오기")
+    void FAIL_GET_ALL_COMMENT_ABOUT_NOT_EXISTED_ITEM_SHOULD_IS_OK() {
         String uri = "/comments/item/{item-id}";
         Long zeroLength = 0L;
 
@@ -252,20 +251,21 @@ public class CommentControllerIntegrationTest {
             .exchange()
 
             .expectStatus()
-            .isOk()
+            .isNotFound()
 
             .expectBody()
 
             .jsonPath("$.success")
-            .isEqualTo(true)
+            .isEqualTo(false)
 
             .jsonPath("$.response")
-            .isArray()
-
-            .jsonPath("$.response.length()")
-            .isEqualTo(zeroLength)
+            .isEmpty()
 
             .jsonPath("$.error")
-            .isEmpty();
+            .isNotEmpty();
+    }
+
+    class Temp {
+
     }
 }

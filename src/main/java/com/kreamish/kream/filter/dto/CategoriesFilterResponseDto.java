@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CategoriesFilterResultDto {
+public class CategoriesFilterResponseDto {
 
     @JsonProperty("category_id")
     private Long id;
@@ -24,14 +24,14 @@ public class CategoriesFilterResultDto {
     @JsonProperty("category_detail_list")
     private List<SimpleCategoryDetailDto> simpleCategoryDetailList;
 
-    public static CategoriesFilterResultDto of(CategoryDto categoryDto,
+    public static CategoriesFilterResponseDto of(CategoryDto categoryDto,
         List<CategoryDetailDto> categoryDetailDtoList) {
         List<SimpleCategoryDetailDto> simpleCategoryDetailDtoList = categoryDetailDtoList.stream()
             .filter(categoryDetailDto -> categoryDetailDto.isBelongTo(categoryDto))
             .map(SimpleCategoryDetailDto::of)
             .collect(Collectors.toList());
 
-        return new CategoriesFilterResultDto(categoryDto.getCategoryId(), categoryDto.getName(),
+        return new CategoriesFilterResponseDto(categoryDto.getCategoryId(), categoryDto.getName(),
             simpleCategoryDetailDtoList);
     }
 }

@@ -40,7 +40,7 @@ class CommentControllerUnitTest {
     @DisplayName("실패: 댓글 등록 실패. item_id가 null")
     void FAIL_SHOULD_CHECK_STATUS_400() {
         Map<String, String> params = new HashMap();
-        params.put("member-id", "1");
+        params.put("memberId", "1");
         params.put("content", "123123");
 
         webTestClient.post()
@@ -56,8 +56,8 @@ class CommentControllerUnitTest {
     @DisplayName("성공: 댓글 등록")
     void SUCCESS_SHOULD_CHECK_STATUS_200() {
         Map<String, String> params = new HashMap();
-        params.put("member-id", "1");
-        params.put("item-id", "1");
+        params.put("memberId", "1");
+        params.put("itemId", "1");
         params.put("content", "comment content");
 
         when(commentFacade.create(any(CommentRequestDto.class))).thenReturn(null);

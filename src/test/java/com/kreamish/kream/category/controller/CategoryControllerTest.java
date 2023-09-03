@@ -5,7 +5,7 @@ import static org.mockito.Mockito.doThrow;
 
 import com.kreamish.kream.category.dto.CategoriesDto;
 import com.kreamish.kream.category.entity.Category;
-import com.kreamish.kream.category.service.CategoryService;
+import com.kreamish.kream.category.service.CategoryServiceImpl;
 import com.kreamish.kream.common.error.GeneralExceptionHandler;
 import com.kreamish.kream.common.util.ApiUtils;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 class CategoryControllerTest {
 
     @Mock
-    CategoryService categoryService;
+    CategoryServiceImpl categoryServiceImpl;
     WebTestClient webTestClient;
     @InjectMocks
     CategoryController categoryController;
@@ -43,7 +43,7 @@ class CategoryControllerTest {
         Category mockBrand = Category.of("mockBrand");
         CategoriesDto mockCategoriesDto = CategoriesDto.of(List.of(mockBrand));
 
-        doReturn(mockCategoriesDto).when(categoryService).getAllCategories();
+        doReturn(mockCategoriesDto).when(categoryServiceImpl).getAllCategories();
 
         webTestClient.get()
             .uri("/categories")
@@ -57,7 +57,7 @@ class CategoryControllerTest {
     void SUCCESS_SHOULD_CHECK_STATUS_204() {
         CategoriesDto mockCategoriesDto = CategoriesDto.of(Collections.emptyList());
 
-        doReturn(mockCategoriesDto).when(categoryService).getAllCategories();
+        doReturn(mockCategoriesDto).when(categoryServiceImpl).getAllCategories();
 
         webTestClient.get()
             .uri("/categories")
@@ -69,7 +69,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("실패: 40x 에러 발생")
     void FAIL_SHOULD_CHECK_STATUS_40x() {
-        doThrow(RuntimeException.class).when(categoryService).getAllCategories();
+        doThrow(RuntimeException.class).when(categoryServiceImpl).getAllCategories();
 
         webTestClient.get()
             .uri("/categories")
