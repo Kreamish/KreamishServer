@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-@Table(name = "like")
+@Table(name = "likes")
 @Getter
 @Entity
 public class Like extends BaseEntity {
