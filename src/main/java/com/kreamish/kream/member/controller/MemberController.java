@@ -49,13 +49,8 @@ public class MemberController {
             throw new IllegalStateException(String.format("memberId is null or 0.. memberId -> %d", memberId));
         }
 
-        return new ResponseEntity<>(
-            ApiUtils.success(ResponseEntity.created(URI.create("/members/" + memberId))
-                .body(new MemberRegisterResponseDto(memberId))
-                .getBody()
-            ),
-            HttpStatus.CREATED
-        );
+        return ResponseEntity.created(URI.create("/members/" + memberId))
+                .body(ApiUtils.success(new MemberRegisterResponseDto(memberId)));
     }
 
     @GetMapping("/{member-id}")
