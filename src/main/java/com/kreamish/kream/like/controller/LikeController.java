@@ -8,6 +8,8 @@ import com.kreamish.kream.like.dto.LikeCntResponseDto;
 import com.kreamish.kream.like.dto.LikeResponseDto;
 import com.kreamish.kream.like.dto.LikedItemSizesResponseDto;
 import com.kreamish.kream.like.facade.LikeFacade;
+import com.kreamish.kream.login.Login;
+import com.kreamish.kream.login.LoginMemberInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,10 +44,9 @@ public class LikeController {
     })
     ResponseEntity<ApiResult<LikedItemSizesResponseDto>> getLikedItemSizes(
         @PathVariable("item-id") @Valid @NotNull Long itemId,
-        // ToDo : Authorization Header Basic Token으로 memberId 받기
-        @RequestParam("member-id") @Valid @NotNull Long memberId) {
+        @Login LoginMemberInfo loginMemberInfo) {
         LikedItemSizesResponseDto likedItemSizesResponseDto = likeFacade.getLikedItemSizes(itemId,
-            memberId);
+            loginMemberInfo.getMemberId());
 
         return new ResponseEntity<>(ApiUtils.success(likedItemSizesResponseDto), HttpStatus.OK);
     }
@@ -62,9 +62,10 @@ public class LikeController {
         @ApiResponse(responseCode = "404", description = "잘못된 파라미터")
     })
     ResponseEntity<ApiResult<LikeResponseDto>> createLike(
-        // ToDo : Authorization Header Basic Token으로 memberId 받기
-        @PathVariable("item-sizes-id") Long itemSizesId) {
-        Long memberId = 1L;
+        @PathVariable("item-sizes-id") Long itemSizesId,
+        @Login LoginMemberInfo loginMemberInfo) {
+        Long memberId = loginMemberInfo.getMemberId();
+
         LikeResponseDto likeResponseDto = likeFacade.createLike(itemSizesId, memberId);
 
         return new ResponseEntity<>(success(likeResponseDto), HttpStatus.OK);

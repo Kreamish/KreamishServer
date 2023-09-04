@@ -7,6 +7,8 @@ import com.kreamish.kream.comment.dto.CommentResponseDto;
 import com.kreamish.kream.comment.dto.ItemCommentCountDto;
 import com.kreamish.kream.comment.facade.CommentFacade;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
+import com.kreamish.kream.login.Login;
+import com.kreamish.kream.login.LoginMemberInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,8 +43,10 @@ public class CommentController {
         @ApiResponse(responseCode = "400", description = "댓글 등록 실패")
     })
     public ResponseEntity<ApiResult<CommentResponseDto>> createComment(
-        @RequestBody @Valid CommentRequestDto commentRequestDto) {
-        return new ResponseEntity<>(success(commentFacade.create(commentRequestDto)),
+        @RequestBody @Valid CommentRequestDto commentRequestDto,
+        @Login LoginMemberInfo loginMemberInfo) {
+        return new ResponseEntity<>(
+            success(commentFacade.create(commentRequestDto, loginMemberInfo.getMemberId())),
             HttpStatus.OK);
     }
 
@@ -54,14 +57,13 @@ public class CommentController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 삭제 실패")
+        @ApiResponse(responseCode = "400", description = "댓글 삭제 실패"),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 댓글")
     })
     public ResponseEntity<ApiResult<?>> deleteComment(
-        @PathVariable("comment-id") Long commentId,
-        // ToDo : basic token header
-        @RequestParam("member-id") Long memberId) {
+        @PathVariable("comment-id") Long commentId, @Login LoginMemberInfo loginMemberInfo) {
 
-        commentFacade.delete(commentId, memberId);
+        commentFacade.delete(commentId, loginMemberInfo.getMemberId());
         return new ResponseEntity<>(success(null), HttpStatus.OK);
     }
 

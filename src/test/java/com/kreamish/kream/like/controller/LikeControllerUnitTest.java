@@ -36,8 +36,8 @@ class LikeControllerUnitTest {
     @DisplayName("성공: post 좋아요 표시. 필수 파라미터 체크하기")
     void SUCCESS_CLICK_LIKE_SHOULD_IS_OK() {
         String uri = "/like";
-        String itemId;
-        String memberId;
+        String itemId = "1";
+        String memberId = "1";
 
         params.put("item-id", itemId);
         params.put("member-id", memberId);
