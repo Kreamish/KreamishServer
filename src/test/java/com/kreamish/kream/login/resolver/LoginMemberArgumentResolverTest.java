@@ -1,10 +1,11 @@
 package com.kreamish.kream.login.resolver;
 
-import static com.kreamish.kream.login.resolver.LoginMemberArgumentResolver.AUTHORIZATION_HEADER_NAME;
 import static com.kreamish.kream.login.resolver.LoginMemberArgumentResolver.AUTHORIZATION_PREFIX;
+import static com.kreamish.kream.login.resolver.LoginMemberArgumentResolver.KREAMISH_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.kreamish.kream.login.LoginMemberInfo;
 import java.util.Base64;
@@ -36,14 +37,14 @@ class LoginMemberArgumentResolverTest {
     public void AUTHORIZATION_HEADER_IS_EXISTS_FOR_loginArgumentResolver() {
         String requestHeaderMemberId = "12341";
 
+        String encodedStr = AUTHORIZATION_PREFIX + Base64.getEncoder()
+            .encodeToString((requestHeaderMemberId + ":" + KREAMISH_PASSWORD).getBytes());
         //given
-        when(request.getHeader(AUTHORIZATION_HEADER_NAME))
-            .thenReturn(Base64.getEncoder().encodeToString(
-                (AUTHORIZATION_PREFIX + requestHeaderMemberId).getBytes()
-            ));
+        when(request.getHeader(AUTHORIZATION)).thenReturn(encodedStr);
 
         //when
-        LoginMemberInfo loginMember = (LoginMemberInfo) loginMemberArgumentResolver.resolveArgument(parameter, null,
+        LoginMemberInfo loginMember = (LoginMemberInfo) loginMemberArgumentResolver.resolveArgument(
+            parameter, null,
             request, null);
 
         //then
@@ -56,7 +57,7 @@ class LoginMemberArgumentResolverTest {
     @Test
     public void AUTHORIZATION_HEADER_IS_NULL_FOR_loginArgumentResolver() {
         //given
-        when(request.getHeader(AUTHORIZATION_HEADER_NAME)).thenReturn(null);
+        when(request.getHeader(AUTHORIZATION)).thenReturn(null);
 
         //then
         assertThrows(IllegalArgumentException.class,

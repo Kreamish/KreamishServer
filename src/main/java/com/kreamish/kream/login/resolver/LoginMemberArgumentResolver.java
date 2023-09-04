@@ -1,5 +1,7 @@
 package com.kreamish.kream.login.resolver;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import com.kreamish.kream.common.resolver.CommonArgumentResolver;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
@@ -14,8 +16,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class LoginMemberArgumentResolver extends CommonArgumentResolver {
 
-    public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
-    public static final String AUTHORIZATION_PREFIX = "basic ";
+    public static final String AUTHORIZATION_PREFIX = "Basic ";
+    public static final String KREAMISH_PASSWORD = "kreamish";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -26,33 +28,39 @@ public class LoginMemberArgumentResolver extends CommonArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String authString = webRequest.getHeader(AUTHORIZATION_HEADER_NAME);
+        // Basic ${base64(memberId:kreamish)}
+        String authString = webRequest.getHeader(AUTHORIZATION);
         if (StringUtils.isBlank(authString)) {
             throw new IllegalArgumentException("Authorization header 가 필요합니다.");
         }
 
-        String decodeValue = new String(Base64.getDecoder().decode(
-            authString)
-        );
-
-        // Authorization: basic memberId
-        String[] split = decodeValue.split(AUTHORIZATION_PREFIX);
-        if (split.length <= 1) {
-            throw new IllegalArgumentException("잘못된 토큰입니다.");
+        if (!authString.startsWith(AUTHORIZATION_PREFIX)) {
+            throw new IllegalArgumentException("Authorization prefix 가 올바르지 않습니다");
         }
 
-        if (isLongParsable(split[1])) {
+        // ${base64(memberId:kreamish)}
+        String encodedStr = authString.substring(AUTHORIZATION_PREFIX.length());
+
+        // memberId:kreamish
+
+        String memberIdAndPassword = new String(
+            Base64.getDecoder().decode(encodedStr.getBytes()));
+
+        // memberId
+        String memberId = memberIdAndPassword.split(":")[0];
+
+        if (isNotLongParsable(memberId)) {
             throw new IllegalArgumentException("memberId는 1이상의 Long 타입이어야 합니다.");
         }
-        return new LoginMemberInfo(Long.parseLong(split[1]));
+        return new LoginMemberInfo(Long.parseLong(memberId));
     }
 
-    private Boolean isLongParsable(String string) {
+    private Boolean isNotLongParsable(String string) {
         try {
             long value = Long.parseLong(string);
-            return value > 0;
+            return value <= 0;
         } catch (NumberFormatException e) {
-            return false;
+            return true;
         }
     }
 }
