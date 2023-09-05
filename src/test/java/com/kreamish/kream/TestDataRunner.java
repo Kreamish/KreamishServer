@@ -8,8 +8,12 @@ import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.categorydetail.repository.CategoryDetailRepository;
 import com.kreamish.kream.comment.entity.Comment;
 import com.kreamish.kream.comment.repository.CommentRepository;
+import com.kreamish.kream.favorite.enity.Favorite;
+import com.kreamish.kream.favorite.repository.FavoriteRepository;
 import com.kreamish.kream.item.entity.Item;
 import com.kreamish.kream.item.repository.ItemRepository;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
+import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.entity.MemberRole;
 import com.kreamish.kream.member.repository.MemberRepository;
@@ -43,8 +47,14 @@ public class TestDataRunner implements ApplicationRunner {
     public static Item ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
     public static Item ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1;
     public static Member MEMBER1;
+    public static Member MEMBER2;
     public static Comment COMMENT1_BY_ITEM1_MEMBER1;
     public static Comment COMMENT2_BY_ITEM1_MEMBER1;
+    public static ItemSizes ITEMSIZES1_WITH_ITEM2;
+    public static ItemSizes ITEMSIZES2_WITH_ITEM2;
+    public static Favorite FAVORITE1_WITH_MEMBER1_ITEMSIZES1;
+    public static Favorite FAVORITE2_WITH_MEMBER1_ITEMSIZES2;
+
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final MemberRoleRepository memberRoleRepository;
@@ -52,6 +62,8 @@ public class TestDataRunner implements ApplicationRunner {
     private final CategoryRepository categoryRepository;
     private final CategoryDetailRepository categoryDetailRepository;
     private final CommentRepository commentRepository;
+    private final ItemSizesRepository itemSizesRepository;
+    private final FavoriteRepository favoriteRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -79,8 +91,31 @@ public class TestDataRunner implements ApplicationRunner {
                 BRAND1_STARTED_WITH_CHAR_B, CATEGORY1,
                 DETAIL1_WITH_CATEGORY1,
                 "http://dummyImgUrl2.com");
+
+            ITEMSIZES1_WITH_ITEM2 = saveItemSizes(
+                "size1",
+                ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1
+            );
+
+            ITEMSIZES2_WITH_ITEM2 = saveItemSizes(
+                "size2",
+                ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1
+            );
+
             // member
             MEMBER1 = saveMember("dummyEmail", ROLE_MEMBER, "dummyPassword");
+            MEMBER2 = saveMember("dummyEmail2", ROLE_MEMBER, "dummyPassword2");
+
+            FAVORITE1_WITH_MEMBER1_ITEMSIZES1 = saveFavorite(
+                MEMBER1,
+                ITEMSIZES1_WITH_ITEM2
+            );
+
+            FAVORITE2_WITH_MEMBER1_ITEMSIZES2 = saveFavorite(
+                MEMBER1,
+                ITEMSIZES2_WITH_ITEM2
+            );
+
             // comment
             COMMENT1_BY_ITEM1_MEMBER1 = saveComment(
                 ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
@@ -92,6 +127,7 @@ public class TestDataRunner implements ApplicationRunner {
             isNotInitialized = !isNotInitialized;
         }
     }
+
 
     private Comment saveComment(Item item, Member member, String content) {
         return commentRepository.save(Comment.of(item, member, content));
@@ -123,4 +159,23 @@ public class TestDataRunner implements ApplicationRunner {
     private MemberRole saveMemberRole(String roleName) {
         return memberRoleRepository.save(MemberRole.builder().name(roleName).build());
     }
+
+    private ItemSizes saveItemSizes(String size, Item item) {
+        return itemSizesRepository.save(
+            ItemSizes.builder()
+                .size(size)
+                .item(item)
+                .build()
+        );
+    }
+
+    private Favorite saveFavorite(Member member, ItemSizes itemSizes) {
+        return favoriteRepository.save(
+            Favorite.builder()
+                .member(member)
+                .itemSizes(itemSizes)
+                .build()
+        );
+    }
+
 }
