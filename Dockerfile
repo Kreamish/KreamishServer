@@ -2,6 +2,13 @@ FROM openjdk:17-jdk-oracle
 
 WORKDIR /var/app
 
-COPY target/kream-0.0.1-SNAPSHOT.jar kream-0.0.1-SNAPSHOT.jar
+COPY pom.xml pom.xml
+COPY src src
+COPY .mvn .mvn
+COPY mvnw mvnw
 
-CMD java -jar kream-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+RUN chmod +x mvnw
+
+RUN ./mvnw clean package
+
+CMD java -jar target/kream-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
