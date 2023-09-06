@@ -1,4 +1,5 @@
-package com.kreamish.kream.like.entity;
+package com.kreamish.kream.favorite.enity;
+
 
 import com.kreamish.kream.common.entity.BaseEntity;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
@@ -11,30 +12,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "likes")
-@Getter
 @Entity
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-public class Like extends BaseEntity {
+@AllArgsConstructor
+@Getter
+@Table(name = "favorite")
+@Builder
+public class Favorite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
-    private Long likeId;
+    @Column(name = "favorite_id")
+    private Long favoriteId;
+
     @ManyToOne
-    @JoinColumn(name = "item_sizes_id")
+    @JoinColumn(name = "item_sizes_id", nullable = false)
     private ItemSizes itemSizes;
+
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-    
-    public static Like of(ItemSizes itemSizes, Member member) {
-        return new Like(null, itemSizes, member);
+
+    public static Favorite of(ItemSizes itemSizes, Member member) {
+        return new Favorite(null, itemSizes, member);
     }
 }
