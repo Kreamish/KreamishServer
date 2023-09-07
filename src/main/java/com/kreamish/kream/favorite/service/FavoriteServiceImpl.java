@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
 
-    private static final Long ZERO_CNT = 0L;
     private final FavoriteRepository favoriteRepository;
     private final ItemSizeService itemSizeService;
     private final MemberService memberService;
