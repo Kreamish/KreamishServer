@@ -10,7 +10,11 @@ public class FavoriteResponseDto {
     @JsonProperty
     private final Long favoriteId;
 
+    @JsonProperty
+    private final Long itemSizesId;
+
     public static FavoriteResponseDto of(Favorite favorite) {
-        return new FavoriteResponseDto(favorite.getFavoriteId());
+        return new FavoriteResponseDto(favorite.getFavoriteId(),
+            favorite.getItemSizes().getItemSizesId());
     }
 }
