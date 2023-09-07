@@ -57,8 +57,8 @@ public class FavoriteController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "관심상품 취소하기 성공"),
-        @ApiResponse(responseCode = "400", description = "관심상품 id가 전달되지 않음"),
-        @ApiResponse(responseCode = "404", description = "취소할 관심상품가 없음")
+        @ApiResponse(responseCode = "400", description = "관심상품 id가 전달되지 않았거나 부적합"),
+        @ApiResponse(responseCode = "404", description = "취소할 관심상품이 없음")
     })
     ResponseEntity<ApiResult<?>> deleteFavorite(
         @PathVariable("favorite-id") @Valid @NotNull Long favoriteId) {
@@ -74,7 +74,7 @@ public class FavoriteController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "관심상품 개수 가져오기 성공"),
-        @ApiResponse(responseCode = "400", description = "관심상품 id가 올바르지 않거나 전달되지 않았다.")
+        @ApiResponse(responseCode = "400", description = "관심상품 id가 올바르지 않거나 부적합")
     })
     ResponseEntity<ApiResult<?>> getFavoriteCnt(
         @PathVariable("item-id") @Valid @NotNull Long itemId) {
