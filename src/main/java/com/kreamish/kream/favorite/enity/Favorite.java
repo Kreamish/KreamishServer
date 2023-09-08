@@ -6,6 +6,7 @@ import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,11 +31,11 @@ public class Favorite extends BaseEntity {
     @Column(name = "favorite_id")
     private Long favoriteId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_sizes_id", nullable = false)
     private ItemSizes itemSizes;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 

@@ -4,6 +4,7 @@ import com.kreamish.kream.common.entity.BaseEntity;
 import com.kreamish.kream.item.entity.Item;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +37,7 @@ public class ItemSizes extends BaseEntity {
     @Setter
     private String size;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 

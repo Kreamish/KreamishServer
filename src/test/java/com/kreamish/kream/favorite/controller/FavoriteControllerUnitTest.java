@@ -61,7 +61,7 @@ class FavoriteControllerUnitTest {
         params.put("item-sizes-id", itemSizesId);
 
         when(favoriteService.createFavorite(anyLong(), anyLong())).thenReturn(
-            new FavoriteResponseDto(favoriteId));
+            new FavoriteResponseDto(favoriteId,Long.parseLong(itemSizesId)));
 
         ApiResult apiResult = webTestClient.post()
             .uri(uri, params)
