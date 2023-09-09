@@ -1,6 +1,7 @@
 package com.kreamish.kream.comment.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import com.kreamish.kream.comment.dto.CommentRequestDto;
@@ -60,7 +61,7 @@ class CommentControllerUnitTest {
         params.put("itemId", "1");
         params.put("content", "comment content");
 
-        when(commentFacade.create(any(CommentRequestDto.class))).thenReturn(null);
+        when(commentFacade.create(any(CommentRequestDto.class), anyLong())).thenReturn(null);
 
         webTestClient.post()
             .uri("/comments")

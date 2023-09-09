@@ -1,7 +1,9 @@
-package com.kreamish.kream.itemsizes.entity;
+package com.kreamish.kream.favorite.enity;
+
 
 import com.kreamish.kream.common.entity.BaseEntity;
-import com.kreamish.kream.item.entity.Item;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
+import com.kreamish.kream.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,37 +13,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-@Table(name = "item_sizes")
+@Table(name = "favorite")
 @Builder
-public class ItemSizes extends BaseEntity {
+public class Favorite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_sizes_id")
-    private Long itemSizesId;
-
-    @Column(name = "size", nullable = false)
-    @Setter
-    private String size;
+    @Column(name = "favorite_id")
+    private Long favoriteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+    @JoinColumn(name = "item_sizes_id", nullable = false)
+    private ItemSizes itemSizes;
 
-    public static ItemSizes of(String size, Item item) {
-        return new ItemSizes(null, size, item);
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    public static Favorite of(ItemSizes itemSizes, Member member) {
+        return new Favorite(null, itemSizes, member);
     }
 }

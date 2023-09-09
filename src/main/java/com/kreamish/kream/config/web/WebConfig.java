@@ -13,12 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final ItemGetItemsArgumentResolver itemGetItemsArgumentResolve;
-
     private final LoginMemberArgumentResolver loginMemberArgumentResolver;
 
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(itemGetItemsArgumentResolve);
         argumentResolvers.add(loginMemberArgumentResolver);
-
     }
 }

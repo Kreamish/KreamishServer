@@ -4,6 +4,7 @@ import com.kreamish.kream.itemsizes.dto.ItemSizeDto;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ItemSizeServiceImpl implements ItemSizeService {
 
     private final ItemSizesRepository itemSizesRepository;
+
+    @Override
+    public Optional<ItemSizes> findById(Long itemSizesId) {
+        return itemSizesRepository.findById(itemSizesId);
+    }
 
     // ToDo : N + 1 문제 발생하나 확인해보기.
     public List<ItemSizeDto> getItemSizes() {

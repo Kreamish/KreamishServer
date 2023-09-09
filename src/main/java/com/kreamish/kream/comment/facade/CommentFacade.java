@@ -25,8 +25,8 @@ public class CommentFacade {
     private final CommentService commentService;
 
     @Transactional
-    public CommentResponseDto create(CommentRequestDto commentRequestDto) {
-        Member member = memberService.getMemberById(commentRequestDto.getMemberId())
+    public CommentResponseDto create(CommentRequestDto commentRequestDto, Long memberId) {
+        Member member = memberService.getMemberById(memberId)
             .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
         Item item = itemService.getItemById(commentRequestDto.getItemId())
             .orElseThrow(() -> new IllegalArgumentException("Item Not Found"));
