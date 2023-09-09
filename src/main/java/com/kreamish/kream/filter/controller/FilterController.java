@@ -9,6 +9,7 @@ import com.kreamish.kream.filter.dto.CategoriesFilterResponseDto;
 import com.kreamish.kream.filter.dto.ItemSizesFilterResponseDto;
 import com.kreamish.kream.filter.facade.FilterFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
@@ -32,11 +33,7 @@ public class FilterController {
         summary = "카테고리 별 세부 카테고리 리스트 반환",
         description = "필터링을 위한 모든 카테고리 별 세부 카테고리 리스트 반환"
     )
-
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
-        @ApiResponse(responseCode = "404")
-    })
+    @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환")
     public ResponseEntity<ApiResult<List<CategoriesFilterResponseDto>>> getCategories() {
         return new ResponseEntity<>(success(filterFacade.getCategories()), HttpStatus.OK);
     }
@@ -46,10 +43,7 @@ public class FilterController {
         summary = "브랜드 리스트 반환",
         description = "필터링을 위한 모든 브랜드 리스트 반환"
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
-        @ApiResponse(responseCode = "404")
-    })
+    @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환")
     public ResponseEntity<ApiResult<List<BrandFilterResponseDto>>> getBrand() {
         return new ResponseEntity<>(success(filterFacade.getBrandFilterList()), HttpStatus.OK);
     }
@@ -59,10 +53,7 @@ public class FilterController {
         summary = "컬렉션 리스트 반환",
         description = "필터링을 위한 모든 컬렉션 리스트 반환"
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
-        @ApiResponse(responseCode = "404")
-    })
+    @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환")
     public ResponseEntity<ApiResult<List<CollectionDto>>> getCollections() {
         return new ResponseEntity<>(success(filterFacade.getCollections()), HttpStatus.OK);
     }
@@ -72,10 +63,7 @@ public class FilterController {
         summary = "아이템 사이즈 리스트 반환",
         description = "필터링을 위한 모든 아이템 사이즈 리스트 반환"
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환"),
-        @ApiResponse(responseCode = "404")
-    })
+    @ApiResponse(responseCode = "200", description = "필터링을 위한 리스트 정상 반환")
     public ResponseEntity<ApiResult<List<ItemSizesFilterResponseDto>>> getItemSizes() {
         return new ResponseEntity<>(success(filterFacade.getItemSizesFilterList()), HttpStatus.OK);
     }

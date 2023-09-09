@@ -10,8 +10,10 @@ import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +42,9 @@ public class CommentController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 등록 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 등록 실패")
+        @ApiResponse(responseCode = "400", description = "댓글 등록 실패", content = @Content)
     })
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<ApiResult<CommentResponseDto>> createComment(
         @RequestBody @Valid CommentRequestDto commentRequestDto,
         @Login LoginMemberInfo loginMemberInfo) {
@@ -57,9 +60,9 @@ public class CommentController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 삭제 실패"),
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 댓글")
+        @ApiResponse(responseCode = "400", description = "댓글 삭제 실패", content = @Content)
     })
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<ApiResult<?>> deleteComment(
         @PathVariable("comment-id") Long commentId, @Login LoginMemberInfo loginMemberInfo) {
 
@@ -74,8 +77,8 @@ public class CommentController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 개수 가져오기 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 개수 가져오기 실패"),
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 아이템")
+        @ApiResponse(responseCode = "400", description = "댓글 개수 가져오기 실패", content = @Content),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 아이템", content = @Content)
     })
     public ResponseEntity<ApiResult<ItemCommentCountDto>> getCommentCount(
         @PathVariable("item-id") Long itemId) {
@@ -92,8 +95,8 @@ public class CommentController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "댓글 전체 가져오기 성공"),
-        @ApiResponse(responseCode = "400", description = "댓글 전체 가져오기 실패"),
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 아이템")
+        @ApiResponse(responseCode = "400", description = "댓글 전체 가져오기 실패", content = @Content),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 아이템", content = @Content)
     })
     public ResponseEntity<ApiResult<List<CommentResponseDto>>> getComments(
         @PathVariable("item-id") Long itemId) {
