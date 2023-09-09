@@ -10,6 +10,7 @@ import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class CommentController {
         @ApiResponse(responseCode = "200", description = "댓글 등록 성공"),
         @ApiResponse(responseCode = "400", description = "댓글 등록 실패")
     })
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<ApiResult<CommentResponseDto>> createComment(
         @RequestBody @Valid CommentRequestDto commentRequestDto) {
         return new ResponseEntity<>(success(commentFacade.create(commentRequestDto)),
@@ -56,6 +58,7 @@ public class CommentController {
         @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
         @ApiResponse(responseCode = "400", description = "댓글 삭제 실패")
     })
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<ApiResult<?>> deleteComment(
         @PathVariable("comment-id") Long commentId,
         // ToDo : basic token header
