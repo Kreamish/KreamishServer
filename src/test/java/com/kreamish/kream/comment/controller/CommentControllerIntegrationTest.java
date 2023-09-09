@@ -1,6 +1,7 @@
 package com.kreamish.kream.comment.controller;
 
 import static com.kreamish.kream.TestDataRunner.ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
+import static com.kreamish.kream.login.resolver.LoginMemberArgumentResolver.KREAMISH_PASSWORD;
 
 import com.kreamish.kream.TestDataRunner;
 import com.kreamish.kream.comment.repository.CommentRepository;
@@ -59,16 +60,17 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 댓글 지우기.")
     void SUCCESS_DELETE_COMMENT_SHOULD_CHECK_IS_OK() {
-        String uri = "/comments/{comment-id}?member-id={member-id}";
+        String uri = "/comments/{comment-id}";
+
         String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
         String memberId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getMember().getMemberId()
             .toString();
 
         params.put("comment-id", commentId);
-        params.put("member-id", memberId);
 
         webTestClient.delete()
             .uri(uri, params)
+            .headers(h -> h.setBasicAuth(memberId, KREAMISH_PASSWORD))
             .exchange()
 
             .expectStatus()
@@ -86,13 +88,13 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("실패: 존재하지 않는 댓글 지우기")
     void FAIL_DELETE_COMMENT_SHOULD_CHECK_BAD_REQUEST() {
-        String uri = "/comments/{comment-id}?member-id={member-id}";
+        String uri = "/comments/{comment-id}";
 
         params.put("comment-id", notExistedId);
-        params.put("member-id", notExistedId);
 
         webTestClient.delete()
             .uri(uri, params)
+            .headers(h -> h.setBasicAuth(notExistedId, KREAMISH_PASSWORD))
             .exchange()
 
             .expectStatus()
@@ -124,12 +126,12 @@ public class CommentControllerIntegrationTest {
         Long targetItemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId();
         Long targetMemberId = TestDataRunner.MEMBER1.getMemberId();
 
-        params.put("memberId", memberId);
         params.put("itemId", itemId);
         params.put("content", content);
 
         webTestClient.post()
             .uri("/comments")
+            .headers(h -> h.setBasicAuth(memberId, "kreamish"))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(params))
@@ -242,7 +244,6 @@ public class CommentControllerIntegrationTest {
     @DisplayName("실패: 존재하지 않는 아이템에 등록된 댓글 전체 가져오기")
     void FAIL_GET_ALL_COMMENT_ABOUT_NOT_EXISTED_ITEM_SHOULD_IS_OK() {
         String uri = "/comments/item/{item-id}";
-        Long zeroLength = 0L;
 
         params.put("item-id", notExistedId);
 
@@ -263,9 +264,5 @@ public class CommentControllerIntegrationTest {
 
             .jsonPath("$.error")
             .isNotEmpty();
-    }
-
-    class Temp {
-
     }
 }
