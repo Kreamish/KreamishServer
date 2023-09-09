@@ -6,6 +6,7 @@ import com.kreamish.kream.category.dto.CategoriesDto;
 import com.kreamish.kream.category.service.CategoryService;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class CategoryController {
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "category list no content"),
         @ApiResponse(responseCode = "200", description = "category list 정상 반환"),
-        @ApiResponse(responseCode = "404", description = "category service error")
+        @ApiResponse(responseCode = "404", description = "category service error",content = @Content)
     })
     public ResponseEntity<ApiResult<?>> getItems() {
         CategoriesDto findCategories = categoryService.getAllCategories();

@@ -8,6 +8,7 @@ import com.kreamish.kream.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -59,7 +60,7 @@ public class MemberController {
         description = "회원 정보 상세 조회"
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 회원"),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 회원", content = @Content),
         @ApiResponse(responseCode = "200", description = "정상 반환"),
     })
     public ResponseEntity<ApiUtils.ApiResult<MemberDetailResponseDto>> inquiryMember(

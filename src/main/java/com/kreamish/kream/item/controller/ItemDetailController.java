@@ -4,6 +4,7 @@ import com.kreamish.kream.common.util.ApiUtils;
 import com.kreamish.kream.item.dto.ItemDetailResponseDto;
 import com.kreamish.kream.item.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class ItemDetailController {
         description = "itemId 로 상품에 대한 상세 정보 조회 및 반환"
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스"),
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스", content = @Content),
         @ApiResponse(responseCode = "200", description = "정상 반환")
     })
     @GetMapping("{item-id}")
