@@ -2,6 +2,7 @@ package com.kreamish.kream.favorite.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -13,6 +14,7 @@ import com.kreamish.kream.common.error.GeneralExceptionHandler;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.favorite.dto.FavoriteResponseDto;
 import com.kreamish.kream.favorite.service.FavoriteService;
+import com.kreamish.kream.favorite.dto.FavoriteItemsReponseDto;
 import com.kreamish.kream.login.resolver.LoginMemberArgumentResolver;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +36,8 @@ class FavoriteControllerUnitTest {
     final String BASE_URI = "/favorites";
     final String KREMAISH = "kreamish";
     final String memberId = "1";
+    final String REGISTRATION_DATE = "registration-date";
+    final String PURCHASE_PRICE = "purchase-price";
     @Mock
     FavoriteService favoriteService;
     WebTestClient webTestClient;
@@ -279,5 +283,35 @@ class FavoriteControllerUnitTest {
         assertThat(apiResult.getError()).isNotNull();
 
         verify(favoriteService, never()).getFavoriteCnt(anyLong());
+    }
+
+    @Test
+    @DisplayName("성공: 관심 상품 등록한 리스트 가져오기. 등록일 순")
+    void SUCCESS_GET_FAVORITE_ITMES_SHOULD_IS_OK() {
+        final String uri = BASE_URI +"?filter={filter}";
+        // ToDo : 생성자 변경
+        final FavoriteItemsReponseDto favoriteItemsReponseDto = new FavoriteItemsReponseDto();
+
+        params.put("filter", REGISTRATION_DATE);
+
+        when(favoriteService.getFavorite(anyLong(), anyString()))
+            .thenReturn(favoriteItemsReponseDto);
+
+        ApiResult apiResult = webTestClient.get()
+            .uri(uri, params)
+            .headers(h -> h.setBasicAuth(memberId, KREMAISH))
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+
+            .expectStatus()
+            .isOk()
+
+            .expectBody(ApiResult.class)
+            .returnResult()
+            .getResponseBody();
+
+        assertThat(apiResult.isSuccess()).isTrue();
+        assertThat(apiResult.getResponse()).isNotNull();
+        assertThat(apiResult.getError()).isNull();
     }
 }

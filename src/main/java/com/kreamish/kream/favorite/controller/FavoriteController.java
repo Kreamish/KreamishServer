@@ -6,11 +6,13 @@ import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.favorite.dto.FavoriteCntResponseDto;
 import com.kreamish.kream.favorite.dto.FavoriteResponseDto;
 import com.kreamish.kream.favorite.service.FavoriteService;
+import com.kreamish.kream.favorite.dto.FavoriteItemsReponseDto;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +33,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    public final String REGISTRATION_DATE = "registration-date";
+    public final String PURCHASE_PRICE = "purchase-price";
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+        summary = "관심 상품 리스트 가져오기",
+        description = "유저가 등록한 관심 상품 리스트를 필터 기준에 따라 페이징해서 가져오기"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "관심 상품 리스트 가져오기 성공")
+    })
+    @SecurityRequirement(name = "basicAuth")
+    ResponseEntity<ApiResult<FavoriteItemsReponseDto>> getFavoriteItems(
+        // ToDo : enum으로 받기, value가 enum 값인지 validation
+        @RequestParam(value = "filter", required = false, defaultValue = REGISTRATION_DATE) String filter,
+        @Login LoginMemberInfo loginMemberInfo
+    ) {
+        FavoriteItemsReponseDto favoriteItemsReponseDto = favoriteService.getFavorite(loginMemberInfo.getMemberId(), filter);
+
+        return ResponseEntity.ok(success(favoriteItemsReponseDto));
+    }
 
     @PostMapping(value = "/item-sizes-id/{item-sizes-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
@@ -41,12 +65,14 @@ public class FavoriteController {
         @ApiResponse(responseCode = "400", description = "필수 파라미터가 전달되지 않음"),
         @ApiResponse(responseCode = "404", description = "존재하지 않는 id 값 전달")
     })
+    @SecurityRequirement(name = "basicAuth")
     ResponseEntity<ApiResult<FavoriteResponseDto>> createFavorite(
         @PathVariable("item-sizes-id") Long itemSizesId,
         @Login LoginMemberInfo loginMemberInfo) {
         FavoriteResponseDto favoriteResponseDto = favoriteService.createFavorite(itemSizesId,
             loginMemberInfo.getMemberId());
 
+        // ToDo : ok로 바꾸기
         return new ResponseEntity<>(success(favoriteResponseDto), HttpStatus.OK);
     }
 

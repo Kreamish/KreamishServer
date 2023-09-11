@@ -1,5 +1,6 @@
 package com.kreamish.kream.favorite.service;
 
+import com.kreamish.kream.favorite.dto.FavoriteItemsReponseDto;
 import com.kreamish.kream.favorite.dto.FavoriteResponseDto;
 import com.kreamish.kream.favorite.dto.ItemFavoriteResponseDto;
 import com.kreamish.kream.favorite.dto.MemberFavoriteListResponseDto;
@@ -22,6 +23,15 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final ItemSizeService itemSizeService;
     private final MemberService memberService;
+
+    @Override
+    public FavoriteItemsReponseDto getFavorite(Long memberId, String filter) {
+        // ToDo : memberId 체크, filter
+        // ToDO : filter 체크 있는 필터인지
+        FavoriteItemsReponseDto favoriteItems = favoriteRepository.getFavoriteItems(memberId,filter);
+
+        return null;
+    }
 
     @Transactional
     public FavoriteResponseDto createFavorite(Long itemSizesId, Long memberId) {
