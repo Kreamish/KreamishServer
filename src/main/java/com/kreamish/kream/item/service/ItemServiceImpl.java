@@ -52,8 +52,9 @@ public class ItemServiceImpl implements ItemService {
         return ItemDetailResponseDto.builder()
             .name(item.getName())
             .subName(item.getSubName())
-            .recentPrice(getRecentPrice(item))
+            .brandName(item.getBrand().getName())
             .modelCode(item.getModelCode())
+            .releasePrice(item.getReleasePrice())
             .releaseDate(item.getReleaseDate())
             .representativeColor(item.getRepresentativeColor())
             .build();

@@ -30,7 +30,7 @@ public class ItemDetailController {
         @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스", content = @Content),
         @ApiResponse(responseCode = "200", description = "정상 반환")
     })
-    @GetMapping("{item-id}")
+    @GetMapping("/{item-id}")
     public ResponseEntity<ApiUtils.ApiResult<ItemDetailResponseDto>> getItemDetail(
         @PathVariable("item-id") Long itemId
     ) {
