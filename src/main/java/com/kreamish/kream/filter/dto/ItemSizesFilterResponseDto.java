@@ -5,10 +5,12 @@ import java.util.Collections;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.util.MultiValueMap;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@ToString
 public class ItemSizesFilterResponseDto {
 
     @JsonProperty("sizeSection")

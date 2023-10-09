@@ -8,6 +8,7 @@ import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
 import io.micrometer.common.util.StringUtils;
 import java.util.Base64;
+import javax.naming.AuthenticationException;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -28,13 +29,14 @@ public class LoginMemberArgumentResolver extends CommonArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory)
+        throws AuthenticationException {
         final boolean required = parameter.getParameterAnnotation(Login.class).required();
         try {
             return getLoginMemberInfoOrThrow(webRequest);
         } catch (IllegalArgumentException e) {
             if (required) {
-                throw e;
+                throw new AuthenticationException(e.getMessage());
             }
             return new LoginMemberInfo(NOT_LOGGED_IN_MEMBER_ID);
         }

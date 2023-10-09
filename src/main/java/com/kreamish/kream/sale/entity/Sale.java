@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "sale")
 @Builder
 @AllArgsConstructor
+@ToString
 public class Sale extends BaseEntity {
 
     @Id
@@ -48,4 +50,9 @@ public class Sale extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "sale_status", nullable = false)
     private DealStatus saleStatus;
+
+    public static Sale of(ItemSizes itemSizes, Member member, Long salePrice,
+        DealStatus saleStatus) {
+        return new Sale(null, itemSizes, member, salePrice, saleStatus);
+    }
 }

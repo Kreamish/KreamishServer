@@ -13,12 +13,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "trade")
 public class Trade extends BaseEntity {
 
@@ -38,4 +40,7 @@ public class Trade extends BaseEntity {
     @Column(name = "trade_price", nullable = false)
     private Long tradePrice;
 
+    public static Trade of(Purchase purchase, Sale sale, Long tradePrice) {
+        return new Trade(null, purchase, sale, tradePrice);
+    }
 }

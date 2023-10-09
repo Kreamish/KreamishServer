@@ -128,7 +128,7 @@ class FilterControllerTest {
             .exchange()
             .expectStatus().isOk()
             .expectBody()
-            .consumeWith(System.out::println)
+            
             .jsonPath("$.success").isEqualTo(true)
 
             .jsonPath("$.response").isNotEmpty()

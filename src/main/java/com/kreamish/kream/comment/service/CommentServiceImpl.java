@@ -34,8 +34,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Long getCommentCount(Long itemId) {
-        List<Comment> all = commentRepository.findAll();
-        System.out.println(all);
         return commentRepository.countByItemItemId(itemId);
     }
 

@@ -1,10 +1,10 @@
 package com.kreamish.kream.comment.controller;
 
-import static com.kreamish.kream.TestDataRunner.ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
+import static com.kreamish.kream.datarunner.DefaultData.ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
 import static com.kreamish.kream.login.resolver.LoginMemberArgumentResolver.KREAMISH_PASSWORD;
 
-import com.kreamish.kream.TestDataRunner;
 import com.kreamish.kream.comment.repository.CommentRepository;
+import com.kreamish.kream.datarunner.DefaultData;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({"test", "data"})
+@ActiveProfiles({"test", "default-data"})
 @Transactional
 public class CommentControllerIntegrationTest {
 
@@ -32,9 +32,9 @@ public class CommentControllerIntegrationTest {
 
     @Test
     @DisplayName("실패: member-id 파라미터 없이 댓글 지우기. ")
-    void FAIL_DELETE_COMMENT_SHOULD_CHECK_IS_BAD_REQUEST() {
+    void FAIL_DELETE_COMMENT_SHOULD_CHECK_IS_UNAUTHORIZED() {
         String uri = "/comments/{comment-id}";
-        String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
+        String commentId = DefaultData.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
 
         params.put("comment-id", commentId);
 
@@ -43,7 +43,7 @@ public class CommentControllerIntegrationTest {
             .exchange()
 
             .expectStatus()
-            .isBadRequest()
+            .isUnauthorized()
 
             .expectBody()
 
@@ -62,8 +62,8 @@ public class CommentControllerIntegrationTest {
     void SUCCESS_DELETE_COMMENT_SHOULD_CHECK_IS_OK() {
         String uri = "/comments/{comment-id}";
 
-        String commentId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
-        String memberId = TestDataRunner.COMMENT1_BY_ITEM1_MEMBER1.getMember().getMemberId()
+        String commentId = DefaultData.COMMENT1_BY_ITEM1_MEMBER1.getCommentId().toString();
+        String memberId = DefaultData.COMMENT1_BY_ITEM1_MEMBER1.getMember().getMemberId()
             .toString();
 
         params.put("comment-id", commentId);
@@ -118,13 +118,13 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 댓글 등록하기.")
     void SUCCESS_CREATE_COMMENT_SHOULD_CHECK_IS_OK() {
-        String memberId = TestDataRunner.MEMBER1.getMemberId().toString();
+        String memberId = DefaultData.MEMBER1.getMemberId().toString();
         String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
             .toString();
         String content = "content3";
 
         Long targetItemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId();
-        Long targetMemberId = TestDataRunner.MEMBER1.getMemberId();
+        Long targetMemberId = DefaultData.MEMBER1.getMemberId();
 
         params.put("itemId", itemId);
         params.put("content", content);

@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
 import java.util.Base64;
+import javax.naming.AuthenticationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +27,8 @@ class LoginMemberArgumentResolverTest {
 
     @Mock
     private NativeWebRequest request;
+    @Mock
+    private Login login;
 
     private LoginMemberArgumentResolver loginMemberArgumentResolver;
 
@@ -34,12 +38,15 @@ class LoginMemberArgumentResolverTest {
     }
 
     @Test
-    public void AUTHORIZATION_HEADER_IS_EXISTS_FOR_loginArgumentResolver() {
+    public void AUTHORIZATION_HEADER_IS_EXISTS_FOR_loginArgumentResolver()
+        throws AuthenticationException {
         String requestHeaderMemberId = "12341";
 
         String encodedStr = AUTHORIZATION_PREFIX + Base64.getEncoder()
             .encodeToString((requestHeaderMemberId + ":" + KREAMISH_PASSWORD).getBytes());
         //given
+        when(login.required()).thenReturn(true);
+        when(parameter.getParameterAnnotation(Login.class)).thenReturn(login);
         when(request.getHeader(AUTHORIZATION)).thenReturn(encodedStr);
 
         //when
@@ -57,10 +64,12 @@ class LoginMemberArgumentResolverTest {
     @Test
     public void AUTHORIZATION_HEADER_IS_NULL_FOR_loginArgumentResolver() {
         //given
+        when(login.required()).thenReturn(true);
+        when(parameter.getParameterAnnotation(Login.class)).thenReturn(login);
         when(request.getHeader(AUTHORIZATION)).thenReturn(null);
 
         //then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(AuthenticationException.class,
             () -> loginMemberArgumentResolver.resolveArgument(
                 parameter, null, request, null)
         );

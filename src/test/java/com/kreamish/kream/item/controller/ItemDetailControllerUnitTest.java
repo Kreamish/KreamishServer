@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import com.kreamish.kream.common.error.GeneralExceptionHandler;
 import com.kreamish.kream.common.util.ApiUtils;
 import com.kreamish.kream.item.service.ItemService;
+import com.kreamish.kream.login.resolver.LoginMemberArgumentResolver;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -43,6 +44,7 @@ public class ItemDetailControllerUnitTest {
         this.webTestClient = MockMvcWebTestClient
             .bindToController(itemDetailController)
             .controllerAdvice(new GeneralExceptionHandler())
+            .customArgumentResolvers(new LoginMemberArgumentResolver())
             .build();
     }
 
@@ -111,8 +113,8 @@ public class ItemDetailControllerUnitTest {
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
-            .expectStatus()
-            .isBadRequest();
+                .expectStatus()
+                .isBadRequest();
 
             verify(itemService, times(0)).findItemById(anyLong());
             apiUtilsMockedStatic.verify(() -> ApiUtils.success(any()), times(0));
@@ -120,24 +122,5 @@ public class ItemDetailControllerUnitTest {
                 times(1));
         }
     }
-
-    @Test
-    @DisplayName("성공: 아이템 즉시 구매, 판매 가격 가져오기")
-    void SUCCESS_GET_ALL_SIZE_PURCHASE_SALE_PRICE() {
-        /*
-            즉시 구매가격, 즉시 판매가격(itemSizes join item on item.id)
-
-                즉시 구매 가격 : 판매 입찰 가격 중 제일 싼거
-                즉시 판매 가격 : 구매 입찰 중 제일 비싼거
-
-                모든 사이즈 일 때
-                    로그인 안 하면 모든 사이즈만 볼 수 있음.
-                    즉시 구매가격이 제일 싼 사이즈의 즉시 구매, 판매 가격 가져옴
-
-                특정 사이즈 일 때
-                    로그인 해야 볼 수 특정 사이즈 호출 가능.
-                    특정 사이즈의 즉시 구매, 판매 가격
-         */
-        final String uri = BASE_URL + "/"
-    }
 }
+

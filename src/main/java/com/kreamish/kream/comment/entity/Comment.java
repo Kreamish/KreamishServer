@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
@@ -23,6 +24,7 @@ import org.hibernate.validator.constraints.Length;
 @Table(name = "comment")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
+@ToString
 public class Comment extends BaseEntity {
 
     @Id
