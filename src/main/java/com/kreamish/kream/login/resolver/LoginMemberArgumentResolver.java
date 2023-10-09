@@ -1,5 +1,6 @@
 package com.kreamish.kream.login.resolver;
 
+import static com.kreamish.kream.login.LoginMemberInfo.NOT_LOGGED_IN_MEMBER_ID;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.kreamish.kream.common.resolver.CommonArgumentResolver;
@@ -28,6 +29,18 @@ public class LoginMemberArgumentResolver extends CommonArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        final boolean required = parameter.getParameterAnnotation(Login.class).required();
+        try {
+            return getLoginMemberInfoOrThrow(webRequest);
+        } catch (IllegalArgumentException e) {
+            if (required) {
+                throw e;
+            }
+            return new LoginMemberInfo(NOT_LOGGED_IN_MEMBER_ID);
+        }
+    }
+
+    private LoginMemberInfo getLoginMemberInfoOrThrow(NativeWebRequest webRequest) {
         // Basic ${base64(memberId:kreamish)}
         String authString = webRequest.getHeader(AUTHORIZATION);
         if (StringUtils.isBlank(authString)) {
@@ -42,7 +55,6 @@ public class LoginMemberArgumentResolver extends CommonArgumentResolver {
         String encodedStr = authString.substring(AUTHORIZATION_PREFIX.length());
 
         // memberId:kreamish
-
         String memberIdAndPassword = new String(
             Base64.getDecoder().decode(encodedStr.getBytes()));
 
@@ -54,6 +66,7 @@ public class LoginMemberArgumentResolver extends CommonArgumentResolver {
         }
         return new LoginMemberInfo(Long.parseLong(memberId));
     }
+
 
     private Boolean isNotLongParsable(String string) {
         try {

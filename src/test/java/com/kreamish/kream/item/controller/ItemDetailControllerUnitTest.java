@@ -46,14 +46,6 @@ public class ItemDetailControllerUnitTest {
             .build();
     }
 
-    // nl -> default 아이템 상세 조회
-    // l -> default 아이템 상세 조회 -> size 아이템 상세 조회
-    // 컨트롤러에서 basic 인증 없으면 itemSize를 default 값으로
-
-    // /items/1 or /items/1/itemSizes/3
-    // nl or l
-    // /item/1 && nl , /item/1/itemSizes/3 && nl, /item/1 && l -> default 상세 조회
-    // /item/1/itemSizes/3 && l => itemSizesId로 상세 조회
     @Test
     @DisplayName("성공 : 아이템 상세 정보 가져오기.")
     void SUCCESS_GET_ITEM_DETAIL_INFO_SHOULD_IS_OK() {
@@ -90,7 +82,6 @@ public class ItemDetailControllerUnitTest {
 
         try (MockedStatic<ApiUtils> apiUtilsMockedStatic = mockStatic(ApiUtils.class)) {
             when(itemService.findItemById(anyLong())).thenThrow(new NoSuchElementException("err"));
-            when(ApiUtils.error(anyString(), any(HttpStatus.class))).thenReturn(any());
 
             webTestClient.get()
                 .uri(uri, params)
@@ -115,14 +106,38 @@ public class ItemDetailControllerUnitTest {
 
         params.put("item-id", itemId);
 
-        webTestClient.get()
-            .uri(uri, params)
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-
+        try (MockedStatic<ApiUtils> apiUtilsMockedStatic = mockStatic(ApiUtils.class)) {
+            webTestClient.get()
+                .uri(uri, params)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
             .expectStatus()
             .isBadRequest();
 
-        verify(itemService, times(0)).findItemById(anyLong());
+            verify(itemService, times(0)).findItemById(anyLong());
+            apiUtilsMockedStatic.verify(() -> ApiUtils.success(any()), times(0));
+            apiUtilsMockedStatic.verify(() -> ApiUtils.error(anyString(), any(HttpStatus.class)),
+                times(1));
+        }
+    }
+
+    @Test
+    @DisplayName("성공: 아이템 즉시 구매, 판매 가격 가져오기")
+    void SUCCESS_GET_ALL_SIZE_PURCHASE_SALE_PRICE() {
+        /*
+            즉시 구매가격, 즉시 판매가격(itemSizes join item on item.id)
+
+                즉시 구매 가격 : 판매 입찰 가격 중 제일 싼거
+                즉시 판매 가격 : 구매 입찰 중 제일 비싼거
+
+                모든 사이즈 일 때
+                    로그인 안 하면 모든 사이즈만 볼 수 있음.
+                    즉시 구매가격이 제일 싼 사이즈의 즉시 구매, 판매 가격 가져옴
+
+                특정 사이즈 일 때
+                    로그인 해야 볼 수 특정 사이즈 호출 가능.
+                    특정 사이즈의 즉시 구매, 판매 가격
+         */
+        final String uri = BASE_URL + "/"
     }
 }
