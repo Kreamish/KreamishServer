@@ -7,6 +7,7 @@ import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.repository.MemberRepository;
 import com.kreamish.kream.purchase.dto.PurchaseDeleteResponseDto;
+import com.kreamish.kream.purchase.dto.PurchaseDetailResponseDto;
 import com.kreamish.kream.purchase.dto.PurchaseListResponseDto;
 import com.kreamish.kream.purchase.dto.PurchaseRegisterResponseDto;
 import com.kreamish.kream.purchase.entity.Purchase;
@@ -60,7 +61,6 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         Optional<Sale> optionalSale = getFitSale(itemSizes, price);
 
-
         if (optionalSale.isEmpty()) {
             return new PurchaseRegisterResponseDto(
                 purchase.getPurchaseId()
@@ -104,12 +104,38 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public PurchaseDeleteResponseDto withdrawPurchase(Long memberId, Long purchasesId) {
-        return null;
+        Purchase purchase = purchaseRepository.findById(purchasesId)
+            .orElseThrow(() -> new NoSuchElementException("Not Found Purchase by purchaseId"));
+
+        purchaseRepository.deleteById(purchase.getPurchaseId());
+
+        return new PurchaseDeleteResponseDto(
+            purchasesId,
+            memberId,
+            null,
+            null
+        );
     }
 
     @Override
     public PurchaseListResponseDto findPurchasesByMemberId(Long memberId, @Nullable Boolean isCompleteStatus) {
-        return null;
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new NoSuchElementException("Not Fount Member By MemberId"));
+
+        PurchaseListResponseDto responseDto = new PurchaseListResponseDto();
+        responseDto.setPurchases(purchaseRepository.findByMember(member, isCompleteStatus)
+            .stream()
+            .map(i -> PurchaseDetailResponseDto.builder()
+                .purchaseId(i.getPurchaseId())
+                .itemSizesId(i.getItemSizes().getItemSizesId())
+                .memberId(i.getMember().getMemberId())
+                .purchasePrice(i.getPurchasePrice())
+                .status(i.getPurchaseStatus())
+                .build())
+            .toList()
+        );
+
+        return responseDto;
     }
 
     @Override
