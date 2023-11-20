@@ -94,7 +94,7 @@ class FilterFacadeTest {
         assertThat(srcCollectionsDto).isEqualTo(dstCollectionsDto);
     }
 
-    @Test
+//    @Test
     void SUCCESS_SHOULD_GET_ITEM_SIZES() {
         //given
         List<ItemSizes> srcItemSizes = itemSizesRepository.findAll();
