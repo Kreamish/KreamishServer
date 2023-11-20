@@ -48,4 +48,8 @@ public class Sale extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "sale_status", nullable = false)
     private DealStatus saleStatus;
+
+    public void deal() {
+        this.saleStatus = DealStatus.COMPLETE;
+    }
 }

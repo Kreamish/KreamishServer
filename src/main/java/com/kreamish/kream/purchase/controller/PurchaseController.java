@@ -13,12 +13,12 @@ import com.kreamish.kream.purchase.dto.PurchaseRegisterResponseDto;
 import com.kreamish.kream.purchase.service.PurchaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,10 +47,8 @@ public class PurchaseController {
             @SecurityRequirement(name = "basicAuth")
         }
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "등록 성공"),
-        @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-    })
+    @ApiResponse(responseCode = "201", description = "등록 성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
     public ResponseEntity<ApiResult<PurchaseRegisterResponseDto>> createPurchase(
         @RequestBody PurchaseRegisterRequestDto requestDto,
         @PathVariable("item-sizes-id") Long itemSizesId,
@@ -72,31 +70,35 @@ public class PurchaseController {
             @SecurityRequirement(name = "basicAuth")
         }
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "조회 성공"),
-        @ApiResponse(responseCode = "204", description = "성공이지만 데이터는 없는 경우"),
-    })
-    @Parameters({
-        @Parameter(
-            name = "isComplete",
-            description = "거래 완료 여부.",
-            examples = {
-                @ExampleObject(name = "null", description = "모두 조회"),
-                @ExampleObject(name = "true", value = "true", description = "거래 완료된 구매 입찰 목록 조회"),
-                @ExampleObject(name = "false", value = "false", description = "거래 완료되지 않은 구매 목록 조회"),
-            }
-        )
-    })
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    @ApiResponse(responseCode = "204", description = "성공이지만 데이터는 없는 경우")
+    @Parameter(
+        name = "isComplete",
+        description = "거래 완료 여부.",
+        examples = {
+            @ExampleObject(name = "null", description = "모두 조회"),
+            @ExampleObject(name = "true", value = "true", description = "거래 완료된 구매 입찰 목록 조회"),
+            @ExampleObject(name = "false", value = "false", description = "거래 완료되지 않은 구매 목록 조회"),
+        }
+    )
     public ResponseEntity<ApiResult<PurchaseListResponseDto>> getPurchases(
         @RequestParam(required = false) Boolean isComplete,
         @Login LoginMemberInfo loginMemberInfo
     ) {
-        PurchaseListResponseDto response = purchaseService.findPurchasesByMemberId(
-            loginMemberInfo.getMemberId(),
-            isComplete
+        Optional<PurchaseListResponseDto> optionalResponse = Optional.ofNullable(
+            purchaseService.findPurchasesByMemberId(
+                loginMemberInfo.getMemberId(),
+                isComplete
+            )
         );
 
-        List<PurchaseDetailResponseDto> purchases = response.getPurchases();
+        PurchaseListResponseDto response = null;
+
+        List<PurchaseDetailResponseDto> purchases = Collections.emptyList();
+        if(optionalResponse.isPresent()){
+            response = optionalResponse.get();
+            purchases = response.getPurchases();
+        }
 
         if (purchases == null || purchases.isEmpty()) {
             return new ResponseEntity<>(success(response), HttpStatus.NO_CONTENT);
@@ -110,21 +112,17 @@ public class PurchaseController {
         summary = "상품 사이즈에 대해 등록된 구매 입찰 건 조회",
         description = "item-sizes 로 등록된 구매 입찰 건 조회"
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "조회 성공"),
-        @ApiResponse(responseCode = "204", description = "성공이지만 데이터는 없는 경우")
-    })
-    @Parameters({
-        @Parameter(
-            name = "isComplete",
-            description = "거래 완료 여부.",
-            examples = {
-                @ExampleObject(name = "null", description = "모두 조회"),
-                @ExampleObject(name = "true", value = "true", description = "거래 완료된 구매 입찰 목록 조회"),
-                @ExampleObject(name = "false", value = "false", description = "거래 완료되지 않은 구매 목록 조회"),
-            }
-        )
-    })
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    @ApiResponse(responseCode = "204", description = "성공이지만 데이터는 없는 경우")
+    @Parameter(
+        name = "isComplete",
+        description = "거래 완료 여부.",
+        examples = {
+            @ExampleObject(name = "null", description = "모두 조회"),
+            @ExampleObject(name = "true", value = "true", description = "거래 완료된 구매 입찰 목록 조회"),
+            @ExampleObject(name = "false", value = "false", description = "거래 완료되지 않은 구매 목록 조회"),
+        }
+    )
     public ResponseEntity<ApiResult<PurchaseListResponseDto>> getPurchasesByItemSizes(
         @RequestParam(required = false) Boolean isComplete,
         @PathVariable("item-sizes-id") Long itemSizesId
@@ -148,10 +146,8 @@ public class PurchaseController {
             @SecurityRequirement(name = "basicAuth")
         }
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "등록 성공"),
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 구매 입찰에 대한 요청"),
-    })
+    @ApiResponse(responseCode = "201", description = "등록 성공")
+    @ApiResponse(responseCode = "404", description = "존재하지 않는 구매 입찰에 대한 요청")
     public ResponseEntity<ApiResult<PurchaseDeleteResponseDto>> withdrawPurchase(
         @PathVariable("purchases-id") Long purchasesId,
         @Login LoginMemberInfo loginMemberInfo
