@@ -52,14 +52,14 @@ class PurchaseControllerTest {
     }
 
     @Test
-    public void SUCCESS_CREATE_PURCHASE_SIMPLE() {
+    void SUCCESS_CREATE_PURCHASE_SIMPLE() {
         final Long itemSizesId = 111L;
         final Long price = 10000L;
         final Long purchaseId = 123L;
         final String uri = "/purchases/item-sizes/" + itemSizesId;
 
         when(purchaseService.createPurchaseAndProceedTrade(memberId, itemSizesId, price))
-            .thenReturn(new PurchaseRegisterResponseDto(purchaseId));
+            .thenReturn(new PurchaseRegisterResponseDto(purchaseId, null));
 
         PurchaseRegisterRequestDto dto = new PurchaseRegisterRequestDto();
         dto.setPrice(price);
@@ -84,7 +84,7 @@ class PurchaseControllerTest {
     }
 
     @Test
-    public void SUCCESS_GET_PURCHASES_SIMPLE() {
+    void SUCCESS_GET_PURCHASES_SIMPLE() {
         Long purchaseId = 123L;
         Long itemSizesId = 1234L;
         Long price = 11000L;
@@ -120,12 +120,12 @@ class PurchaseControllerTest {
         assertThat(result).isNotNull();
         assertThat(result.getResponse()).isNotNull();
         List<PurchaseDetailResponseDto> purchaseList = result.getResponse().getPurchases();
-        assertThat(purchaseList.size()).isEqualTo(1);
+        assertThat(purchaseList).hasSize(1);
         assertThat(purchaseList.get(0).getPurchaseId()).isEqualTo(purchaseId);
     }
 
     @Test
-    public void SUCCESS_GET_PURCHASES_EMPTY() {
+    void SUCCESS_GET_PURCHASES_EMPTY() {
         final String uri = "/purchases";
 
         PurchaseListResponseDto response = new PurchaseListResponseDto();
@@ -148,12 +148,11 @@ class PurchaseControllerTest {
         assertThat(result).isNotNull();
         assertThat(result.getResponse()).isNotNull();
         List<PurchaseDetailResponseDto> purchases = result.getResponse().getPurchases();
-        assertThat(purchases).isNotNull();
-        assertThat(purchases.size()).isEqualTo(0);
+        assertThat(purchases).isNotNull().isEmpty();
     }
 
     @Test
-    public void SUCCESS_DELETE_PURCHASE(){
+    void SUCCESS_DELETE_PURCHASE(){
         final Long purchaseId = 123L;
         final String uri = "/purchases/" + purchaseId;
 
@@ -179,7 +178,7 @@ class PurchaseControllerTest {
     }
 
     @Test
-    public void FAIL_DELETE_PURCHASE_NO_SUCH_EXCEPTION(){
+    void FAIL_DELETE_PURCHASE_NO_SUCH_EXCEPTION(){
         final Long purchaseId = 123L;
         final String uri = "/purchases/" + purchaseId;
 
