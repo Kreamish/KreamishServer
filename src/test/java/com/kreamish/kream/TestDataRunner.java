@@ -8,12 +8,17 @@ import com.kreamish.kream.categorydetail.entity.CategoryDetail;
 import com.kreamish.kream.categorydetail.repository.CategoryDetailRepository;
 import com.kreamish.kream.comment.entity.Comment;
 import com.kreamish.kream.comment.repository.CommentRepository;
+import com.kreamish.kream.common.entity.DealStatus;
 import com.kreamish.kream.item.entity.Item;
 import com.kreamish.kream.item.repository.ItemRepository;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
+import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.entity.MemberRole;
 import com.kreamish.kream.member.repository.MemberRepository;
 import com.kreamish.kream.member.repository.MemberRoleRepository;
+import com.kreamish.kream.sale.entity.Sale;
+import com.kreamish.kream.sale.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -42,6 +47,8 @@ public class TestDataRunner implements ApplicationRunner {
     public static CategoryDetail DETAIL1_WITH_CATEGORY1;
     public static Item ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2;
     public static Item ITEM2_WITH_BRAND1_CATEGORY1_DETAIL1;
+    public static ItemSizes ITEMSIZES_WITH_ITEM1;
+    public static Sale SALE_WITH_ITEMSIZES_MEMBER1;
     public static Member MEMBER1;
     public static Comment COMMENT1_BY_ITEM1_MEMBER1;
     public static Comment COMMENT2_BY_ITEM1_MEMBER1;
@@ -52,6 +59,8 @@ public class TestDataRunner implements ApplicationRunner {
     private final CategoryRepository categoryRepository;
     private final CategoryDetailRepository categoryDetailRepository;
     private final CommentRepository commentRepository;
+    private final ItemSizesRepository itemSizesRepository;
+    private final SaleRepository saleRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -89,8 +98,38 @@ public class TestDataRunner implements ApplicationRunner {
                 ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,
                 "comment2");
 
+            ITEMSIZES_WITH_ITEM1 = saveItemSizes(
+                ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2
+            );
+
+            SALE_WITH_ITEMSIZES_MEMBER1 = saveSale(
+                ITEMSIZES_WITH_ITEM1,
+                MEMBER1,
+                10000L
+            );
+
             isNotInitialized = !isNotInitialized;
         }
+    }
+
+    private Sale saveSale(ItemSizes itemSizes, Member member, Long price) {
+        return saleRepository.save(
+            Sale.builder()
+                .salePrice(price)
+                .itemSizes(itemSizes)
+                .member(member)
+                .saleStatus(DealStatus.PENDING)
+                .build()
+        );
+    }
+
+    private ItemSizes saveItemSizes(Item item) {
+        return itemSizesRepository.save(
+            ItemSizes.builder()
+                .item(item)
+                .size("size")
+                .build()
+        );
     }
 
     private Comment saveComment(Item item, Member member, String content) {
