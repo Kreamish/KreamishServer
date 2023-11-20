@@ -125,13 +125,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         PurchaseListResponseDto responseDto = new PurchaseListResponseDto();
         responseDto.setPurchases(purchaseRepository.findByMember(member, isCompleteStatus)
             .stream()
-            .map(i -> PurchaseDetailResponseDto.builder()
-                .purchaseId(i.getPurchaseId())
-                .itemSizesId(i.getItemSizes().getItemSizesId())
-                .memberId(i.getMember().getMemberId())
-                .purchasePrice(i.getPurchasePrice())
-                .status(i.getPurchaseStatus())
-                .build())
+            .map(this::convertToPurchaseDetailResponseDto)
             .toList()
         );
 
@@ -139,7 +133,27 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public PurchaseListResponseDto findPurchasesByItemSizesId(Long memberId, @Nullable Boolean isCompleteStatus) {
-        return null;
+    public PurchaseListResponseDto findPurchasesByItemSizesId(Long itemSizesId, @Nullable Boolean isComplete) {
+        ItemSizes itemSizes = itemSizesRepository.findById(itemSizesId)
+            .orElseThrow(() -> new NoSuchElementException("Not Found ItemSizes By ItemSizesId"));
+
+        PurchaseListResponseDto responseDto = new PurchaseListResponseDto();
+        responseDto.setPurchases(
+            purchaseRepository.findByItemSizes(itemSizes, isComplete).stream()
+                .map(this::convertToPurchaseDetailResponseDto)
+                .toList()
+        );
+
+        return responseDto;
+    }
+
+    private PurchaseDetailResponseDto convertToPurchaseDetailResponseDto(Purchase purchase) {
+        return PurchaseDetailResponseDto.builder()
+            .purchaseId(purchase.getPurchaseId())
+            .itemSizesId(purchase.getItemSizes().getItemSizesId())
+            .memberId(purchase.getMember().getMemberId())
+            .purchasePrice(purchase.getPurchasePrice())
+            .status(purchase.getPurchaseStatus())
+            .build();
     }
 }

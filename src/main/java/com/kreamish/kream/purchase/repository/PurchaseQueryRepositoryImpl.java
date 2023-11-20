@@ -5,6 +5,7 @@ import static com.kreamish.kream.member.entity.QMember.*;
 import static com.kreamish.kream.purchase.entity.QPurchase.*;
 
 import com.kreamish.kream.common.entity.DealStatus;
+import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.purchase.entity.Purchase;
 import com.querydsl.core.types.Predicate;
@@ -19,12 +20,23 @@ public class PurchaseQueryRepositoryImpl implements PurchaseQueryRepository {
 
     private final JPAQueryFactory query;
 
+    @Override
     public List<Purchase> findByMember(Member byMember, @Nullable Boolean isComplete) {
         return query.select(purchase)
             .from(purchase)
             .join(purchase.member, member).join(purchase.itemSizes, itemSizes)
             .fetchJoin()
             .where(member.eq(byMember), dealStatusCheck(purchase.purchaseStatus, isComplete))
+            .fetch();
+    }
+
+    @Override
+    public List<Purchase> findByItemSizes(ItemSizes byItemSizes, Boolean isComplete) {
+        return query.select(purchase)
+            .from(purchase)
+            .join(purchase.itemSizes, itemSizes).join(purchase.member, member)
+            .fetchJoin()
+            .where(itemSizes.eq(byItemSizes), dealStatusCheck(purchase.purchaseStatus, isComplete))
             .fetch();
     }
 

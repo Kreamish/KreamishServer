@@ -78,39 +78,39 @@ class PurchaseQueryRepositoryImplTest {
             .build();
     }
 
+    static class FindByMemberTestCase {
+
+        Boolean isComplete;
+        Predicate<? super Purchase> expectedEvaluator;
+
+        public FindByMemberTestCase(Boolean isComplete, Predicate<? super Purchase> expectedEvaluator) {
+            this.isComplete = isComplete;
+            this.expectedEvaluator = expectedEvaluator;
+        }
+
+        List<Purchase> getExpectedPurchases(List<Purchase> purchases, Predicate<Purchase> variableEvaluator) {
+            return purchases.stream()
+                .filter(expectedEvaluator)
+                .filter(variableEvaluator)
+                .collect(Collectors.toList());
+        }
+    }
+
+    static Stream<FindByMemberTestCase> providePurchaseTestCase() {
+        return Stream.of(
+            new FindByMemberTestCase(null, purchase -> true),
+            new FindByMemberTestCase(true,
+                purchase -> DealStatus.COMPLETE.equals(purchase.getPurchaseStatus())
+            ),
+            new FindByMemberTestCase(false,
+                purchase -> !DealStatus.COMPLETE.equals(purchase.getPurchaseStatus())
+            )
+        );
+    }
+
     @Nested
     @DisplayName("findByMember querydsl 조회 테스트")
     class FIND_BY_MEMBER_TEST {
-
-        static class FindByMemberTestCase {
-
-            Boolean isComplete;
-            Predicate<? super Purchase> expectedEvaluator;
-
-            public FindByMemberTestCase(Boolean isComplete, Predicate<? super Purchase> expectedEvaluator) {
-                this.isComplete = isComplete;
-                this.expectedEvaluator = expectedEvaluator;
-            }
-
-            List<Purchase> getExpectedPurchases(List<Purchase> purchases, Member providedMember) {
-                return purchases.stream()
-                    .filter(expectedEvaluator)
-                    .filter(i -> providedMember.equals(i.getMember()))
-                    .collect(Collectors.toList());
-            }
-        }
-
-        static Stream<FindByMemberTestCase> providePurchaseTestCase() {
-            return Stream.of(
-                new FindByMemberTestCase(null, purchase -> true),
-                new FindByMemberTestCase(true,
-                    purchase -> DealStatus.COMPLETE.equals(purchase.getPurchaseStatus())
-                ),
-                new FindByMemberTestCase(false,
-                    purchase -> !DealStatus.COMPLETE.equals(purchase.getPurchaseStatus())
-                )
-            );
-        }
 
         @ParameterizedTest
         @MethodSource("providePurchaseTestCase")
@@ -118,14 +118,47 @@ class PurchaseQueryRepositoryImplTest {
         void FIND_BY_MEMBER_SHOULD_RETURN_FILTERED_BY_IS_COMPLETE_VALUE(FindByMemberTestCase findByMemberTestCase) {
             List<Purchase> result = purchaseRepository.findByMember(member, null);
 
-            Long[] expectedPurchaseIds
-                = findByMemberTestCase.getExpectedPurchases(alreadyPersistedPurchase, member)
+            Long[] expectedPurchaseIds = findByMemberTestCase.getExpectedPurchases(
+                    alreadyPersistedPurchase,
+                    i -> member.equals(i.getMember())
+                )
                 .stream()
                 .map(Purchase::getPurchaseId)
                 .toArray(Long[]::new);
 
             assertThat(result).isNotNull().extracting("purchaseId", Long.class)
                 .contains(expectedPurchaseIds);
+        }
+
+        static Stream<FindByMemberTestCase> providePurchaseTestCase() {
+            return PurchaseQueryRepositoryImplTest.providePurchaseTestCase();
+        }
+    }
+
+    @Nested
+    @DisplayName("findByItemSizes querydsl 조회 테스트")
+    class FIND_BY_ITEM_SIZES_TEST {
+
+        @ParameterizedTest
+        @MethodSource("providePurchaseTestCase")
+        @DisplayName("isComplete 여부에 따라, 필터링 되는 조건이 적용되어야 한다.")
+        void FIND_BY_MEMBER_SHOULD_RETURN_FILTERED_BY_IS_COMPLETE_VALUE(FindByMemberTestCase findByMemberTestCase) {
+            List<Purchase> result = purchaseRepository.findByItemSizes(itemSizes, null);
+
+            Long[] expectedPurchaseIds = findByMemberTestCase.getExpectedPurchases(
+                alreadyPersistedPurchase,
+                    i -> itemSizes.equals(i.getItemSizes())
+                )
+                .stream()
+                .map(Purchase::getPurchaseId)
+                .toArray(Long[]::new);
+
+            assertThat(result).isNotNull().extracting("purchaseId", Long.class)
+                .contains(expectedPurchaseIds);
+        }
+
+        static Stream<FindByMemberTestCase> providePurchaseTestCase() {
+            return PurchaseQueryRepositoryImplTest.providePurchaseTestCase();
         }
     }
 }

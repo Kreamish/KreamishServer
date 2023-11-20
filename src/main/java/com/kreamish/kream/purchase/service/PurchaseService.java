@@ -13,5 +13,5 @@ public interface PurchaseService {
 
     PurchaseListResponseDto findPurchasesByMemberId(Long memberId, @Nullable Boolean isCompleteStatus);
 
-    PurchaseListResponseDto findPurchasesByItemSizesId(Long memberId, @Nullable Boolean isCompleteStatus);
+    PurchaseListResponseDto findPurchasesByItemSizesId(Long itemSizesId, @Nullable Boolean isComplete);
 }
