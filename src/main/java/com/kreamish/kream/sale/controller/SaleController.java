@@ -95,4 +95,28 @@ public class SaleController {
 
         return new ResponseEntity<>(success(response), HttpStatus.OK);
     }
+
+    @GetMapping("/item-sizes-id/{item-sizes-id}")
+    @Operation(
+        summary = "상품 사이즈에 대해 등록된 구매 입찰 건 조회",
+        description = "item-sizes 로 등록된 구매 입찰 건 조회"
+    )
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    @Parameter(
+        name = "isComplete",
+        description = "거래 완료 여부.",
+        examples = {
+            @ExampleObject(name = "null", description = "모두 조회"),
+            @ExampleObject(name = "true", value = "true", description = "거래 완료된 구매 입찰 목록 조회"),
+            @ExampleObject(name = "false", value = "false", description = "거래 완료되지 않은 구매 목록 조회"),
+        }
+    )
+    public ResponseEntity<ApiResult<SaleListResponseDto>> getPurchasesByItemSizes(
+        @RequestParam(required = false) Boolean isComplete,
+        @PathVariable("item-sizes-id") Long itemSizesId
+    ) {
+        SaleListResponseDto response = saleService.findSalesByItemSizesId(itemSizesId, isComplete);
+
+        return new ResponseEntity<>(success(response), HttpStatus.OK);
+    }
 }

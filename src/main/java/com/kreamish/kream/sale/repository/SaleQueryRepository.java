@@ -11,4 +11,6 @@ public interface SaleQueryRepository {
     Optional<Sale> findMinPriceSaleByItemSizesId(ItemSizes itemSizes);
 
     List<Sale> findByMember(Member member, Boolean isComplete);
+
+    List<Sale> findByItemSizes(ItemSizes itemSizes, Boolean isComplete);
 }
