@@ -5,20 +5,27 @@ import static com.kreamish.kream.common.util.ApiUtils.success;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
+import com.kreamish.kream.purchase.dto.PurchaseListResponseDto;
+import com.kreamish.kream.sale.dto.SaleListResponseDto;
 import com.kreamish.kream.sale.dto.SaleRegisterRequestDto;
 import com.kreamish.kream.sale.dto.SaleRegisterResponseDto;
 import com.kreamish.kream.sale.service.SaleService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,7 +45,7 @@ public class SaleController {
     )
     @ApiResponse(responseCode = "201", description = "등록 성공")
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
-    public ResponseEntity<ApiResult<SaleRegisterResponseDto>> createPurchase(
+    public ResponseEntity<ApiResult<SaleRegisterResponseDto>> createSales(
         @RequestBody SaleRegisterRequestDto requestDto,
         @PathVariable("item-sizes-id") Long itemSizesId,
         @Login LoginMemberInfo loginMemberInfo
@@ -49,5 +56,43 @@ public class SaleController {
             requestDto.getPrice()
         );
         return new ResponseEntity<>(success(response), HttpStatus.CREATED);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+        summary = "본인 등록 판매 입찰 건 조회",
+        description = "본인이 등록한 판매 입찰 목록 조회.",
+        security = {
+            @SecurityRequirement(name = "basicAuth")
+        }
+    )
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    @Parameter(
+        name = "isComplete",
+        description = "거래 완료 여부.",
+        examples = {
+            @ExampleObject(name = "null", description = "모두 조회"),
+            @ExampleObject(name = "true", value = "true", description = "거래 완료된 판매 입찰 목록 조회"),
+            @ExampleObject(name = "false", value = "false", description = "거래 완료되지 않은 판매 목록 조회"),
+        }
+    )
+    public ResponseEntity<ApiResult<SaleListResponseDto>> getSales(
+        @RequestParam(required = false) Boolean isComplete,
+        @Login LoginMemberInfo loginMemberInfo
+    ) {
+        Optional<SaleListResponseDto> optionalResponse = Optional.ofNullable(
+            saleService.findSalesByMemberId(
+                loginMemberInfo.getMemberId(),
+                isComplete
+            )
+        );
+
+        SaleListResponseDto response = null;
+
+        if (optionalResponse.isPresent()) {
+            response = optionalResponse.get();
+        }
+
+        return new ResponseEntity<>(success(response), HttpStatus.OK);
     }
 }
