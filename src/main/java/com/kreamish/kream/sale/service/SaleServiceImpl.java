@@ -6,13 +6,18 @@ import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.repository.MemberRepository;
+import com.kreamish.kream.purchase.dto.PurchaseDetailResponseDto;
+import com.kreamish.kream.purchase.dto.PurchaseListResponseDto;
 import com.kreamish.kream.purchase.entity.Purchase;
 import com.kreamish.kream.purchase.repository.PurchaseRepository;
+import com.kreamish.kream.sale.dto.SaleDetailResponseDto;
+import com.kreamish.kream.sale.dto.SaleListResponseDto;
 import com.kreamish.kream.sale.dto.SaleRegisterResponseDto;
 import com.kreamish.kream.sale.entity.Sale;
 import com.kreamish.kream.sale.repository.SaleRepository;
 import com.kreamish.kream.trade.dto.TradeResponseDto;
 import com.kreamish.kream.trade.entity.Trade;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -89,6 +94,15 @@ public class SaleServiceImpl implements SaleService {
         );
     }
 
+    @Override
+    public SaleListResponseDto findSalesByMemberId(Long memberId, Boolean isComplete) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new NoSuchElementException("Not Fount Member By MemberId"));
+
+        return new SaleListResponseDto(findSaleList(member, isComplete));
+
+    }
+
     private Optional<Purchase> getFitPurchase(ItemSizes itemSizes, Long salePrice) {
         Optional<Purchase> optionalSale = purchaseRepository.findMaxPricePurchaseByItemSizesId(itemSizes);
         if (optionalSale.isEmpty() || optionalSale.get().getPurchasePrice() < salePrice) {
@@ -96,5 +110,21 @@ public class SaleServiceImpl implements SaleService {
         } else {
             return optionalSale;
         }
+    }
+
+    private List<SaleDetailResponseDto> findSaleList(Member member, Boolean isComplete) {
+        return saleRepository.findByMember(member, isComplete).stream()
+            .map(this::convertToSaleDetailResponseDto)
+            .toList();
+    }
+
+    private SaleDetailResponseDto convertToSaleDetailResponseDto(Sale sale) {
+        return SaleDetailResponseDto.builder()
+            .saleId(sale.getSaleId())
+            .itemSizesId(sale.getItemSizes().getItemSizesId())
+            .memberId(sale.getMember().getMemberId())
+            .salePrice(sale.getSalePrice())
+            .status(sale.getSaleStatus())
+            .build();
     }
 }

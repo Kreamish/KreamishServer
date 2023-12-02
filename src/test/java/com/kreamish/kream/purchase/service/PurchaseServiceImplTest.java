@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-import com.kreamish.kream.item.entity.Item;
 import com.kreamish.kream.item.repository.TradeRepository;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
