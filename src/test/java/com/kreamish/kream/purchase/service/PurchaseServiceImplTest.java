@@ -16,14 +16,14 @@ import com.kreamish.kream.purchase.repository.PurchaseRepository;
 import com.kreamish.kream.sale.entity.Sale;
 import com.kreamish.kream.sale.repository.SaleRepository;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class PurchaseServiceImplTest {
 
     @InjectMocks
@@ -55,18 +55,6 @@ class PurchaseServiceImplTest {
 
     @Mock
     ItemSizes itemSizes;
-
-    AutoCloseable openMocks;
-
-    @BeforeEach
-    void setUp() {
-        openMocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void clearSetUp() throws Exception {
-        openMocks.close();
-    }
 
     @Test
     @DisplayName("구매 입찰을 생성했을 때 마땅한 판매가 있다면, 기 판매 입찰 등록된 가격으로 거래가 성사되어야 한다.")
