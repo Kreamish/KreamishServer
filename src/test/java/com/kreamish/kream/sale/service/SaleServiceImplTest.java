@@ -1,20 +1,19 @@
 package com.kreamish.kream.sale.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-import com.kreamish.kream.item.entity.Item;
+import com.kreamish.kream.common.entity.DealStatus;
 import com.kreamish.kream.item.repository.TradeRepository;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.repository.MemberRepository;
-import com.kreamish.kream.purchase.dto.PurchaseRegisterResponseDto;
 import com.kreamish.kream.purchase.entity.Purchase;
 import com.kreamish.kream.purchase.repository.PurchaseRepository;
-import com.kreamish.kream.purchase.service.PurchaseServiceImpl;
 import com.kreamish.kream.sale.dto.SaleRegisterResponseDto;
 import com.kreamish.kream.sale.entity.Sale;
 import com.kreamish.kream.sale.repository.SaleRepository;
@@ -76,6 +75,30 @@ class SaleServiceImplTest {
         verify(purchase).deal();
 
         assertThat(saleRegisterResponseDto.getTrade().getTradePrice()).isEqualTo(purchasePrice);
+    }
+
+    @Test
+    @DisplayName("PENDING 상태가 아닌 sale 삭제는 예외가 발생해야 한다.")
+    void TRYING_DELETE_NON_PENDING_STATUS_SALE_SHOULD_THROWS_EXCEPTION() {
+        Long memberId = 12345L;
+        Long saleId = 9234L;
+
+        Member seller = Member.builder()
+            .memberId(memberId)
+            .build();
+
+        Sale sale = Sale.builder()
+            .saleStatus(DealStatus.COMPLETE)
+            .member(seller)
+            .saleId(saleId)
+            .itemSizes(itemSizes)
+            .build();
+
+        given(saleRepository.findById(saleId)).willReturn(Optional.of(sale));
+        given(memberRepository.findById(memberId)).willReturn(Optional.of(seller));
+
+        assertThrows(IllegalStateException.class,
+            () -> saleServiceImpl.withdrawSale(memberId, saleId));
     }
 }
 
