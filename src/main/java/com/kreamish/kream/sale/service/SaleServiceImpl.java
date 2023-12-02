@@ -8,6 +8,7 @@ import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.repository.MemberRepository;
 import com.kreamish.kream.purchase.entity.Purchase;
 import com.kreamish.kream.purchase.repository.PurchaseRepository;
+import com.kreamish.kream.sale.dto.SaleDeleteResponseDto;
 import com.kreamish.kream.sale.dto.SaleDetailResponseDto;
 import com.kreamish.kream.sale.dto.SaleListResponseDto;
 import com.kreamish.kream.sale.dto.SaleRegisterResponseDto;
@@ -109,6 +110,26 @@ public class SaleServiceImpl implements SaleService {
         return new SaleListResponseDto(findSaleList(itemSizes, isComplete));
     }
 
+    @Override
+    public SaleDeleteResponseDto withdrawSale(Long memberId, Long saleId) {
+        Sale sale = saleRepository.findById(saleId)
+            .orElseThrow(() -> new NoSuchElementException("Not Found Sale by saleId"));
+
+        Long itemSizesId = sale.getItemSizes().getItemSizesId();
+        Long beforePrice = sale.getSalePrice();
+
+        dealStatusShouldPending(sale.getSaleStatus());
+
+        saleRepository.deleteById(sale.getSaleId());
+
+        return new SaleDeleteResponseDto(
+            saleId,
+            memberId,
+            itemSizesId,
+            beforePrice
+        );
+    }
+
     private Optional<Purchase> getFitPurchase(ItemSizes itemSizes, Long salePrice) {
         Optional<Purchase> optionalSale = purchaseRepository.findMaxPricePurchaseByItemSizesId(itemSizes);
         if (optionalSale.isEmpty() || optionalSale.get().getPurchasePrice() < salePrice) {
@@ -138,5 +159,11 @@ public class SaleServiceImpl implements SaleService {
             .salePrice(sale.getSalePrice())
             .status(sale.getSaleStatus())
             .build();
+    }
+
+    private void dealStatusShouldPending(DealStatus purchaseStatus) {
+        if (!DealStatus.PENDING.equals(purchaseStatus)) {
+            throw new IllegalStateException("Not expected deal status.");
+        }
     }
 }
