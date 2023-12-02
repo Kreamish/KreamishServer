@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GeneralExceptionHandler {
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<ApiResult<?>> handleGeneralException(Exception e) {
+    public ResponseEntity<ApiResult<Void>> handleGeneralException(Exception e) {
         return new ResponseEntity<>(
             ApiUtils.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({NoSuchElementException.class})
-    public ResponseEntity<ApiResult<?>> handleNoSuchElementException(
+    public ResponseEntity<ApiResult<Void>> handleNoSuchElementException(
         NoSuchElementException e
     ) {
         return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND),
@@ -33,7 +33,7 @@ public class GeneralExceptionHandler {
         MissingServletRequestParameterException.class,
         IllegalArgumentException.class,
         IllegalStateException.class})
-    public ResponseEntity<ApiResult<?>> handleMethodArgumentNotValidException(
+    public ResponseEntity<ApiResult<Void>> handleMethodArgumentNotValidException(
         Exception e) {
         return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST),
             HttpStatus.BAD_REQUEST);
@@ -41,7 +41,7 @@ public class GeneralExceptionHandler {
     }
 
     @ExceptionHandler(TypeMismatchException.class)
-    public ResponseEntity<ApiResult<?>> handleTypeMismatchException(TypeMismatchException e) {
+    public ResponseEntity<ApiResult<Void>> handleTypeMismatchException(TypeMismatchException e) {
         return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST),
             HttpStatus.BAD_REQUEST);
     }
