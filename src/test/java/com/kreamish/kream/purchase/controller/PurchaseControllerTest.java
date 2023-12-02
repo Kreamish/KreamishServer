@@ -137,7 +137,7 @@ class PurchaseControllerTest {
             .exchange()
 
             .expectStatus()
-            .isNoContent()
+            .isOk()
 
             .expectBody(new ParameterizedTypeReference<ApiResult<PurchaseListResponseDto>>() {})
             .returnResult()
