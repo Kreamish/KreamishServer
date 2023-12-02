@@ -13,6 +13,7 @@ import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -48,5 +49,21 @@ public class PurchaseQueryRepositoryImpl implements PurchaseQueryRepository {
         } else {
             return purchaseStatus.ne(DealStatus.COMPLETE);
         }
+    }
+
+    @Override
+    public Optional<Purchase> findMaxPricePurchaseByItemSizesId(ItemSizes itemSizesParam) {
+        return Optional.ofNullable(
+            query.select(purchase)
+                .from(purchase)
+                .join(purchase.itemSizes, itemSizes)
+                .where(itemSizes.isNotNull(),
+                    itemSizes.eq(itemSizesParam),
+                    purchase.purchaseStatus.eq(DealStatus.PENDING)
+                )
+                .orderBy(purchase.purchasePrice.desc())
+                .limit(1)
+                .fetchOne()
+        );
     }
 }
