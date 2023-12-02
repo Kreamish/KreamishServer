@@ -90,8 +90,8 @@ class PurchaseControllerTest {
         Long price = 11000L;
         final String uri = "/purchases/";
 
-        PurchaseListResponseDto response = new PurchaseListResponseDto();
         List<PurchaseDetailResponseDto> list = new ArrayList<>();
+        PurchaseListResponseDto response = new PurchaseListResponseDto(list);
         PurchaseDetailResponseDto item = new PurchaseDetailResponseDto(
             purchaseId,
             itemSizesId,
@@ -100,7 +100,6 @@ class PurchaseControllerTest {
             DealStatus.PENDING
         );
         list.add(item);
-        response.setPurchases(list);
         when(purchaseService.findPurchasesByMemberId(memberId, null))
             .thenReturn(response);
 
@@ -128,8 +127,7 @@ class PurchaseControllerTest {
     void SUCCESS_GET_PURCHASES_EMPTY() {
         final String uri = "/purchases";
 
-        PurchaseListResponseDto response = new PurchaseListResponseDto();
-        response.setPurchases(new ArrayList<>());
+        PurchaseListResponseDto response = new PurchaseListResponseDto(new ArrayList<>());
         when(purchaseService.findPurchasesByMemberId(memberId, null))
             .thenReturn(response);
 
