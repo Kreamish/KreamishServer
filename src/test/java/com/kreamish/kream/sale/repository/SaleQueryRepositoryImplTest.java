@@ -29,17 +29,11 @@ class SaleQueryRepositoryImplTest {
     @Autowired
     SaleRepository saleRepository;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
-    EntityManagerFactory emf;
-
-    EntityManager em;
     ItemSizes itemSizes;
     Member seller;
 
     @BeforeEach
     public void beforeEach() {
-        em = emf.createEntityManager();
         saleRepository.deleteAll();
         itemSizes = ITEMSIZES_WITH_ITEM1;
         seller = MEMBER1;
