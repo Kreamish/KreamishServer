@@ -31,7 +31,8 @@ public class GeneralExceptionHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class,
         MissingServletRequestParameterException.class,
-        IllegalArgumentException.class})
+        IllegalArgumentException.class,
+        IllegalStateException.class})
     public ResponseEntity<ApiResult<?>> handleMethodArgumentNotValidException(
         Exception e) {
         return new ResponseEntity<>(ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST),
