@@ -5,7 +5,7 @@ import static com.kreamish.kream.common.util.ApiUtils.success;
 import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
-import com.kreamish.kream.purchase.dto.PurchaseListResponseDto;
+import com.kreamish.kream.sale.dto.SaleDeleteResponseDto;
 import com.kreamish.kream.sale.dto.SaleListResponseDto;
 import com.kreamish.kream.sale.dto.SaleRegisterRequestDto;
 import com.kreamish.kream.sale.dto.SaleRegisterResponseDto;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -116,6 +117,25 @@ public class SaleController {
         @PathVariable("item-sizes-id") Long itemSizesId
     ) {
         SaleListResponseDto response = saleService.findSalesByItemSizesId(itemSizesId, isComplete);
+
+        return new ResponseEntity<>(success(response), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{sale-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+        summary = "판매 입찰 취소",
+        description = "판매 입찰 건 취소",
+        security = {
+            @SecurityRequirement(name = "basicAuth")
+        }
+    )
+    @ApiResponse(responseCode = "200", description = "구매 입찰 취소(삭제) 성공")
+    @ApiResponse(responseCode = "404", description = "존재하지 않는 구매 입찰에 대한 요청")
+    public ResponseEntity<ApiResult<SaleDeleteResponseDto>> withdrawSale(
+        @PathVariable("sale-id") Long saleId,
+        @Login LoginMemberInfo loginMemberInfo
+    ) {
+        SaleDeleteResponseDto response = saleService.withdrawSale(loginMemberInfo.getMemberId(), saleId);
 
         return new ResponseEntity<>(success(response), HttpStatus.OK);
     }
