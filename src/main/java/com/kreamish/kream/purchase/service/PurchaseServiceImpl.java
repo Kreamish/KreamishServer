@@ -108,13 +108,18 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase purchase = purchaseRepository.findById(purchasesId)
             .orElseThrow(() -> new NoSuchElementException("Not Found Purchase by purchaseId"));
 
+        dealStatusShouldPending(purchase.getPurchaseStatus());
+
+        Long itemSizesId = purchase.getItemSizes().getItemSizesId();
+        Long beforePrice = purchase.getPurchasePrice();
+
         purchaseRepository.deleteById(purchase.getPurchaseId());
 
         return new PurchaseDeleteResponseDto(
             purchasesId,
             memberId,
-            null,
-            null
+            itemSizesId,
+            beforePrice
         );
     }
 
@@ -154,5 +159,11 @@ public class PurchaseServiceImpl implements PurchaseService {
             .purchasePrice(purchase.getPurchasePrice())
             .status(purchase.getPurchaseStatus())
             .build();
+    }
+
+    private void dealStatusShouldPending(DealStatus purchaseStatus) {
+        if (!DealStatus.PENDING.equals(purchaseStatus)) {
+            throw new IllegalStateException("Not expected deal status.");
+        }
     }
 }
