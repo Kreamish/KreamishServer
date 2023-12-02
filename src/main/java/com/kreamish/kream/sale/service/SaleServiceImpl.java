@@ -112,13 +112,20 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public SaleDeleteResponseDto withdrawSale(Long memberId, Long saleId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new NoSuchElementException("Not Found Member By MemberId"));
+
         Sale sale = saleRepository.findById(saleId)
             .orElseThrow(() -> new NoSuchElementException("Not Found Sale by saleId"));
+
+        if(!sale.getMember().getMemberId().equals(member.getMemberId())){
+            throw new IllegalStateException("Sale is not registered by current member");
+        }
+        dealStatusShouldPending(sale.getSaleStatus());
 
         Long itemSizesId = sale.getItemSizes().getItemSizesId();
         Long beforePrice = sale.getSalePrice();
 
-        dealStatusShouldPending(sale.getSaleStatus());
 
         saleRepository.deleteById(sale.getSaleId());
 
