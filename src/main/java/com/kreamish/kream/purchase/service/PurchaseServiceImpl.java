@@ -17,6 +17,7 @@ import com.kreamish.kream.sale.repository.SaleRepository;
 import com.kreamish.kream.trade.dto.TradeResponseDto;
 import com.kreamish.kream.trade.entity.Trade;
 import jakarta.annotation.Nullable;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -118,18 +119,11 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public PurchaseListResponseDto findPurchasesByMemberId(Long memberId, @Nullable Boolean isCompleteStatus) {
+    public PurchaseListResponseDto findPurchasesByMemberId(Long memberId, @Nullable Boolean isComplete) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NoSuchElementException("Not Fount Member By MemberId"));
 
-        PurchaseListResponseDto responseDto = new PurchaseListResponseDto();
-        responseDto.setPurchases(purchaseRepository.findByMember(member, isCompleteStatus)
-            .stream()
-            .map(this::convertToPurchaseDetailResponseDto)
-            .toList()
-        );
-
-        return responseDto;
+        return new PurchaseListResponseDto(findPurchaseList(member, isComplete));
     }
 
     @Override
@@ -137,14 +131,19 @@ public class PurchaseServiceImpl implements PurchaseService {
         ItemSizes itemSizes = itemSizesRepository.findById(itemSizesId)
             .orElseThrow(() -> new NoSuchElementException("Not Found ItemSizes By ItemSizesId"));
 
-        PurchaseListResponseDto responseDto = new PurchaseListResponseDto();
-        responseDto.setPurchases(
-            purchaseRepository.findByItemSizes(itemSizes, isComplete).stream()
-                .map(this::convertToPurchaseDetailResponseDto)
-                .toList()
-        );
+        return new PurchaseListResponseDto(findPurchaseList(itemSizes, isComplete));
+    }
 
-        return responseDto;
+    private List<PurchaseDetailResponseDto> findPurchaseList(ItemSizes itemSizes, Boolean isComplete) {
+        return purchaseRepository.findByItemSizes(itemSizes, isComplete).stream()
+            .map(this::convertToPurchaseDetailResponseDto)
+            .toList();
+    }
+
+    private List<PurchaseDetailResponseDto> findPurchaseList(Member member, Boolean isComplete) {
+        return purchaseRepository.findByMember(member, isComplete).stream()
+            .map(this::convertToPurchaseDetailResponseDto)
+            .toList();
     }
 
     private PurchaseDetailResponseDto convertToPurchaseDetailResponseDto(Purchase purchase) {
