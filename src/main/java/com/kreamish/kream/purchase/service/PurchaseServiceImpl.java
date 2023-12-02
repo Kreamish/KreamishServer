@@ -105,9 +105,15 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public PurchaseDeleteResponseDto withdrawPurchase(Long memberId, Long purchasesId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new NoSuchElementException("Not Found Member By MemberId"));
+
         Purchase purchase = purchaseRepository.findById(purchasesId)
             .orElseThrow(() -> new NoSuchElementException("Not Found Purchase by purchaseId"));
 
+        if (!purchase.getMember().getMemberId().equals(member.getMemberId())) {
+            throw new IllegalStateException("Purchase is not registered by current member");
+        }
         dealStatusShouldPending(purchase.getPurchaseStatus());
 
         Long itemSizesId = purchase.getItemSizes().getItemSizesId();
