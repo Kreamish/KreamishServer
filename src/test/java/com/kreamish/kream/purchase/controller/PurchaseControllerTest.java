@@ -150,7 +150,7 @@ class PurchaseControllerTest {
     }
 
     @Test
-    void SUCCESS_DELETE_PURCHASE(){
+    void SUCCESS_DELETE_PURCHASE() {
         final Long purchaseId = 123L;
         final String uri = "/purchases/" + purchaseId;
 
@@ -176,7 +176,7 @@ class PurchaseControllerTest {
     }
 
     @Test
-    void FAIL_DELETE_PURCHASE_NO_SUCH_EXCEPTION(){
+    void FAIL_DELETE_PURCHASE_NO_SUCH_EXCEPTION() {
         final Long purchaseId = 123L;
         final String uri = "/purchases/" + purchaseId;
 
