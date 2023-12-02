@@ -31,7 +31,7 @@ public class PurchaseQueryRepositoryImpl implements PurchaseQueryRepository {
     }
 
     @Override
-    public List<Purchase> findByItemSizes(ItemSizes byItemSizes, Boolean isComplete) {
+    public List<Purchase> findByItemSizes(ItemSizes byItemSizes, @Nullable Boolean isComplete) {
         return query.select(purchase)
             .from(purchase)
             .join(purchase.itemSizes, itemSizes).join(purchase.member, member)

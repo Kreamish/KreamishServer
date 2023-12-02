@@ -8,4 +8,6 @@ public interface SaleService {
     SaleRegisterResponseDto createSaleAndProceedTrade(Long memberId, Long itemSizesId, Long price);
 
     SaleListResponseDto findSalesByMemberId(Long memberId, Boolean isComplete);
+
+    SaleListResponseDto findSalesByItemSizesId(Long itemSizesId, Boolean isComplete);
 }

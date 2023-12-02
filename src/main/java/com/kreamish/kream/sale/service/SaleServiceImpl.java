@@ -6,8 +6,6 @@ import com.kreamish.kream.itemsizes.entity.ItemSizes;
 import com.kreamish.kream.itemsizes.repository.ItemSizesRepository;
 import com.kreamish.kream.member.entity.Member;
 import com.kreamish.kream.member.repository.MemberRepository;
-import com.kreamish.kream.purchase.dto.PurchaseDetailResponseDto;
-import com.kreamish.kream.purchase.dto.PurchaseListResponseDto;
 import com.kreamish.kream.purchase.entity.Purchase;
 import com.kreamish.kream.purchase.repository.PurchaseRepository;
 import com.kreamish.kream.sale.dto.SaleDetailResponseDto;
@@ -103,6 +101,14 @@ public class SaleServiceImpl implements SaleService {
 
     }
 
+    @Override
+    public SaleListResponseDto findSalesByItemSizesId(Long itemSizesId, Boolean isComplete) {
+        ItemSizes itemSizes = itemSizesRepository.findById(itemSizesId)
+            .orElseThrow(() -> new NoSuchElementException("Not Found ItemSizes By ItemSizesId"));
+
+        return new SaleListResponseDto(findSaleList(itemSizes, isComplete));
+    }
+
     private Optional<Purchase> getFitPurchase(ItemSizes itemSizes, Long salePrice) {
         Optional<Purchase> optionalSale = purchaseRepository.findMaxPricePurchaseByItemSizesId(itemSizes);
         if (optionalSale.isEmpty() || optionalSale.get().getPurchasePrice() < salePrice) {
@@ -114,6 +120,12 @@ public class SaleServiceImpl implements SaleService {
 
     private List<SaleDetailResponseDto> findSaleList(Member member, Boolean isComplete) {
         return saleRepository.findByMember(member, isComplete).stream()
+            .map(this::convertToSaleDetailResponseDto)
+            .toList();
+    }
+
+    private List<SaleDetailResponseDto> findSaleList(ItemSizes itemSizes, Boolean isComplete) {
+        return saleRepository.findByItemSizes(itemSizes, isComplete).stream()
             .map(this::convertToSaleDetailResponseDto)
             .toList();
     }
