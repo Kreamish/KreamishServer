@@ -40,7 +40,16 @@ public class SaleQueryRepositoryImpl implements SaleQueryRepository {
         return query.select(sale)
             .from(sale)
             .join(sale.member, member).join(sale.itemSizes, itemSizes)
-            .where(member.eq(byMember), dealStatusCheck(purchase.purchaseStatus, isComplete))
+            .where(member.eq(byMember), dealStatusCheck(sale.saleStatus, isComplete))
+            .fetch();
+    }
+
+    @Override
+    public List<Sale> findByItemSizes(ItemSizes byItemSizes, Boolean isComplete) {
+        return query.select(sale)
+            .from(sale)
+            .join(sale.member, member).join(sale.itemSizes, itemSizes)
+            .where(itemSizes.eq(byItemSizes), dealStatusCheck(sale.saleStatus, isComplete))
             .fetch();
     }
 
