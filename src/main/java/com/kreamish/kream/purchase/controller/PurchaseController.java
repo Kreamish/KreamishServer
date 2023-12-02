@@ -6,7 +6,6 @@ import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
 import com.kreamish.kream.purchase.dto.PurchaseDeleteResponseDto;
-import com.kreamish.kream.purchase.dto.PurchaseDetailResponseDto;
 import com.kreamish.kream.purchase.dto.PurchaseListResponseDto;
 import com.kreamish.kream.purchase.dto.PurchaseRegisterRequestDto;
 import com.kreamish.kream.purchase.dto.PurchaseRegisterResponseDto;
@@ -16,8 +15,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -71,7 +68,6 @@ public class PurchaseController {
         }
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
-    @ApiResponse(responseCode = "204", description = "성공이지만 데이터는 없는 경우")
     @Parameter(
         name = "isComplete",
         description = "거래 완료 여부.",
@@ -94,17 +90,11 @@ public class PurchaseController {
 
         PurchaseListResponseDto response = null;
 
-        List<PurchaseDetailResponseDto> purchases = Collections.emptyList();
-        if(optionalResponse.isPresent()){
+        if (optionalResponse.isPresent()) {
             response = optionalResponse.get();
-            purchases = response.getPurchases();
         }
 
-        if (purchases == null || purchases.isEmpty()) {
-            return new ResponseEntity<>(success(response), HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(success(response), HttpStatus.OK);
-        }
+        return new ResponseEntity<>(success(response), HttpStatus.OK);
     }
 
     @GetMapping("/item-sizes-id/{item-sizes-id}")
@@ -113,7 +103,6 @@ public class PurchaseController {
         description = "item-sizes 로 등록된 구매 입찰 건 조회"
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
-    @ApiResponse(responseCode = "204", description = "성공이지만 데이터는 없는 경우")
     @Parameter(
         name = "isComplete",
         description = "거래 완료 여부.",
@@ -129,13 +118,7 @@ public class PurchaseController {
     ) {
         PurchaseListResponseDto response = purchaseService.findPurchasesByItemSizesId(itemSizesId, isComplete);
 
-        List<PurchaseDetailResponseDto> purchases = response.getPurchases();
-
-        if (purchases == null || purchases.isEmpty()) {
-            return new ResponseEntity<>(success(response), HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(success(response), HttpStatus.OK);
-        }
+        return new ResponseEntity<>(success(response), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{purchases-id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -146,7 +129,7 @@ public class PurchaseController {
             @SecurityRequirement(name = "basicAuth")
         }
     )
-    @ApiResponse(responseCode = "201", description = "등록 성공")
+    @ApiResponse(responseCode = "200", description = "구매 입찰 취소(삭제) 성공")
     @ApiResponse(responseCode = "404", description = "존재하지 않는 구매 입찰에 대한 요청")
     public ResponseEntity<ApiResult<PurchaseDeleteResponseDto>> withdrawPurchase(
         @PathVariable("purchases-id") Long purchasesId,
