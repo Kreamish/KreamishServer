@@ -25,7 +25,6 @@ public class PurchaseQueryRepositoryImpl implements PurchaseQueryRepository {
         return query.select(purchase)
             .from(purchase)
             .join(purchase.member, member).join(purchase.itemSizes, itemSizes)
-            .fetchJoin()
             .where(member.eq(byMember), dealStatusCheck(purchase.purchaseStatus, isComplete))
             .fetch();
     }
@@ -35,7 +34,6 @@ public class PurchaseQueryRepositoryImpl implements PurchaseQueryRepository {
         return query.select(purchase)
             .from(purchase)
             .join(purchase.itemSizes, itemSizes).join(purchase.member, member)
-            .fetchJoin()
             .where(itemSizes.eq(byItemSizes), dealStatusCheck(purchase.purchaseStatus, isComplete))
             .fetch();
     }
