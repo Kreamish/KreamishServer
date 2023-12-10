@@ -78,6 +78,24 @@ class SaleServiceImplTest {
     }
 
     @Test
+    @DisplayName("본인이 등록한 판매 입찰은 본인이 등록한 구매 입찰과 거래가 성사되지 않아야 한다.") //TODO
+    void CREATE_SALE_SHOULD_THROWS_EXCEPTION() {
+        long salePrice = 950L;
+        long purchasePrice = 1000L;
+
+        given(memberRepository.findById(seller.getMemberId())).willReturn(Optional.of(seller));
+        given(itemSizesRepository.findById(itemSizes.getItemSizesId())).willReturn(Optional.of(itemSizes));
+
+        given(purchase.getPurchasePrice()).willReturn(purchasePrice);
+        given(purchase.getMember()).willReturn(seller);
+        given(purchaseRepository.findMaxPricePurchaseByItemSizesId(itemSizes)).willReturn(Optional.of(purchase));
+
+        assertThrows(IllegalArgumentException.class, () -> saleServiceImpl.createSaleAndProceedTrade(
+            seller.getMemberId(), itemSizes.getItemSizesId(), salePrice // 구매 가격
+        ));
+    }
+
+    @Test
     @DisplayName("PENDING 상태가 아닌 sale 삭제는 예외가 발생해야 한다.")
     void TRYING_DELETE_NON_PENDING_STATUS_SALE_SHOULD_THROWS_EXCEPTION() {
         Long memberId = 12345L;
