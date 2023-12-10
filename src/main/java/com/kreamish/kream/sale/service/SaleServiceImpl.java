@@ -68,6 +68,7 @@ public class SaleServiceImpl implements SaleService {
         }
 
         Purchase purchase = optionalPurchase.get();
+        selfTradeCheck(member, purchase);
 
         Trade trade = Trade.builder()
             .purchase(purchase)
@@ -91,6 +92,12 @@ public class SaleServiceImpl implements SaleService {
                 .tradeDate(trade.getCreatedAt())
                 .build()
         );
+    }
+
+    private void selfTradeCheck(Member member, Purchase purchase) {
+        if (member.getMemberId().equals(purchase.getMember().getMemberId())) {
+            throw new IllegalArgumentException("self trade is not permitted");
+        }
     }
 
     @Override
@@ -118,14 +125,13 @@ public class SaleServiceImpl implements SaleService {
         Sale sale = saleRepository.findById(saleId)
             .orElseThrow(() -> new NoSuchElementException("Not Found Sale by saleId"));
 
-        if(!sale.getMember().getMemberId().equals(member.getMemberId())){
+        if (!sale.getMember().getMemberId().equals(member.getMemberId())) {
             throw new IllegalStateException("Sale is not registered by current member");
         }
         dealStatusShouldPending(sale.getSaleStatus());
 
         Long itemSizesId = sale.getItemSizes().getItemSizesId();
         Long beforePrice = sale.getSalePrice();
-
 
         saleRepository.deleteById(sale.getSaleId());
 
