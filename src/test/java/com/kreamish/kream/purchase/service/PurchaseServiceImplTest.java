@@ -52,16 +52,23 @@ class PurchaseServiceImplTest {
     @Mock
     ItemSizes itemSizes;
 
+    @Mock
+    Member buyer;
+
     @Test
     @DisplayName("구매 입찰을 생성했을 때 마땅한 판매가 있다면, 기 판매 입찰 등록된 가격으로 거래가 성사되어야 한다.")
     void CREATE_PURCHASE_SHOULD_PROCEED_TRADE_IF_FIT_EXISTS() {
         long purchasePrice = 1000L;
         long salePrice = 950L;
 
+        given(seller.getMemberId()).willReturn(1L);
+        given(buyer.getMemberId()).willReturn(2L);
+
         given(memberRepository.findById(seller.getMemberId())).willReturn(Optional.of(seller));
         given(itemSizesRepository.findById(itemSizes.getItemSizesId())).willReturn(Optional.of(itemSizes));
 
         given(sale.getSalePrice()).willReturn(salePrice);
+        given(sale.getMember()).willReturn(buyer);
         given(saleRepository.findMinPriceSaleByItemSizesId(itemSizes)).willReturn(Optional.of(sale));
 
         PurchaseRegisterResponseDto purchaseRegisterResponseDto = purchaseService.createPurchaseAndProceedTrade(

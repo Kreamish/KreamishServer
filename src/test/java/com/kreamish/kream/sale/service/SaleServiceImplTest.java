@@ -50,6 +50,9 @@ class SaleServiceImplTest {
     Member seller;
 
     @Mock
+    Member buyer;
+
+    @Mock
     Purchase purchase;
 
     @Mock
@@ -61,10 +64,14 @@ class SaleServiceImplTest {
         long salePrice = 950L;
         long purchasePrice = 1000L;
 
+        given(seller.getMemberId()).willReturn(1L);
+        given(buyer.getMemberId()).willReturn(2L);
+
         given(memberRepository.findById(seller.getMemberId())).willReturn(Optional.of(seller));
         given(itemSizesRepository.findById(itemSizes.getItemSizesId())).willReturn(Optional.of(itemSizes));
 
         given(purchase.getPurchasePrice()).willReturn(purchasePrice);
+        given(purchase.getMember()).willReturn(buyer);
         given(purchaseRepository.findMaxPricePurchaseByItemSizesId(itemSizes)).willReturn(Optional.of(purchase));
 
         SaleRegisterResponseDto saleRegisterResponseDto = saleServiceImpl.createSaleAndProceedTrade(
