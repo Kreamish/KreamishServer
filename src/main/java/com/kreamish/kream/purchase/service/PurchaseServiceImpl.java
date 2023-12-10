@@ -69,6 +69,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
 
         Sale sale = optionalSale.get();
+        selfTradeCheck(member, sale);
 
         Trade trade = Trade.builder()
             .purchase(purchase)
@@ -92,6 +93,12 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .tradeDate(trade.getCreatedAt())
                 .build()
         );
+    }
+
+    private void selfTradeCheck(Member member, Sale sale) {
+        if (member.getMemberId().equals(sale.getMember().getMemberId())) {
+            throw new IllegalArgumentException("self trade is not permitted");
+        }
     }
 
     private Optional<Sale> getFitSale(ItemSizes itemSizes, Long purchasePrice) {
