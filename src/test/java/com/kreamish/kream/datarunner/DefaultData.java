@@ -47,6 +47,7 @@ public class DefaultData implements ApplicationRunner {
     public static ItemSizes ITEM_SIZES4_WITH_ITEM1;
     public static ItemSizes ITEM_SIZES5_WITH_ITEM1;
     public static Member MEMBER1;
+    public static Member MEMBER2;
     public static Comment COMMENT1_BY_ITEM1_MEMBER1;
     public static Comment COMMENT2_BY_ITEM1_MEMBER1;
     public static int i = 0;
@@ -96,7 +97,9 @@ public class DefaultData implements ApplicationRunner {
         ITEM_SIZES5_WITH_ITEM1 = saveItemSizes("285",
             ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2);
         // member
-        MEMBER1 = saveMember("dummyEmail", ROLE_MEMBER, "dummyPassword");
+        MEMBER1 = saveMember("kang@naver.com", ROLE_MEMBER, "dummyPassword");
+        MEMBER2 = saveMember("tmddn645@naver.com", ROLE_MEMBER, "dummyPassword");
+
         // comment
         COMMENT1_BY_ITEM1_MEMBER1 = saveComment(
             ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2, MEMBER1,

@@ -8,7 +8,7 @@ import static com.kreamish.kream.datarunner.DefaultData.ITEM_SIZES3_WITH_ITEM1;
 import static com.kreamish.kream.datarunner.DefaultData.ITEM_SIZES4_WITH_ITEM1;
 import static com.kreamish.kream.datarunner.DefaultData.ITEM_SIZES5_WITH_ITEM1;
 import static com.kreamish.kream.datarunner.DefaultData.MEMBER1;
-import static java.lang.Boolean.TRUE;
+import static com.kreamish.kream.datarunner.DefaultData.MEMBER2;
 
 import com.kreamish.kream.common.entity.DealStatus;
 import com.kreamish.kream.itemsizes.entity.ItemSizes;
@@ -32,13 +32,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TradeData implements ApplicationRunner {
 
-    public static Boolean isNotInitialized = TRUE;
     public static Purchase PURCHASE1;
     public static Purchase PURCHASE2;
     public static Purchase PURCHASE3;
     public static Purchase PURCHASE4;
     public static Purchase PURCHASE5;
     public static Purchase PURCHASE6;
+    public static Purchase PURCHASE7;
+    public static Purchase PURCHASE8;
+    public static Purchase PURCHASE9;
+    public static Purchase PURCHASE10;
     public static Sale SALE1;
     public static Sale SALE2;
     public static Sale SALE3;
@@ -57,25 +60,31 @@ public class TradeData implements ApplicationRunner {
     private final TradeRepository tradeRepository;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         // purchase
         PURCHASE1 = savePurchase(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 1000L, COMPLETE);
         PURCHASE2 = savePurchase(ITEM_SIZES2_WITH_ITEM1, MEMBER1, 2000L, COMPLETE);
         PURCHASE3 = savePurchase(ITEM_SIZES3_WITH_ITEM1, MEMBER1, 3000L, COMPLETE);
         PURCHASE4 = savePurchase(ITEM_SIZES4_WITH_ITEM1, MEMBER1, 4000L, COMPLETE);
         PURCHASE5 = savePurchase(ITEM_SIZES5_WITH_ITEM1, MEMBER1, 5000L, COMPLETE);
-        PURCHASE6 = savePurchase(ITEM_SIZES5_WITH_ITEM1, MEMBER1, 5000L, COMPLETE);
+
+        PURCHASE6 = savePurchase(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 5000L, PENDING);
+        PURCHASE7 = savePurchase(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 5000L, PENDING);
+        PURCHASE8 = savePurchase(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 7000L, PENDING);
+
+        PURCHASE9 = savePurchase(ITEM_SIZES2_WITH_ITEM1, MEMBER1, 7000L, PENDING);
+        PURCHASE10 = savePurchase(ITEM_SIZES2_WITH_ITEM1, MEMBER1, 9000L, PENDING);
 
         // sale
-        SALE1 = saveSale(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 1000L, COMPLETE);
-        SALE2 = saveSale(ITEM_SIZES2_WITH_ITEM1, MEMBER1, 2000L, COMPLETE);
-        SALE3 = saveSale(ITEM_SIZES3_WITH_ITEM1, MEMBER1, 3000L, COMPLETE);
-        SALE4 = saveSale(ITEM_SIZES4_WITH_ITEM1, MEMBER1, 4000L, COMPLETE);
-        SALE5 = saveSale(ITEM_SIZES5_WITH_ITEM1, MEMBER1, 5000L, COMPLETE);
+        SALE1 = saveSale(ITEM_SIZES1_WITH_ITEM1, MEMBER2, 1000L, COMPLETE);
+        SALE2 = saveSale(ITEM_SIZES2_WITH_ITEM1, MEMBER2, 2000L, COMPLETE);
+        SALE3 = saveSale(ITEM_SIZES3_WITH_ITEM1, MEMBER2, 3000L, COMPLETE);
+        SALE4 = saveSale(ITEM_SIZES4_WITH_ITEM1, MEMBER2, 4000L, COMPLETE);
+        SALE5 = saveSale(ITEM_SIZES5_WITH_ITEM1, MEMBER2, 5000L, COMPLETE);
 
-        SALE6_NOT_TRADED_AND_THE_LOWEST_PRICE = saveSale(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 1500L,
+        SALE6_NOT_TRADED_AND_THE_LOWEST_PRICE = saveSale(ITEM_SIZES1_WITH_ITEM1, MEMBER2, 1500L,
             PENDING);
-        SALE7_THE_HIGHEST_PRICE = saveSale(ITEM_SIZES1_WITH_ITEM1, MEMBER1, 6000L, PENDING);
+        SALE7_THE_HIGHEST_PRICE = saveSale(ITEM_SIZES1_WITH_ITEM1, MEMBER2, 6000L, PENDING);
 
         // trade
         TRADE1_WITH_PURCHASE1_SALE1 = saveTrade(PURCHASE1, SALE1, PURCHASE1.getPurchasePrice());
