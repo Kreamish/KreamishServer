@@ -1,8 +1,11 @@
 package com.kreamish.kream.purchase.service;
 
 import com.kreamish.kream.login.LoginMemberInfo;
+import com.kreamish.kream.purchase.dto.PendingPurchaseDto;
+import com.kreamish.kream.purchase.dto.PendingPurchaseResponseDto;
 import com.kreamish.kream.purchase.dto.SaleNowPriceDto;
 import com.kreamish.kream.purchase.repository.PurchaseRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class PurchaseServiceImpl implements PurchaseService {
 
     private final PurchaseRepository purchaseRepository;
+
+    @Override
+    public PendingPurchaseResponseDto getPendingPurchasesByItemSizesId(Long itemSizesId) {
+        final List<PendingPurchaseDto> pendingPurchases = purchaseRepository.findPurchaseByDealStatusAndItemSizesId(
+            itemSizesId);
+
+        return PendingPurchaseResponseDto.of(pendingPurchases);
+    }
+
+    @Override
+    public PendingPurchaseResponseDto getPendingPurchasesByItemId(Long itemId) {
+        final List<PendingPurchaseDto> pendingPurchases = purchaseRepository.findPurchaseByDealStatusAndItemId(
+            itemId);
+
+        return PendingPurchaseResponseDto.of(pendingPurchases);
+    }
 
     @Override
     public SaleNowPriceDto getSaleNowPrice(Long itemId, Long itemSizesId,
