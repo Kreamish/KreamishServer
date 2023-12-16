@@ -9,9 +9,7 @@ import com.kreamish.kream.filter.dto.CategoriesFilterResponseDto;
 import com.kreamish.kream.filter.dto.ItemSizesFilterResponseDto;
 import com.kreamish.kream.filter.facade.FilterFacade;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/filter")
+@RequestMapping("/filters")
 public class FilterController {
 
     private final FilterFacade filterFacade;
@@ -58,7 +56,7 @@ public class FilterController {
         return new ResponseEntity<>(success(filterFacade.getCollections()), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/itemsizes", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/item-sizes", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "아이템 사이즈 리스트 반환",
         description = "필터링을 위한 모든 아이템 사이즈 리스트 반환"

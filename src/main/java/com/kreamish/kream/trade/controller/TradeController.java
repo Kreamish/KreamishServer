@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/trade")
+@RequestMapping("/trades")
 public class TradeController {
 
     private final TradeService tradeService;
@@ -38,7 +38,7 @@ public class TradeController {
         @ApiResponse(responseCode = "401", description = "미로그인 유저"),
         @ApiResponse(responseCode = "200", description = "정상 반환")
     })
-    @GetMapping(value = "/item/{item-id}/chart", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/items/{item-id}/chart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult<MarketPricesGraphResponseDto>> getMarketPricesGraph(
         @Login LoginMemberInfo loginMemberInfo,
         @PathVariable("item-id") Long itemId,
@@ -59,7 +59,7 @@ public class TradeController {
         @ApiResponse(responseCode = "401", description = "미로그인 유저"),
         @ApiResponse(responseCode = "200", description = "정상 반환")
     })
-    @GetMapping(value = "/item/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/items/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult<TradeHistoryResponseDto>> getTradeHistoryByItemId(
         @Login LoginMemberInfo loginMemberInfo,
         @PathVariable("item-id") Long itemId
@@ -79,7 +79,7 @@ public class TradeController {
         @ApiResponse(responseCode = "401", description = "미로그인 유저"),
         @ApiResponse(responseCode = "200", description = "정상 반환")
     })
-    @GetMapping(value = "/item/{item-id}/itemsizes/{item-sizes-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/items/{item-id}/item-sizes/{item-sizes-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult<TradeHistoryResponseDto>> getTradeHistoryByItemSizesId(
         @Login LoginMemberInfo loginMemberInfo,
         @PathVariable("item-id") Long itemId,

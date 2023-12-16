@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 @ExtendWith(MockitoExtension.class)
 public class TradeControllerUnitTest {
 
-    final String BASE_URL = "/trade";
+    final String BASE_URL = "/trades";
     final String KREMAISH = "kreamish";
     final Map<String, String> params = new HashMap<>();
     @Mock
@@ -60,7 +60,7 @@ public class TradeControllerUnitTest {
     @DisplayName("실패: 시세 그래프 가져오기. 미로그인 유저가 api 호출")
     void FAIL_GET_MARKET_PRICES_GRAPH_SHOULD_401() {
         final String itemId = "1";
-        final String uri = "/item/{item-id}/chart?period=all";
+        final String uri = "/items/{item-id}/chart?period=all";
 
         params.put("item-id", itemId);
 
@@ -80,7 +80,7 @@ public class TradeControllerUnitTest {
     void FAIL_GET_MARKET_PRICES_GRAPH_SHOULD_400() {
         final String wrongItemId = "a";
         final String memberId = "1";
-        final String uri = "/item/{item-id}/chart?period=1";
+        final String uri = "/items/{item-id}/chart?period=1";
 
         params.put("item-id", wrongItemId);
 
@@ -101,7 +101,7 @@ public class TradeControllerUnitTest {
     void FAIL_GET_MARKET_PRICES_GRAPH_SHOULD_400(String period) {
         final String itemId = "1";
         final String memberId = "1";
-        final String uri = "/item/{item-id}/chart?period={period}";
+        final String uri = "/items/{item-id}/chart?period={period}";
 
         params.put("item-id", itemId);
         params.put("period", period);
@@ -124,7 +124,7 @@ public class TradeControllerUnitTest {
     void SUCCESS_GET_MARKET_PRICES_GRAPH_SHOULD_400(String period) {
         final String itemId = "1";
         final String memberId = "2";
-        final String uri = "/item/{item-id}/chart?period={period}";
+        final String uri = "/items/{item-id}/chart?period={period}";
 
         params.put("item-id", itemId);
         params.put("period", period);
@@ -147,7 +147,7 @@ public class TradeControllerUnitTest {
     void FAIL_GET_TRADE_HISTORY_BY_ITEM_ID_SHOULD_CHECK_IS_BAD_REQUEST() {
         final String wrongItemId = "a";
         final String memberId = "1";
-        final String uri = "/item/{item-id}";
+        final String uri = "/items/{item-id}";
 
         params.put("item-id", wrongItemId);
 
@@ -168,7 +168,7 @@ public class TradeControllerUnitTest {
         final String itemId = "1";
         final Long longItemId = 1L;
         final String memberId = "1";
-        final String uri = "/item/{item-id}";
+        final String uri = "/items/{item-id}";
 
         final TradeHistoryResponseDto tradeHistoryResponseDto = TradeHistoryResponseDto.of(
             List.of(new TradeOrderDto()), longItemId);
@@ -221,7 +221,7 @@ public class TradeControllerUnitTest {
         final Long longItemId = 1L;
         final String itemSizesId = "1";
         final String memberId = "1";
-        final String uri = "/item/{item-id}/itemsizes/{item-sizes-id}";
+        final String uri = "/items/{item-id}/item-sizes/{item-sizes-id}";
         final TradeHistoryResponseDto tradeHistoryResponseDto = TradeHistoryResponseDto.of(
             List.of(new TradeOrderDto()), longItemId);
 

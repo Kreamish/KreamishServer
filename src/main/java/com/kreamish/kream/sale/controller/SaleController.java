@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sale")
+@RequestMapping("/sales")
 public class SaleController {
 
     private final SaleService saleService;
 
-    @GetMapping(value = {"/item/{item-id}"})
+    @GetMapping(value = {"/items/{item-id}"})
     public ResponseEntity<ApiResult<PendingSaleResponseDto>> getPendingSaleByItemId(
         @Login LoginMemberInfo loginMemberInfo, @PathVariable("item-id") Long itemId) {
         PendingSaleResponseDto pendingSaleResponseDto = saleService.getPendingSalesByItemId(
@@ -30,7 +30,7 @@ public class SaleController {
         return ResponseEntity.ok(success(pendingSaleResponseDto));
     }
 
-    @GetMapping(value = {"/item/{item-id}/itemsizes/{item-sizes-id}"})
+    @GetMapping(value = {"/items/{item-id}/item-sizes/{item-sizes-id}"})
     public ResponseEntity<ApiResult<PendingSaleResponseDto>> getPendingSaleByItemId(
         @Login LoginMemberInfo loginMemberInfo, @PathVariable("item-id") Long itemId,
         @PathVariable(value = "item-sizes-id", required = false) Long itemSizesId) {

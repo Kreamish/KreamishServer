@@ -68,7 +68,7 @@ class FilterControllerTest {
         doReturn(null).when(filterFacade).getCategories();
 
         webTestClient.get()
-            .uri("/filter/categories")
+            .uri("/filters/categories")
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -87,7 +87,7 @@ class FilterControllerTest {
         doReturn(brandFilterResponseDtoList).when(filterFacade).getBrandFilterList();
 
         webTestClient.get()
-            .uri("/filter/brand")
+            .uri("/filters/brand")
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -109,7 +109,7 @@ class FilterControllerTest {
         doReturn(null).when(filterFacade).getCollections();
 
         webTestClient.get()
-            .uri("/filter/collections")
+            .uri("/filters/collections")
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -124,11 +124,11 @@ class FilterControllerTest {
         doReturn(itemSizesFilterResponseDtoList).when(filterFacade).getItemSizesFilterList();
 
         webTestClient.get()
-            .uri("/filter/itemsizes")
+            .uri("/filters/item-sizes")
             .exchange()
             .expectStatus().isOk()
             .expectBody()
-            
+
             .jsonPath("$.success").isEqualTo(true)
 
             .jsonPath("$.response").isNotEmpty()

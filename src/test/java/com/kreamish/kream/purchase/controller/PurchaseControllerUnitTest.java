@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 @ExtendWith(SpringExtension.class)
 class PurchaseControllerUnitTest {
 
-    private static final String BASE_URL = "/purchase";
+    private static final String BASE_URL = "/purchases";
     private final String anyId = "1";
     WebTestClient webTestClient;
     @Mock
@@ -66,7 +66,7 @@ class PurchaseControllerUnitTest {
     @MethodSource("provideArgs")
     void TEST_GET_PENDING_PURCHASES_SHOULD_CHECK_PATH_VARIABLE(String itemId, String itemSizesId,
         int httpStatusCode, int mockExecutionCnt) {
-        final String uri = "/item/{item-id}/itemsizes/{item-sizes-id}";
+        final String uri = "/items/{item-id}/item-sizes/{item-sizes-id}";
 
         params.put("item-id", itemId);
         params.put("item-sizes-id", itemSizesId);
@@ -87,7 +87,7 @@ class PurchaseControllerUnitTest {
     @Test
     @DisplayName("성공: 구매 입찰중인 리스트 가져오기. DTO JsonPath 올바른지 확인")
     void SUCCESS_GET_PENDING_PURCHASES_SHOUL_CHECK_DTO_JSON_PATH() throws JsonProcessingException {
-        final String uri = "/item/{item-id}/itemsizes/{item-sizes-id}";
+        final String uri = "/items/{item-id}/item-sizes/{item-sizes-id}";
         final PendingPurchaseDto p1 = PendingPurchaseDto.of("1", 1L, null);
         final PendingPurchaseResponseDto pendingPurchaseResponseDto = PendingPurchaseResponseDto.of(
             List.of(p1));

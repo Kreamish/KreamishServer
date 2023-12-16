@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/purchase")
+@RequestMapping("/purchases")
 @RequiredArgsConstructor
 @Slf4j
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
 
-    @GetMapping(value = {"/item/{item-id}"})
+    @GetMapping(value = {"/items/{item-id}"})
     public ResponseEntity<ApiResult<PendingPurchaseResponseDto>> getPendingPurchasesByItemId(
         @Login LoginMemberInfo loginMemberInfo, @PathVariable("item-id") Long itemId) {
         PendingPurchaseResponseDto pendingPurchaseResponseDto = purchaseService.getPendingPurchasesByItemId(
@@ -32,8 +32,8 @@ public class PurchaseController {
         return ResponseEntity.ok(success(pendingPurchaseResponseDto));
     }
 
-    @GetMapping(value = {"/item/{item-id}/itemsizes/{item-sizes-id}"})
-    public ResponseEntity<ApiResult<PendingPurchaseResponseDto>> getPendingPurchasesByItemId(
+    @GetMapping(value = {"/items/{item-id}/item-sizes/{item-sizes-id}"})
+    public ResponseEntity<ApiResult<PendingPurchaseResponseDto>> getPendingPurchasesByItemSizesId(
         @Login LoginMemberInfo loginMemberInfo, @PathVariable("item-id") Long itemId,
         @PathVariable(value = "item-sizes-id", required = false) Long itemSizesId) {
         PendingPurchaseResponseDto pendingPurchaseResponseDto = purchaseService.getPendingPurchasesByItemSizesId(

@@ -158,7 +158,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 특정 아이템에 달린 댓글 개수 가져오기")
     void SUCCESS_GET_COMMENT_COUNT_SHOULD_CHECK_IS_OK() {
-        String uri = "/comments/count/item/{item-id}";
+        String uri = "/comments/count/items/{item-id}";
         String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
             .toString();
         Long targetCnt = 2L;
@@ -187,7 +187,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 존재하지 않는 아이템에 달린 댓글 개수 가져오기")
     void SUCCESS_GET_NOT_EXISTED_COMMENT_COUNT_SHOULD_IS_OK() {
-        String uri = "/comments/count/item/{item-id}";
+        String uri = "/comments/count/items/{item-id}";
         Long notExistedResponse = 0L;
 
         params.put("item-id", String.valueOf(Integer.MAX_VALUE));
@@ -214,7 +214,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("성공: 특정 아이템에 등록된 댓글 전체 가져오기")
     void SUCCESS_GET_ALL_COMMENT_SHOULD_IS_OK() {
-        String uri = "/comments/item/{item-id}";
+        String uri = "/comments/items/{item-id}";
         String itemId = ITEM1_WITH_BRAND1_CATEGORY1_DETAIL1_AND_COMMENT_CNT_IS_2.getItemId()
             .toString();
         Long targetCommentCnt = 2L;
@@ -243,7 +243,7 @@ public class CommentControllerIntegrationTest {
     @Test
     @DisplayName("실패: 존재하지 않는 아이템에 등록된 댓글 전체 가져오기")
     void FAIL_GET_ALL_COMMENT_ABOUT_NOT_EXISTED_ITEM_SHOULD_IS_OK() {
-        String uri = "/comments/item/{item-id}";
+        String uri = "/comments/items/{item-id}";
 
         params.put("item-id", notExistedId);
 

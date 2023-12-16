@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 @ExtendWith(SpringExtension.class)
 public class SaleControllerUnitTest {
 
-    private static final String BASE_URL = "/sale";
+    private static final String BASE_URL = "/sales";
     private final String anyId = "1";
     WebTestClient webTestClient;
     @Mock
@@ -64,7 +64,7 @@ public class SaleControllerUnitTest {
     @MethodSource("provideArgs")
     void TEST_GET_PENDING_SALE_SHOULD_CHECK_PATH_VARIABLE(String itemId, String itemSizesId,
         int httpStatusCode, int mockExecutionCnt) {
-        final String uri = "/item/{item-id}/itemsizes/{item-sizes-id}";
+        final String uri = "/items/{item-id}/item-sizes/{item-sizes-id}";
 
         params.put("item-id", itemId);
         params.put("item-sizes-id", itemSizesId);
@@ -85,7 +85,7 @@ public class SaleControllerUnitTest {
     @Test
     @DisplayName("성공: 판매 입찰중인 리스트 가져오기. DTO JsonPath 올바른지 확인")
     void SUCCESS_GET_PENDING_SALE_SHOUL_CHECK_DTO_JSON_PATH() {
-        final String uri = "/item/{item-id}/itemsizes/{item-sizes-id}";
+        final String uri = "/items/{item-id}/item-sizes/{item-sizes-id}";
         final PendingSaleDto pendingSaleDto = PendingSaleDto.of("1", 1L, null);
         final PendingSaleResponseDto pendingSaleResponseDto = PendingSaleResponseDto.of(
             List.of(pendingSaleDto));

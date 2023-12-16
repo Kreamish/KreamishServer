@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/price")
+@RequestMapping("/prices")
 @RequiredArgsConstructor
 public class PriceController {
 
@@ -33,7 +33,7 @@ public class PriceController {
         @ApiResponse(responseCode = "400", description = "잘못된 인자 전달"),
         @ApiResponse(responseCode = "200", description = "정상 반환")
     })
-    @GetMapping({"/item/{item-id}", "/item/{item-id}/itemsizes/{item-sizes-id}"})
+    @GetMapping({"/items/{item-id}", "/items/{item-id}/item-sizes/{item-sizes-id}"})
     public ResponseEntity<ApiResult<TotalPriceInfoResponseDto>> getRecentTradedPrice(
         @PathVariable("item-id") Long itemId,
         @PathVariable(value = "item-sizes-id", required = false) Long itemSizesId,

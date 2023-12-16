@@ -70,7 +70,7 @@ public class CommentController {
         return new ResponseEntity<>(success(null), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/count/item/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/count/items/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "댓글 개수 가져오기",
         description = "특정 아이템에 등록된 댓글 개수 가져오기"
@@ -88,7 +88,7 @@ public class CommentController {
         return new ResponseEntity<>(success(itemCommentCountDto), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/item/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/items/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
         summary = "댓글 전체 가져오기",
         description = "특정 아이템에 등록된 댓글 전체 댓글 가져오기"

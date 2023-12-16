@@ -224,7 +224,7 @@ class FavoriteControllerUnitTest {
     @Test
     @DisplayName("성공: 관심상품 개수 가져오기 성공")
     void SUCCESS_GET_FAVORITES_CNT_SHOULD_IS_OK() {
-        final String uri = BASE_URI + "/count/item/{item-id}";
+        final String uri = BASE_URI + "/count/items/{item-id}";
         final String itemId = "1";
         final Long dummyCnt = 1L;
 
@@ -255,7 +255,7 @@ class FavoriteControllerUnitTest {
     @Test
     @DisplayName("실패: 관심상품 개수 가져오기 실패. 부적합한 Id type 전달")
     void FAIL_GET_FAVORITES_CNT_SHOULD_IS_BAD_REQUEST() {
-        final String uri = BASE_URI + "/count/item/{item-id}";
+        final String uri = BASE_URI + "/count/items/{item-id}";
         final String invalidId = "invalidId";
 
         params.put("item-id", invalidId);
