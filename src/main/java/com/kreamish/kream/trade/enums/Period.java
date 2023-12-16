@@ -1,8 +1,10 @@
 package com.kreamish.kream.trade.enums;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum Period {
     ONE_MONTH("1"),
     THREE_MONTHS("3"),

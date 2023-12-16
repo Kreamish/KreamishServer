@@ -8,11 +8,13 @@ import static com.kreamish.kream.trade.entity.QTrade.trade;
 
 import com.kreamish.kream.common.entity.DealStatus;
 import com.kreamish.kream.item.dto.RecentTradePriceInfoResponseDto;
-import com.kreamish.kream.trade.entity.Trade;
+import com.kreamish.kream.trade.dto.TradeOrderDto;
 import com.kreamish.kream.trade.enums.Period;
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -22,37 +24,39 @@ public class TradeQueryRepositoryImpl implements TradeQueryRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<Trade> findAllByItemIdAndCreatedAtMoreOrEqualThan(long itemId, Period period) {
-        return query.select(trade)
+    public List<TradeOrderDto> findAllByItemSizesId(Long itemSizesId) {
+        return query.select(
+                Projections.bean(
+                    TradeOrderDto.class,
+                    itemSizes.itemSizesId.as("itemSizesId"),
+                    itemSizes.size.as("itemSizes"),
+                    trade.tradePrice.as("price"),
+                    trade.createdAt.as("tradedAt")
+                )
+            )
             .from(trade)
             .join(trade.sale, sale)
-            .join(trade.sale.itemSizes, itemSizes)
-            .join(trade.sale.itemSizes.item, item)
+            .join(sale.itemSizes, itemSizes)
+            .where(itemSizes.itemSizesId.eq(itemSizesId))
+            .fetch();
+    }
+
+    @Override
+    public List<TradeOrderDto> findAllByItemIdAndCreatedAtForTheLastNMonths(Long itemId,
+        Period period) {
+        return jpaQueryTradeJoinedItemSizesAndSaleAndItem()
             .where(
-                item.itemId.eq(itemId)
+                item.itemId.eq(itemId),
+                getBetweenLastNMonthsAndNowOrElseGetNull(period)
             ).fetch();
     }
 
-/*
-        select t
-        from trade
-        join t.sale s on t.sale_id = s.id
-        join s.itemsizes is on t.s.is.id = is.id
-        where 1=1
-        is.item_id = :itemId and
-        :period <= createdAt
-         */
-
-    private Predicate periodCondition(String period) {
-        if (period == "all") {
-            return null;
-        }
-        try {
-            int periodInt = Integer.parseInt(period);
-        } catch (NumberFormatException e) {
-
-        }
-        return null;
+    @Override
+    public List<TradeOrderDto> findAllByItemId(Long itemId) {
+        return jpaQueryTradeJoinedItemSizesAndSaleAndItem()
+            .where(
+                item.itemId.eq(itemId)
+            ).fetch();
     }
 
     @Override
@@ -87,5 +91,34 @@ public class TradeQueryRepositoryImpl implements TradeQueryRepository {
             .from(purchase)
             .where(booleanExpression.and(purchase.purchaseStatus.eq(DealStatus.COMPLETE)))
             .fetch();
+    }
+
+    private JPAQuery<TradeOrderDto> jpaQueryTradeJoinedItemSizesAndSaleAndItem() {
+        return query.select(
+                Projections.bean(
+                    TradeOrderDto.class,
+                    itemSizes.itemSizesId.as("itemSizesId"),
+                    itemSizes.size.as("itemSizes"),
+                    trade.tradePrice.as("price"),
+                    trade.createdAt.as("tradedAt")
+                )
+            )
+            .from(trade)
+            .join(trade.sale, sale)
+            .join(sale.itemSizes, itemSizes)
+            .join(itemSizes.item, item);
+    }
+
+    private BooleanExpression getBetweenLastNMonthsAndNowOrElseGetNull(Period period) {
+        if (!period.equals(Period.ALL)) {
+            final int months = Integer.parseInt(period.getValue());
+
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime LastNMonths = now.minusMonths(months);
+
+            return trade.createdAt.between(LastNMonths, now);
+        }
+
+        return null;
     }
 }

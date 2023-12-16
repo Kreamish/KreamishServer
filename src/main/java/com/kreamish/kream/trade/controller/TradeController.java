@@ -6,6 +6,7 @@ import com.kreamish.kream.common.util.ApiUtils.ApiResult;
 import com.kreamish.kream.item.dto.MarketPricesGraphResponseDto;
 import com.kreamish.kream.login.Login;
 import com.kreamish.kream.login.LoginMemberInfo;
+import com.kreamish.kream.trade.dto.TradeHistoryResponseDto;
 import com.kreamish.kream.trade.enums.Period;
 import com.kreamish.kream.trade.service.TradeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,25 +41,54 @@ public class TradeController {
     @GetMapping(value = "/item/{item-id}/chart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult<MarketPricesGraphResponseDto>> getMarketPricesGraph(
         @Login LoginMemberInfo loginMemberInfo,
-        @PathVariable Long itemId,
-        @RequestParam(required = false, defaultValue = "all") Period period
+        @PathVariable("item-id") Long itemId,
+        @RequestParam Period period
     ) {
-
-        /*
-        1. 거래내역 조회
-            /trade/item/1/chart?period=전체,1,3,6,12
-        2. 아이템사이즈 별 페이징, 체결 거래(거래가격, 거래 사이즈,  날짜),
-           판매 입찰, 구매 입찰(거래 사이즈, 가격, 해당 가격대에 올라온 상품 수량)
-           /trade/item/1?itemsizes=1&paging
-            ,
-            todo : 거래내역 전체, 거래 내역 페이징, 거래내역 아이템 아이디로, 등등을 api 여러 개로 하지말고 여기 인자로 받아서 service에서 다른걸 호출하게
-            todo : 구매, 판매 입찰 페이징
-         */
-
         final MarketPricesGraphResponseDto marketPricesGraph = tradeService.getMarketPricesGraph(
             itemId, period);
 
         return new ResponseEntity<>(success(marketPricesGraph), HttpStatus.OK);
+    }
+
+    @Operation(
+        summary = "거래된 내역 리스트 반환",
+        description = "특정 아이템에 대한 거래 내역 전체 반환"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스"),
+        @ApiResponse(responseCode = "401", description = "미로그인 유저"),
+        @ApiResponse(responseCode = "200", description = "정상 반환")
+    })
+    @GetMapping(value = "/item/{item-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResult<TradeHistoryResponseDto>> getTradeHistoryByItemId(
+        @Login LoginMemberInfo loginMemberInfo,
+        @PathVariable("item-id") Long itemId
+    ) {
+        TradeHistoryResponseDto tradeHistoryResponseDto = tradeService.getTradeHistoryByItemId(
+            itemId);
+
+        return new ResponseEntity<>(success(tradeHistoryResponseDto), HttpStatus.OK);
+    }
+
+    @Operation(
+        summary = "거래된 내역 리스트 반환",
+        description = "특정 아이템 사이즈에 대한 거래 내역 전체 반환"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스"),
+        @ApiResponse(responseCode = "401", description = "미로그인 유저"),
+        @ApiResponse(responseCode = "200", description = "정상 반환")
+    })
+    @GetMapping(value = "/item/{item-id}/itemsizes/{item-sizes-id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResult<TradeHistoryResponseDto>> getTradeHistoryByItemSizesId(
+        @Login LoginMemberInfo loginMemberInfo,
+        @PathVariable("item-id") Long itemId,
+        @PathVariable("item-sizes-id") Long itemSizesId
+    ) {
+        TradeHistoryResponseDto tradeHistoryResponseDto = tradeService.getTradeHistoryByItemSizesId(
+            itemId, itemSizesId);
+
+        return new ResponseEntity<>(success(tradeHistoryResponseDto), HttpStatus.OK);
     }
 
 }

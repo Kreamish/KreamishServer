@@ -7,7 +7,6 @@ public class PeriodConverter implements Converter<String, Period> {
 
     @Override
     public Period convert(String source) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return Period.of(source);
     }
 }
